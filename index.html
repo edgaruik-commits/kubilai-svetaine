@@ -132,7 +132,7 @@ const SITE = {
   nav: [['Features','#features'],['Models','#models'],['Delivery','#delivery'],['Contact','#contact']],
   hero: {
     title: 'Soak by the fire, under the open sky.',
-    lead: 'Wood-fired acrylic hot tubs, round or square. No power, no hookup, just wood, water and time. Delivery to Germany, Austria, Switzerland and France.',
+    lead: 'Wood-fired acrylic hot tubs, round, square or rectangular. No power, no hookup, just wood, water and time. Delivery to Germany, Austria, Switzerland and France.',
     cta: 'Request a quote'
   },
   ui: { tabs:['Shape & finish','Equipment','Accessories'], none:'None', model:'Size', shape:'Shape', wood:'Wood', acr:'Acrylic', fib:'Fiberglass', on:'On', off:'Off',
@@ -142,7 +142,7 @@ const SITE = {
     { id:'M', name:'Fjord M', r:1.025, size:'Inner 185×85 cm · outer 205×100 cm', people:'5–6 people', liters:'approx. 1,100 l', heat:'approx. 2.5 h', price:6490, priceSquare:4500 },
     { id:'L', name:'Fjord L', r:1.125, size:'Inner 200×90 cm · outer 225×105 cm', people:'6–8 people', liters:'approx. 1,500 l', heat:'approx. 3 h',   price:8290, priceSquare:8690 }
   ],
-  shapes: [ {id:'round', n:'Round', extra:0}, {id:'square', n:'Square', extra:0} ],
+  shapes: [ {id:'round', n:'Round', extra:0}, {id:'square', n:'Square', extra:0}, {id:'rect', n:'Rectangular', extra:0} ],
   // stove position: inside the tub (integrated stove behind a wooden guard) or outside (free-standing)
   stovePlaces: [ {id:'out', n:'Outside', extra:0}, {id:'in', n:'Inside', extra:200} ],
   woods:    [{n:'Spruce',c:'#c9a46c'},{n:'Thermowood',c:'#6d4b34'},{n:'Larch',c:'#b8733b'},{n:'Natural pine',c:'#dcbc8a'},{n:'Red cedar',c:'#a4512f'},{n:'Walnut',c:'#4f3526'},{n:'Grey wash',c:'#8d918e'},{n:'Black stain',c:'#2c2b29'}],
@@ -170,8 +170,8 @@ const SITE = {
       {t:'Ready quickly', d:'Depending on the size, the water is bath-warm after about two to three hours.'}
     ]
   },
-  modelsTitle: 'Three sizes, two shapes',
-  tableHead: ['Model','Size (round / square)','Seats','Water','Heat-up','From'],
+  modelsTitle: 'Three sizes, three shapes',
+  tableHead: ['Model','Size (round / square / rectangular)','Seats','Water','Heat-up','From'],
   delivery: {
     title: 'Delivery to four countries',
     items: [
@@ -193,11 +193,11 @@ const SITE = {
 
 const $ = id => document.getElementById(id);
 const S = SITE;
-const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, p:0, fire:true, acc:{}, pend:{hydro:false,thermo:true,shelf:true,led:true} };   // fire is always on
+const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, stepOpen:1, p:0, fire:true, acc:{ladder:true}, pend:{hydro:false,thermo:true,shelf:true,led:true} };   // fire is always on
 S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
 const plus = n => n ? '+'+fmt(n) : '';   // price shown in the option menus, e.g. +€120
-const mp = (m,si) => (S.shapes[si].id==='square' && m.priceSquare!=null) ? m.priceSquare : m.price;   // base price depends on the shape
+const mp = (m,si) => { const id=S.shapes[si].id; return id==='rect' ? (m.priceRect!=null?m.priceRect:(m.priceSquare!=null?m.priceSquare:m.price)) : (id==='square' && m.priceSquare!=null) ? m.priceSquare : m.price; };   // base price depends on the shape
 const total = () => mp(S.models[st.m],st.s) + S.shapes[st.s].extra + (st.acc.stove?S.stovePlaces[st.p].extra:0) + S.accessories.reduce((t,a)=>t+(st.acc[a.id]&&!st.pend[a.id]?a.price:0),0);
 
 /* ---------- Text ---------- */
@@ -212,7 +212,7 @@ const total = () => mp(S.models[st.m],st.s) + S.shapes[st.s].extra + (st.acc.sto
   $('feat').innerHTML=S.features.items.map(i=>`<div><h3>${i.t}</h3><p>${i.d}</p></div>`).join('');
   $('mTitle').textContent=S.modelsTitle;
   $('mTable').innerHTML='<thead><tr>'+S.tableHead.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>'+
-    S.models.map(m=>`<tr><td class="n">${m.name}</td><td>${m.size}</td><td>${m.people}</td><td>${m.liters}</td><td>${m.heat}</td><td>Round ${fmt(m.price)}<br>Square ${fmt(m.priceSquare!=null?m.priceSquare:m.price)}</td></tr>`).join('')+'</tbody>';
+    S.models.map(m=>`<tr><td class="n">${m.name}</td><td>${m.size}</td><td>${m.people}</td><td>${m.liters}</td><td>${m.heat}</td><td>Round ${fmt(m.price)}<br>Square ${fmt(m.priceSquare!=null?m.priceSquare:m.price)}<br>Rectangular ${fmt(m.priceRect!=null?m.priceRect:(m.priceSquare!=null?m.priceSquare:m.price))}</td></tr>`).join('')+'</tbody>';
   $('dTitle').textContent=S.delivery.title;
   $('markets').innerHTML=S.delivery.items.map(i=>`<div><div class="cc">${i.code}</div><h3>${i.name}</h3><p>${i.note}</p></div>`).join('');
   const c=S.contact; $('cTitle').textContent=c.title; $('cText').textContent=c.text;
@@ -240,13 +240,17 @@ press($('oModel'),st.m); press($('oShape'),st.s); press($('oWood'),st.w); pressM
 const chipEls={}; var COVC=[['Black','#1c1e20'],['Brown','#6b4430'],['Grey','#8a9094']];   // thermal cover colours
 function syncUI(){ const v=!!st.acc.stove;
   [...$('oPos').children].forEach((x,j)=>x.setAttribute('aria-pressed',j===st.p));
-  [...$('oSteps').children].forEach((x,j)=>x.setAttribute('aria-pressed',(j===1)===!!st.acc.ladder));
+  [...$('oSteps').children].forEach((x,j)=>x.setAttribute('aria-pressed',(j===0)===!!st.stepOpen));
   Object.keys(chipEls).forEach(id=>chipEls[id].setAttribute('aria-pressed',!!st.acc[id]));
   if(chipEls.guard) chipEls.guard.disabled=!v; }           // chimney guard needs a stove
 function setAcc(id,v){ st.acc[id]=v; if(id==='stove'&&!v) st.acc.guard=false; syncUI(); build(); readout(); }
 // Equipment tab: stove position (outside / inside; the stove is always included) and steps
 S.stovePlaces.forEach((p,i)=>btn($('oPos'),p.n+(p.extra?' '+plus(p.extra):''),()=>{ st.p=i; setAcc('stove',true); }));
-[['No',false],['Yes '+plus(S.accessories.find(a=>a.id==='ladder').price),true]].forEach(([t,v])=>btn($('oSteps'),t,()=>setAcc('ladder',v)));
+const LAD=S.accessories.find(a=>a.id==='ladder'), LAD_CLOSED=LAD.price;   // closed steps are paid, open steps are free
+Object.defineProperty(LAD,'price',{get:()=>st.stepOpen?0:LAD_CLOSED,configurable:true});
+Object.defineProperty(LAD,'name',{get:()=>st.stepOpen?'Steps \u00b7 Open':'Steps \u00b7 Closed',configurable:true});
+LAD.desc='Open steps (free) or closed wooden steps, plus a step inside the tub';
+[['Open (free)',1],['Closed '+plus(LAD_CLOSED),0]].forEach(([t,o])=>btn($('oSteps'),t,()=>{ st.stepOpen=o; setAcc('ladder',true); }));   // steps are always included: open (free) or closed (paid)
 // Accessories tab: everything else
 S.accessories.filter(a=>a.id!=='stove'&&a.id!=='ladder').forEach(a=>{
   const b=document.createElement('button'); chipEls[a.id]=b; b.title=a.desc; b.innerHTML=`<span>${a.name}</span><small>${plus(a.price)}</small>`;
@@ -297,10 +301,11 @@ function particles(n,size,op){ const pos=new Float32Array(n*3), g=new THREE.Buff
   const seed=[...Array(n)].map(()=>({a:Math.random(),x:Math.random()*2-1,z:Math.random()*2-1,r:Math.random()})); return {p,pos,g,seed,n}; }
 const steam=particles(70,.35,.38), bubbles=particles(36,.09,.8);
 
-let tub, fireDoor, R=1, HW=1, sq=false, H=.95, bound=.8;
+let tub, fireDoor, R=1, HW=1, HX=1, HZ=1, sq=false, H=.95, bound=.8, bx=.8, bz=.8;
 function build(){
   if(tub) scene.remove(tub);
-  tub=new THREE.Group(); const m=S.models[st.m]; R=m.r; const gk=(R+1.35)/3.4; ground.scale.set(gk,gk,1); HW=R*.92; sq=S.shapes[st.s].id==='square'; bound=(sq?HW:R)-.28;
+  tub=new THREE.Group(); const m=S.models[st.m]; R=m.r; const gk=(R+1.35)/3.4; ground.scale.set(gk,gk,1); HW=R*.92; const shp=S.shapes[st.s].id, rect=shp==='rect'; sq=shp==='square'||rect; HX=rect?HW*1.2:HW; HZ=rect?HW*.82:HW;   // rectangular = longer along x, shallower along z
+  bx=(sq?HX:R)-.28; bz=(sq?HZ:R)-.28; bound=Math.min(bx,bz);
   const wood=new THREE.Color(S.woods[st.w].c), acr=new THREE.Color(S.acrylics[st.a].c), A=st.acc;
   const steel=new THREE.MeshStandardMaterial({color:0x2b3236,metalness:.7,roughness:.4});
   const ss=new THREE.MeshPhongMaterial({color:0xaeb8bc,specular:0xffffff,shininess:80});
@@ -311,14 +316,14 @@ function build(){
 
   function loopMesh(y,off,mat,th){ const g=new THREE.Group();
     if(!sq){ const o=new THREE.Mesh(new THREE.TorusGeometry(R+off,th,8,72),mat); o.rotation.x=Math.PI/2; g.add(o); }
-    else { const hf=HW+off, L=2*(hf+th);
-      for(const s of [1,-1]){ const a=new THREE.Mesh(new THREE.BoxGeometry(L,th*2,th*2),mat); a.position.z=s*hf; g.add(a);
-        const b=new THREE.Mesh(new THREE.BoxGeometry(th*2,th*2,L),mat); b.position.x=s*hf; g.add(b); } }
+    else { const hfx=HX+off, hfz=HZ+off;
+      for(const s of [1,-1]){ const a=new THREE.Mesh(new THREE.BoxGeometry(2*(hfx+th),th*2,th*2),mat); a.position.z=s*hfz; g.add(a);
+        const b=new THREE.Mesh(new THREE.BoxGeometry(th*2,th*2,2*(hfz+th)),mat); b.position.x=s*hfx; g.add(b); } }
     g.position.y=y; tub.add(g); return g; }
   function edge(a){ const c=Math.cos(a), s=Math.sin(a);
     if(!sq) return {p:new THREE.Vector3(c*R,0,s*R), n:new THREE.Vector3(c,0,s)};
-    const k=HW/Math.max(Math.abs(c),Math.abs(s));
-    return {p:new THREE.Vector3(c*k,0,s*k), n:Math.abs(c)>=Math.abs(s)?new THREE.Vector3(Math.sign(c),0,0):new THREE.Vector3(0,0,Math.sign(s))}; }
+    const kx=HX/Math.abs(c), kz=HZ/Math.abs(s), k=Math.min(kx,kz);
+    return {p:new THREE.Vector3(c*k,0,s*k), n:kx<=kz?new THREE.Vector3(Math.sign(c),0,0):new THREE.Vector3(0,0,Math.sign(s))}; }
   function place(g,a,y){ const e=edge(a); g.position.set(e.p.x,y||0,e.p.z); g.rotation.y=-Math.atan2(e.n.z,e.n.x); tub.add(g); return g; }
 
   // wooden cladding + base
@@ -326,17 +331,18 @@ function build(){
     for(let i=0;i<n;i++){ const a=i/n*Math.PI*2; add(new THREE.BoxGeometry(sw*.97,H,.07),wm(),Math.cos(a)*R,H/2+.06,Math.sin(a)*R,-a-Math.PI/2); }
     add(new THREE.CylinderGeometry(R+.02,R+.02,.06,48),new THREE.MeshStandardMaterial({color:0x22282b}),0,.03,0);
   } else {
-    const k=Math.round(2*HW/.16), L=2*HW+.14, w=L/k, w2=2*HW/k;
-    for(let i=0;i<k;i++){ const x=-L/2+(i+.5)*w, z=-HW+(i+.5)*w2;
-      add(new THREE.BoxGeometry(w*.96,H,.07),wm(),x,H/2+.06,HW); add(new THREE.BoxGeometry(w*.96,H,.07),wm(),x,H/2+.06,-HW);
-      add(new THREE.BoxGeometry(w2*.96,H,.07),wm(),HW,H/2+.06,z,Math.PI/2); add(new THREE.BoxGeometry(w2*.96,H,.07),wm(),-HW,H/2+.06,z,Math.PI/2); }
-    add(new THREE.BoxGeometry(2*HW+.16,.06,2*HW+.16),new THREE.MeshStandardMaterial({color:0x22282b}),0,.03,0);
+    const kx=Math.round(2*HX/.16), Lx=2*HX+.14, w=Lx/kx, kz=Math.round(2*HZ/.16), w2=2*HZ/kz;
+    for(let i=0;i<kx;i++){ const x=-Lx/2+(i+.5)*w;
+      add(new THREE.BoxGeometry(w*.96,H,.07),wm(),x,H/2+.06,HZ); add(new THREE.BoxGeometry(w*.96,H,.07),wm(),x,H/2+.06,-HZ); }
+    for(let i=0;i<kz;i++){ const z=-HZ+(i+.5)*w2;
+      add(new THREE.BoxGeometry(w2*.96,H,.07),wm(),HX,H/2+.06,z,Math.PI/2); add(new THREE.BoxGeometry(w2*.96,H,.07),wm(),-HX,H/2+.06,z,Math.PI/2); }
+    add(new THREE.BoxGeometry(2*HX+.16,.06,2*HZ+.16),new THREE.MeshStandardMaterial({color:0x22282b}),0,.03,0);
   }
   [.25,.75].forEach(y=>loopMesh(y,.05,ss,.014));
 
   // acrylic rim, shell, floor, water
   const rim=loopMesh(H+.06,-.02,am,.075);
-  const hi=(sq?HW:R)-.07;
+  const hix=(sq?HX:R)-.07, hiz=(sq?HZ:R)-.07, hi=hix;
   // ---- tub liner: sloped back wall, wide seat bench, raised lounger, stepped central well ----
   const yl=.52, rb=R-.22, Rw=R-.42, Rf=Rw-.08;   // bench height, bench outer radius, well radii (round tub)
   const lineMat=new THREE.LineBasicMaterial({color:0x2d4a55,transparent:true,opacity:.6});
@@ -350,18 +356,18 @@ function build(){
     const pts=[[0,.1],[Rf-.03,.1],[Rf,.13],[Rf,.28],[Rf+.03,.3],[Rw,.3],[Rw,yl-.02],[Rw+.03,yl],[rb,yl],[R-.07,H+.04]].map(([x,y])=>new THREE.Vector2(x,y));
     const lg=new THREE.LatheGeometry(pts,64); outline(lg,add(lg,am,0,0,0));
     sector(Rw+.01,rb+.04,Math.PI-.85,Math.PI+.85,yl-.01,.14,am);                   // raised lounger seat
-  } else { const hw=hi-.26, hs=hw-.08, wh=H+.04-yl, mid=(hw+hi)/2, mid2=(hs+hw)/2;
+  } else { const hwx=hix-.26, hsx=hwx-.08, hwz=hiz-.26, hsz=hwz-.08, wh=H+.04-yl, midx=(hwx+hix)/2, midz=(hwz+hiz)/2, mid2x=(hsx+hwx)/2, mid2z=(hsz+hwz)/2;
     [[0,1],[0,-1],[1,0],[-1,0]].forEach(([x,z])=>{ const r=x?Math.PI/2:0;
-      addE(new THREE.PlaneGeometry(2*hi,wh),am,x*hi,yl+wh/2,z*hi,r);                  // back wall
-      addE(new THREE.PlaneGeometry(2*hw,yl-.3),am,x*hw,.3+(yl-.3)/2,z*hw,r);          // well wall, upper
-      addE(new THREE.PlaneGeometry(2*hs,.2),am,x*hs,.2,z*hs,r);                        // well wall, lower
-      addE(x?new THREE.BoxGeometry(hi-hw,.03,2*hi):new THREE.BoxGeometry(2*hw,.03,hi-hw),am,x*mid,yl-.015,z*mid);     // bench
-      addE(x?new THREE.BoxGeometry(hw-hs,.03,2*hw):new THREE.BoxGeometry(2*hs,.03,hw-hs),am,x*mid2,.285,z*mid2); });  // step
-    add(new THREE.PlaneGeometry(2*hs,2*hs),am,0,.1,0).rotation.x=-Math.PI/2;
-    addE(new THREE.BoxGeometry(hi-hw+.02,.14,2*hw*.9),am,-mid,yl+.06,0);               // raised lounger seat
+      addE(new THREE.PlaneGeometry(x?2*hiz:2*hix,wh),am,x*hix,yl+wh/2,z*hiz,r);                  // back wall
+      addE(new THREE.PlaneGeometry(x?2*hwz:2*hwx,yl-.3),am,x*hwx,.3+(yl-.3)/2,z*hwz,r);          // well wall, upper
+      addE(new THREE.PlaneGeometry(x?2*hsz:2*hsx,.2),am,x*hsx,.2,z*hsz,r);                        // well wall, lower
+      addE(x?new THREE.BoxGeometry(hix-hwx,.03,2*hiz):new THREE.BoxGeometry(2*hwx,.03,hiz-hwz),am,x*midx,yl-.015,z*midz);     // bench
+      addE(x?new THREE.BoxGeometry(hwx-hsx,.03,2*hwz):new THREE.BoxGeometry(2*hsx,.03,hwz-hsz),am,x*mid2x,.285,z*mid2z); });  // step
+    add(new THREE.PlaneGeometry(2*hsx,2*hsz),am,0,.1,0).rotation.x=-Math.PI/2;
+    addE(new THREE.BoxGeometry(hix-hwx+.02,.14,2*hwz*.9),am,-midx,yl+.06,0);               // raised lounger seat
   }
   const wmat=new THREE.MeshPhongMaterial({color:0x62bdd4,transparent:true,opacity:.32,depthWrite:false,shininess:120});
-  const water=new THREE.Mesh(sq?new THREE.PlaneGeometry(2*(hi-.02),2*(hi-.02)):new THREE.CircleGeometry(R-.085,48),wmat);
+  const water=new THREE.Mesh(sq?new THREE.PlaneGeometry(2*(hix-.02),2*(hiz-.02)):new THREE.CircleGeometry(R-.085,48),wmat);
   water.rotation.x=-Math.PI/2; water.position.y=H-.12; tub.add(water);
 
   // accessories
@@ -412,12 +418,12 @@ function build(){
     if(!sq){ const rw=R-.155, Rw=R-.42;
       ls(.9,4.7,n1).forEach(a=>nozzle(Math.cos(a)*(rw+.004),.72,Math.sin(a)*(rw+.004),Math.cos(a),Math.sin(a),.03));
       ls(.5,5.1,n2).forEach(a=>nozzle(Math.cos(a)*(Rw+.004),.41,Math.sin(a)*(Rw+.004),Math.cos(a),Math.sin(a),.026)); }
-    else { const t=HW*.42, w=hi+.004, hw=hi-.26+.004, sd=[[1,0],[-1,0],[0,1],[0,-1]];
-      const side=(n,fn)=>sd.forEach(([x,z],k)=>{ const c=Math.floor(n/4)+(k<n%4?1:0); ls(-t,t,c).forEach(o=>fn(x,z,o)); });
-      side(n1,(x,z,o)=>nozzle(x?x*w:o,.72,z?z*w:o,x,z,.03));
-      side(n2,(x,z,o)=>nozzle(x?x*hw:o,.41,z?z*hw:o,x,z,.026)); }
+    else { const tx=HX*.42, tz=HZ*.42, wx=hix+.004, wz=hiz+.004, hwx=hix-.26+.004, hwz=hiz-.26+.004, sd=[[1,0],[-1,0],[0,1],[0,-1]];
+      const side=(n,fn)=>sd.forEach(([x,z],k)=>{ const c=Math.floor(n/4)+(k<n%4?1:0), t=x?tz:tx; ls(-t,t,c).forEach(o=>fn(x,z,o)); });
+      side(n1,(x,z,o)=>nozzle(x?x*wx:o,.72,z?z*wz:o,x,z,.03));
+      side(n2,(x,z,o)=>nozzle(x?x*hwx:o,.41,z?z*hwz:o,x,z,.026)); }
     // three chrome air buttons on the outside wall, next to the steps
-    const sOff=.62, eb=edge(Math.PI+(sq?Math.atan(sOff/HW):sOff/R)), bg=new THREE.Group();   // control buttons sit on the wall right next to the steps
+    const sOff=A.ladder?(sq?Math.min(.75,HZ-.12):.75):.62, eb=edge(Math.PI+(sq?Math.atan(sOff/HX):sOff/R)), bg=new THREE.Group();   // control buttons sit on the wall right next to the steps
      bg.position.copy(eb.p); bg.rotation.y=-Math.atan2(eb.n.z,eb.n.x);
     [-.1,0,.1].forEach(z=>{ const b=new THREE.Mesh(new THREE.CylinderGeometry(.034,.034,.025,20),nm); b.rotation.z=Math.PI/2; b.position.set(.04,.55,z); bg.add(b);
       const c=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.03,16),ss); c.rotation.z=Math.PI/2; c.position.set(.04,.55,z); bg.add(c); });
@@ -442,12 +448,49 @@ function build(){
       for(let i=0;i<k;i++) bm(w,ph-.01,d,cx,i*ph+ph/2,cz,wd);             // horizontal boards on every side
       const n=4, bw=w/n;
       for(let i=0;i<n;i++) bm(bw-.01,.035,d+.02,x0+bw*i+bw/2,top-.0175,cz,lt); }   // top planks
-    stepBlock(back,.40,-.15,.45,.64);      // upper step, against the tub
-    stepBlock(.40,.82,-.55,.45,.32);       // lower step, longer on one side
-    place(g,Math.PI); }
+    function openStep(x0,x1,z0,z1,top){ const w=x1-x0, d=z1-z0, cx=(x0+x1)/2, cz=(z0+z1)/2, pt=.06, tt=.035, hp=top-tt, o=.025;   // open type: legs, rails and planks, no side boards
+      const bm=(sx,sy,sz,px,py,pz,mat)=>{ const m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat); m.position.set(px,py,pz); m.castShadow=m.receiveShadow=true; g.add(m); };
+      const wd=wm();
+      [[x0+o+pt/2,z0+o+pt/2],[x1-o-pt/2,z0+o+pt/2],[x0+o+pt/2,z1-o-pt/2],[x1-o-pt/2,z1-o-pt/2]].forEach(([px,pz])=>bm(pt,hp,pt,px,hp/2,pz,wd));   // four legs
+      [hp-.06,hp*.45].forEach(py=>{ [z0+o+pt/2,z1-o-pt/2].forEach(pz=>bm(w-2*o-pt,.04,.025,cx,py,pz,wd));
+        [x0+o+pt/2,x1-o-pt/2].forEach(px=>bm(.025,.04,d-2*o-pt,px,py,cz,wd)); });   // rails
+      const n=4, bw=w/n;
+      for(let i=0;i<n;i++) bm(bw-.01,tt,d+.02,x0+bw*i+bw/2,top-tt/2,cz,lt); }   // top planks
+    const K=1.3;   // steps are 30% bigger than the original size
+    if(sq){ const sb=st.stepOpen?openStep:stepBlock;
+      sb(back,.40,-.3,.3,.64);       // upper step, against the tub
+      sb(.40,.82,-.3,.3,.32);       // lower step, same width as the upper one
+      g.scale.setScalar(K); place(g,Math.PI); }
+    else {   // round tub: straight steps of constant width; only the edge touching the tub follows the curve of the wall
+      const z0=-.3*K, z1=.3*K, x1=.40*K, top1=.64*K, N=18;
+      const bk=z=>Math.sqrt(R*R-z*z)-R-.02;                                            // wall position at sideways offset z
+      const slab=(xa,xb,za,zb,y0,h,mat)=>{ const sh=new THREE.Shape(), pts=[];            // footprint: curved back edge, straight sides and front
+        for(let i=0;i<=N;i++){ const z=za+(zb-za)*i/N; pts.push([typeof xa==='function'?xa(z):xa,z]); }
+        sh.moveTo(pts[0][0],pts[0][1]); pts.slice(1).forEach(([x,z])=>sh.lineTo(x,z)); sh.lineTo(xb,zb); sh.lineTo(xb,za); sh.closePath();
+        const geo=new THREE.ExtrudeGeometry(sh,{depth:h,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,y0+h,0);
+        const o=new THREE.Mesh(geo,mat); o.castShadow=o.receiveShadow=true; g.add(o); return o; };
+      const gb=(sx,sy,sz,px,py,pz,mat)=>{ const o=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat); o.position.set(px,py,pz); o.castShadow=o.receiveShadow=true; g.add(o); };
+      const dbl=m=>{ m.side=THREE.DoubleSide; return m; };
+      lt.side=core.side=THREE.DoubleSide;
+      function upperClosed(){ const hb=top1-.035, k=Math.max(3,Math.round(hb/.12)), ph=hb/k, wd=dbl(wm());
+        slab(z=>bk(z)+.012,x1-.012,z0+.01,z1-.01,0,hb,core);                              // dark core between the boards
+        for(let i=0;i<k;i++) slab(bk,x1,z0,z1,i*ph,ph-.01,wd);                           // boards follow the wall on the back side
+        const n=4, x0=-.02, bw=(x1-x0)/n;
+        for(let i=0;i<n;i++) slab(i?x0+bw*i:bk,x0+bw*(i+1)-.01,z0-.01,z1+.01,top1-.035,.035,lt); }   // top planks
+      function upperOpen(){ const pt=.06, tt=.035, hp=top1-tt, o=.025, wd=dbl(wm()), zl=z0+o+pt/2, zr=z1-o-pt/2, xf=x1-o-pt/2;
+        const xbL=bk(zl)+.02+o+pt/2, xbR=bk(zr)+.02+o+pt/2, xbm=(xbL+xbR)/2;
+        [[xbL,zl],[xbR,zr],[xf,zl],[xf,zr]].forEach(([x,z])=>gb(pt,hp,pt,x,hp/2,z,wd));                 // four legs
+        [hp-.06,hp*.45].forEach(py=>{ [xbm,xf].forEach(x=>gb(.025,.04,zr-zl,x,py,(zl+zr)/2,wd));
+          [[zl,xbL],[zr,xbR]].forEach(([z,xb])=>gb(xf-xb,.04,.025,(xf+xb)/2,py,z,wd)); });             // rails
+        const n=4, x0=-.02, bw=(x1-x0)/n;
+        for(let i=0;i<n;i++) slab(i?x0+bw*i:bk,x0+bw*(i+1)-.01,z0-.01,z1+.01,top1-tt,tt,lt); }       // top planks
+      const open=!!st.stepOpen, sb=open?openStep:stepBlock;
+      (open?upperOpen:upperClosed)();                                  // upper step, against the tub
+      sb(x1,.82*K,z0,z1,.32*K);                                        // lower step, straight and the same width
+      place(g,Math.PI); } }
   if(A.led){ loopMesh(H-.12,-.12,new THREE.MeshBasicMaterial({color:0x7fe8ff}),.018); }
   if(A.cover){ const lm=new THREE.MeshStandardMaterial({color:new THREE.Color(COVC[st.coverC||0][1]),roughness:.7});
-    const c=sq?new THREE.Mesh(new THREE.BoxGeometry(2*HW+.24,.09,2*HW+.24),lm):new THREE.Mesh(new THREE.CylinderGeometry(R+.06,R+.06,.09,48),lm);
+    const c=sq?new THREE.Mesh(new THREE.BoxGeometry(2*HX+.24,.09,2*HZ+.24),lm):new THREE.Mesh(new THREE.CylinderGeometry(R+.06,R+.06,.09,48),lm);
     c.position.y=H+.17; c.castShadow=true; tub.add(c); }
   scene.add(tub); ledLight.position.set(0,H-.25,0); poolLight.position.set(0,.8,0);
 }
@@ -468,7 +511,7 @@ function resize(){ const p=canvas.parentElement,w=p.clientWidth,h=p.clientHeight
   else { const ph=pn.offsetHeight+44, top=80; fh=Math.max(200,h-ph-top); oy=(ph-top)/2; } // mobile: panel at the bottom, tub moves up
   camera.setViewOffset(w,h,ox,oy,w,h); camera.updateProjectionMatrix();
   const k=2*Math.tan(17*Math.PI/180);
-  distT=VIEW_SCALE*Math.max(4,(2*R+1.5)*(w/fw)/(k*camera.aspect),3.1*(h/fh)/k); }
+  distT=VIEW_SCALE*Math.max(4,(2*R+1.9)*(w/fw)/(k*camera.aspect),3.1*(h/fh)/k); }
 addEventListener('resize',resize); resize();
 if(window.ResizeObserver) new ResizeObserver(()=>resize()).observe(canvas.parentElement.querySelector('.panel'));
 
@@ -485,9 +528,9 @@ const clock=new THREE.Clock();
   steam.p.visible=!A.cover; steam.p.material.opacity=f?.38:.12;
   bubbles.p.visible=!!A.hydro&&!A.cover;
   steam.seed.forEach((s,i)=>{ const life=(t*(f?.18:.08)+s.a)%1, a=s.a*60, rr=Math.sqrt(s.r)*bound;
-    steam.pos[i*3]=(sq?s.x*bound:Math.cos(a)*rr)+Math.sin(t+i)*.08*life; steam.pos[i*3+1]=H+.05+life*1.3; steam.pos[i*3+2]=(sq?s.z*bound:Math.sin(a)*rr)+Math.cos(t*.8+i)*.08*life; });
+    steam.pos[i*3]=(sq?s.x*bx:Math.cos(a)*rr)+Math.sin(t+i)*.08*life; steam.pos[i*3+1]=H+.05+life*1.3; steam.pos[i*3+2]=(sq?s.z*bz:Math.sin(a)*rr)+Math.cos(t*.8+i)*.08*life; });
   bubbles.seed.forEach((s,i)=>{ const life=(t*.45+s.a)%1, a=s.a*60, rr=Math.sqrt(s.r)*bound*.9;
-    bubbles.pos[i*3]=sq?s.x*bound*.9:Math.cos(a)*rr; bubbles.pos[i*3+1]=.2+life*(H-.35); bubbles.pos[i*3+2]=sq?s.z*bound*.9:Math.sin(a)*rr; });
+    bubbles.pos[i*3]=sq?s.x*bx*.9:Math.cos(a)*rr; bubbles.pos[i*3+1]=.2+life*(H-.35); bubbles.pos[i*3+2]=sq?s.z*bz*.9:Math.sin(a)*rr; });
   steam.g.attributes.position.needsUpdate=true; bubbles.g.attributes.position.needsUpdate=true;
   renderer.render(scene,camera);
   requestAnimationFrame(loop);
@@ -512,7 +555,7 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
  const nm=f.get('n');form.innerHTML='<div class="ty" role="status"><h3>Thank you, <span id="tyn"></span>!</h3><p>Thank you for your request. We will contact you within 24 hours.</p></div>';document.getElementById('tyn').textContent=nm;document.querySelector('.ty').scrollIntoView({behavior:'smooth',block:'center'});});
 </script>
 <script>
-document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=5;st.a=2;st.fib=0;st.p=0;st.acc={stove:true,hydro:true};
+document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=5;st.a=2;st.fib=0;st.p=0;st.acc={stove:true,hydro:true,ladder:true};st.stepOpen=1;
  press($('oModel'),st.m);press($('oShape'),st.s);press($('oWood'),st.w);pressMat();
  setJets(6);syncUI();showTab(0);if(!rqs.hidden)showSum();};
 </script>
