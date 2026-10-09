@@ -193,7 +193,7 @@ const SITE = {
 
 const $ = id => document.getElementById(id);
 const S = SITE;
-const st = { m:0, s:0, w:0, a:0, fib:0, coverC:0, p:0, fire:true, acc:{}, pend:{hydro:false,thermo:true,shelf:true,led:true} };   // fire is always on
+const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, p:0, fire:true, acc:{}, pend:{hydro:false,thermo:true,shelf:true,led:true} };   // fire is always on
 S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
 const plus = n => n ? '+'+fmt(n) : '';   // price shown in the option menus, e.g. +€120
@@ -512,7 +512,7 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
  const nm=f.get('n');form.innerHTML='<div class="ty" role="status"><h3>Thank you, <span id="tyn"></span>!</h3><p>Thank you for your request. We will contact you within 24 hours.</p></div>';document.getElementById('tyn').textContent=nm;document.querySelector('.ty').scrollIntoView({behavior:'smooth',block:'center'});});
 </script>
 <script>
-document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=0;st.a=0;st.fib=0;st.p=0;st.acc={stove:true,hydro:true};
+document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=5;st.a=2;st.fib=0;st.p=0;st.acc={stove:true,hydro:true};
  press($('oModel'),st.m);press($('oShape'),st.s);press($('oWood'),st.w);pressMat();
  setJets(6);syncUI();showTab(0);if(!rqs.hidden)showSum();};
 </script>
