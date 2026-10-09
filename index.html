@@ -78,7 +78,7 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 .t p .tl:hover span{transform:translateX(3px)}
 </style></head><body>
 <div class="bar"><div class="w"><span>Customer reviews</span><span id="dl">Fast delivery</span><span>24-month warranty</span><span>14-day right of withdrawal</span></div></div>
-<header><div class="w"><a class="logo" href="#" aria-label="Thermal Heat"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1.5C17 8 25.5 11 25.5 20a9.5 9.5 0 0 1-19 0c0-5 3.2-7.200 4.200-11 2.100 1.800 3 3.200 3.600 5.200C15.800 10.500 15 6 16 1.500Z" fill="#d98a1c"/><path d="M16 17.500c2.200 3 4.200 4.600 4.200 7.200a4.200 4.200 0 0 1-8.400 0c0-2.600 2-4.200 4.200-7.200Z" fill="#1f3a34"/></svg><span class="wm"><b>Thermal</b><i>Heat</i></span></a><nav><a href="thermal-heat-gallery.html">Gallery</a><a href="#">About us</a><a href="#">Contact</a><div class="soc" aria-label="Social media">
+<header><div class="w"><a class="logo" href="#" aria-label="Thermal Heat"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1.5C17 8 25.5 11 25.5 20a9.5 9.5 0 0 1-19 0c0-5 3.2-7.200 4.200-11 2.100 1.800 3 3.200 3.600 5.200C15.800 10.500 15 6 16 1.500Z" fill="#d98a1c"/><path d="M16 17.500c2.200 3 4.200 4.600 4.200 7.200a4.200 4.200 0 0 1-8.400 0c0-2.600 2-4.200 4.200-7.200Z" fill="#1f3a34"/></svg><span class="wm"><b>Thermal</b><i>Heat</i></span></a><nav><a href="thermal-heat-gallery.html">Gallery</a><a href="#">About us</a><a href="#" id="navContact">Contact</a><div class="soc" aria-label="Social media">
 <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
 <a href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.200 0-7.800.4A2.600 2.600 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.600 2.600 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.600 2.600 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800z"/><path fill="#e6dfd1" d="M10 15V9l5.200 3z"/></svg></a>
 <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M13.500 22v-8.200h2.800l.5-3.300h-3.300V8.400c0-.9.400-1.700 1.800-1.700h1.600V3.800c-.3 0-1.300-.2-2.400-.2-2.500 0-4.100 1.500-4.100 4.200v2.700H7.600v3.300h2.800V22z"/></svg></a>
@@ -500,10 +500,13 @@ const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+', '+m.peo
 const rqs=document.getElementById('rqf');
 function showSum(){document.getElementById('sum').innerHTML=rows().map((x,i,a)=>`<tr${i===a.length-1?' class="t"':''}><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('');}
 document.getElementById('rq').onclick=()=>{showSum();const c=document.querySelector('.cs button[aria-pressed=true]');if(c)document.getElementById('rqL').value=c.dataset.n;rqs.hidden=false;rqs.scrollIntoView({behavior:'smooth'});};
-document.getElementById('rqForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);
- const body='Name: '+f.get('n')+'\nEmail: '+f.get('e')+'\nPhone: '+(f.get('p')||'-')+'\nDelivery: '+f.get('l')+', '+(f.get('z')||'-')+'\n\nCONFIGURATION\n'+rows().map(x=>x.filter(Boolean).join(' | ')).join('\n')+'\n\n'+(f.get('m')||'');
- const nm=f.get('n');e.target.innerHTML='<div class="ty" role="status"><h3>Thank you, <span id="tyn"></span>!</h3><p>Thank you for your request. We will contact you within 24 hours.</p><p class="rqn">Please send the email that opened in your email app to complete your request. If it did not open, write to <b>'+S.email+'</b>.</p></div>';document.getElementById('tyn').textContent=nm;document.querySelector('.ty').scrollIntoView({behavior:'smooth',block:'center'});
- location.href='mailto:'+S.email+'?subject='+encodeURIComponent('Hot tub request')+'&body='+encodeURIComponent(body);});
+document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.target,f=new FormData(form),btn=form.querySelector('button[type=submit]'),ok=document.getElementById('rqok');
+ const body='CONFIGURATION\n'+rows().map(x=>x.filter(Boolean).join(' | ')).join('\n')+'\n\n'+(f.get('m')||'');
+ btn.disabled=true;ok.hidden=true;
+ const sent=await sendMail({name:f.get('n'),email:f.get('e'),phone:f.get('p')||'-',delivery_country:f.get('l'),postcode_city:f.get('z')||'-',message:body},'Hot tub request');
+ btn.disabled=false;
+ if(!sent){ok.textContent='Sorry, sending failed. Please try again or write to '+MAIL_TO+'.';ok.hidden=false;return;}
+ const nm=f.get('n');form.innerHTML='<div class="ty" role="status"><h3>Thank you, <span id="tyn"></span>!</h3><p>Thank you for your request. We will contact you within 24 hours.</p></div>';document.getElementById('tyn').textContent=nm;document.querySelector('.ty').scrollIntoView({behavior:'smooth',block:'center'});});
 </script>
 <script>
 document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=0;st.a=0;st.p=0;st.acc={stove:true,hydro:true};
@@ -612,6 +615,80 @@ t.addEventListener('click',function(e){if(e.target.className==='rvm'){var c=e.ta
 function step(d){t.scrollBy({left:d*(t.firstChild.offsetWidth+16)})}
 document.getElementById('rvp').onclick=function(){step(-1)};
 document.getElementById('rvn').onclick=function(){step(1)};
+})();
+</script>
+
+<style>
+#cdlg{position:fixed;inset:0;margin:auto;border:0;border-radius:14px;padding:32px 30px 28px;max-width:460px;width:calc(100% - 32px);max-height:calc(100vh - 32px);overflow:auto;box-sizing:border-box;background:#faf6ee;color:#2a2420;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+#cdlg::backdrop{background:rgba(16,40,47,.65)}
+#cdlg h3{font:700 26px Georgia,serif;margin:0 0 6px;color:#1f3a34}
+#cdlg .cx{position:absolute;top:12px;right:16px;background:none;border:0;font-size:30px;line-height:1;cursor:pointer;color:#5d544b}
+#cdlg .cx:hover{color:#1f3a34}
+#cForm2{display:grid;gap:16px;margin-top:20px}
+#cdlg label{display:grid;gap:7px;font:600 14px system-ui,sans-serif;color:#4a4036}
+#cdlg input:not([type=checkbox]),#cdlg textarea{width:100%;box-sizing:border-box;font:400 16px system-ui,sans-serif;color:#2a2420;padding:12px 14px;border:1.5px solid #cfc6b6;border-radius:8px;background:#fff;transition:border-color .15s,box-shadow .15s}
+#cdlg textarea{min-height:110px;resize:vertical}
+#cdlg input:not([type=checkbox]):focus,#cdlg textarea:focus{outline:0;border-color:#d98a1c;box-shadow:0 0 0 3px rgba(217,138,28,.22)}
+#cdlg label.ck2{display:flex;gap:10px;align-items:flex-start;font:400 13px/1.45 system-ui,sans-serif;color:#5d544b}
+#cdlg label.ck2 input{width:18px;height:18px;margin:1px 0 0;accent-color:#d98a1c;flex:none}
+#cForm2 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#cForm2 .b{width:100%;margin:4px 0 0;padding:14px}
+#cForm2 .b[disabled]{opacity:.6;cursor:wait}
+#cdlg .ty{margin-top:8px}
+#cmsg{font-size:14px;color:#5d544b;margin:0}
+#cmsg.err{color:#b3261e}
+</style>
+<dialog id="cdlg" aria-labelledby="cdt">
+<button class="cx" type="button" id="cclose" aria-label="Close">&times;</button>
+<div id="cbody">
+<h3 id="cdt">Contact us</h3>
+<p class="rqn" style="margin-top:0">Send us your question and we will reply by email within 24 hours.</p>
+<form id="cForm2">
+<label>Name<input name="name" required autocomplete="name"></label>
+<label>Email<input name="email" type="email" required autocomplete="email"></label>
+<label>Phone (optional)<input name="phone" type="tel" autocomplete="tel"></label>
+<label>Country<input name="country" autocomplete="country-name"></label>
+<label>Message<textarea name="message" required></textarea></label>
+<div class="hp" aria-hidden="true"><label>Leave empty<input name="_honey" tabindex="-1" autocomplete="off"></label></div>
+<label class="ck2"><input type="checkbox" required> I agree that Thermal Heat may use my data to answer this request (privacy policy).</label>
+<button class="b" type="submit">Send message</button>
+<p id="cmsg" role="status" hidden></p>
+</form>
+</div>
+</dialog>
+<script>
+/* Messages are sent by the website itself (not from the visitor's mail app). */
+const MAIL_TO='edgaruik@gmail.com';
+async function sendMail(data,subject){
+  try{
+    const res=await fetch('https://formsubmit.co/ajax/'+MAIL_TO,{method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(Object.assign({_subject:subject,_template:'table',_captcha:'false'},data))});
+    const j=await res.json();
+    return res.ok&&String(j.success)==='true';
+  }catch(_){return false;}
+}
+(function(){
+  const dlg=document.getElementById('cdlg'),form=document.getElementById('cForm2'),msg=document.getElementById('cmsg'),body=document.getElementById('cbody');
+  const html=body.innerHTML;
+  document.getElementById('navContact').addEventListener('click',e=>{e.preventDefault();dlg.showModal();});
+  document.getElementById('cclose').addEventListener('click',()=>dlg.close());
+  dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close();});
+  dlg.addEventListener('close',()=>{if(!document.getElementById('cForm2')){body.innerHTML=html;wire();}});
+  function wire(){
+    const f=document.getElementById('cForm2'),m=document.getElementById('cmsg');
+    f.addEventListener('submit',async e=>{
+      e.preventDefault();const btn=f.querySelector('button[type=submit]'),d=new FormData(f);
+      if(d.get('_honey'))return;
+      btn.disabled=true;m.hidden=true;m.className='';
+      const ok=await sendMail({name:d.get('name'),email:d.get('email'),phone:d.get('phone')||'-',country:d.get('country')||'-',message:d.get('message')},'Website contact message');
+      btn.disabled=false;
+      if(!ok){m.textContent='Sorry, sending failed. Please try again or write to '+MAIL_TO+'.';m.className='err';m.hidden=false;return;}
+      document.getElementById('cbody').innerHTML='<div class="ty" role="status"><h3></h3><p>Thank you for your message. We will contact you within 24 hours.</p></div>';
+      document.querySelector('#cbody .ty h3').textContent='Thank you, '+d.get('name')+'!';
+    });
+  }
+  wire();
 })();
 </script>
 </body></html>
