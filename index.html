@@ -96,6 +96,7 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
             <b id="lModel"></b><div class="opts" id="oModel"></div>
             <b id="lWood"></b><div class="sw" id="oWood"></div>
             <b id="lAcr"></b><div class="sw" id="oAcr"></div>
+            <b id="lFib"></b><div class="sw" id="oFib"></div>
           </div>
           <div class="pane" id="pane1" hidden>
             <b id="lPos"></b><div class="opts" id="oPos"></div>
@@ -134,7 +135,7 @@ const SITE = {
     lead: 'Wood-fired acrylic hot tubs, round or square. No power, no hookup, just wood, water and time. Delivery to Germany, Austria, Switzerland and France.',
     cta: 'Request a quote'
   },
-  ui: { tabs:['Shape & finish','Equipment','Accessories'], none:'None', model:'Size', shape:'Shape', wood:'Wood', acr:'Acrylic', on:'On', off:'Off',
+  ui: { tabs:['Shape & finish','Equipment','Accessories'], none:'None', model:'Size', shape:'Shape', wood:'Wood', acr:'Acrylic', fib:'Fiberglass', on:'On', off:'Off',
         hint:'Drag to rotate', stovePos:'Stove position', steps:'Steps', guard:'Chimney guard', accessories:'Accessories', total:'Total', currency:'EUR' },
   // r = radius in 3D units (size in the configurator). Prices are placeholders (EUR).
   models: [
@@ -192,7 +193,7 @@ const SITE = {
 
 const $ = id => document.getElementById(id);
 const S = SITE;
-const st = { m:0, s:0, w:0, a:0, p:0, fire:true, acc:{}, pend:{hydro:false,thermo:true,shelf:true,led:true} };   // fire is always on
+const st = { m:0, s:0, w:0, a:0, fib:0, coverC:0, p:0, fire:true, acc:{}, pend:{hydro:false,thermo:true,shelf:true,led:true} };   // fire is always on
 S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
 const plus = n => n ? '+'+fmt(n) : '';   // price shown in the option menus, e.g. +€120
@@ -204,7 +205,7 @@ const total = () => mp(S.models[st.m],st.s) + S.shapes[st.s].extra + (st.acc.sto
   const [b1,b2] = S.brand.split('|'); $('brand').innerHTML = b1 + '<span>' + b2 + '</span>';
   $('nav').innerHTML = S.nav.map(n => `<a href="${n[1]}">${n[0]}</a>`).join('');
   $('h1').textContent=S.hero.title; $('lead').textContent=S.hero.lead; $('cta').textContent=S.hero.cta;
-  $('lModel').textContent=S.ui.model; $('lShape').textContent=S.ui.shape; $('lWood').textContent=S.ui.wood; $('lAcr').textContent=S.ui.acr; const ap=id=>(S.accessories.find(a=>a.id===id)||{price:0}).price;
+  $('lModel').textContent=S.ui.model; $('lShape').textContent=S.ui.shape; $('lWood').textContent=S.ui.wood; $('lAcr').textContent=S.ui.acr; $('lFib').textContent=S.ui.fib; const ap=id=>(S.accessories.find(a=>a.id===id)||{price:0}).price;
   $('lPos').textContent=S.ui.stovePos+(ap('stove')?' '+plus(ap('stove')):''); $('lSteps').textContent=S.ui.steps;
   $('hint').textContent=S.ui.hint;
   $('fTitle').textContent=S.features.title;
@@ -221,7 +222,7 @@ const total = () => mp(S.models[st.m],st.s) + S.shapes[st.s].extra + (st.acc.sto
   $('form').addEventListener('submit', e => {
     e.preventDefault(); const f=new FormData(e.target);
     const accs=S.accessories.filter(a=>st.acc[a.id]&&!st.pend[a.id]).map(a=>a.name).join(', ')||'-';
-    const body=`${c.name}: ${f.get('n')}\n${c.mail}: ${f.get('e')}\n${c.land}: ${f.get('l')}\n\n${S.models[st.m].name}, ${S.shapes[st.s].n}, ${S.woods[st.w].n}${st.acc.stove?', '+S.ui.stovePos+': '+S.stovePlaces[st.p].n:''}, ${S.acrylics[st.a].n}\n${S.ui.accessories}: ${accs}\n${S.ui.total}: ${fmt(total())}\n\n${f.get('m')}`;
+    const body=`${c.name}: ${f.get('n')}\n${c.mail}: ${f.get('e')}\n${c.land}: ${f.get('l')}\n\n${S.models[st.m].name}, ${S.shapes[st.s].n}, ${S.woods[st.w].n}${st.acc.stove?', '+S.ui.stovePos+': '+S.stovePlaces[st.p].n:''}, ${st.fib?S.ui.fib:S.ui.acr}: ${S.acrylics[st.a].n}\n${S.ui.accessories}: ${accs}\n${S.ui.total}: ${fmt(total())}\n\n${f.get('m')}`;
     location.href=`mailto:${S.email}?subject=${encodeURIComponent(c.subject)}&body=${encodeURIComponent(body)}`;
   });
 })();
@@ -232,9 +233,11 @@ function btn(box,label,fn,css){ const b=document.createElement('button'); if(css
 S.models.forEach((m,i)=>btn($('oModel'),m.name,()=>{st.m=i;press($('oModel'),i);build();readout();}).textContent=m.id);
 S.shapes.forEach((s,i)=>btn($('oShape'),s.n+(s.extra?' '+plus(s.extra):''),()=>{st.s=i;press($('oShape'),i);build();readout();}));
 S.woods.forEach((w,i)=>btn($('oWood'),w.n,()=>{st.w=i;press($('oWood'),i);build();},w.c));
-S.acrylics.forEach((a,i)=>btn($('oAcr'),a.n,()=>{st.a=i;press($('oAcr'),i);build();},a.c));
-press($('oModel'),st.m); press($('oShape'),st.s); press($('oWood'),st.w); press($('oAcr'),st.a);
-const chipEls={};
+function pressMat(){ press($('oAcr'),st.fib?-1:st.a); press($('oFib'),st.fib?st.a:-1); }
+S.acrylics.forEach((a,i)=>btn($('oAcr'),a.n,()=>{st.a=i;st.fib=0;pressMat();build();},a.c));
+S.acrylics.forEach((a,i)=>btn($('oFib'),a.n,()=>{st.a=i;st.fib=1;pressMat();build();},a.c));   // Fiberglass: same colours as acrylic
+press($('oModel'),st.m); press($('oShape'),st.s); press($('oWood'),st.w); pressMat();
+const chipEls={}; var COVC=[['Black','#1c1e20'],['Brown','#6b4430'],['Grey','#8a9094']];   // thermal cover colours
 function syncUI(){ const v=!!st.acc.stove;
   [...$('oPos').children].forEach((x,j)=>x.setAttribute('aria-pressed',j===st.p));
   [...$('oSteps').children].forEach((x,j)=>x.setAttribute('aria-pressed',(j===1)===!!st.acc.ladder));
@@ -443,7 +446,7 @@ function build(){
     stepBlock(.40,.82,-.55,.45,.32);       // lower step, longer on one side
     place(g,Math.PI); }
   if(A.led){ loopMesh(H-.12,-.12,new THREE.MeshBasicMaterial({color:0x7fe8ff}),.018); }
-  if(A.cover){ const lm=new THREE.MeshStandardMaterial({color:0x39434a,roughness:.7});
+  if(A.cover){ const lm=new THREE.MeshStandardMaterial({color:new THREE.Color(COVC[st.coverC||0][1]),roughness:.7});
     const c=sq?new THREE.Mesh(new THREE.BoxGeometry(2*HW+.24,.09,2*HW+.24),lm):new THREE.Mesh(new THREE.CylinderGeometry(R+.06,R+.06,.09,48),lm);
     c.position.y=H+.17; c.castShadow=true; tub.add(c); }
   scene.add(tub); ledLight.position.set(0,H-.25,0); poolLight.position.set(0,.8,0);
@@ -493,7 +496,7 @@ const clock=new THREE.Clock();
 <script>document.querySelectorAll('.cs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.cs button').forEach(x=>x.setAttribute('aria-pressed',x===b));document.getElementById('dl').textContent='Delivery to '+b.dataset.n})</script>
 <script>
 S.email='info@thermal-heat.example';
-const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+', '+m.people+')',fmt(mp(m,st.s))],['Shape',S.shapes[st.s].n,S.shapes[st.s].extra?'+'+fmt(S.shapes[st.s].extra):''],['Wood',S.woods[st.w].n,''],['Acrylic',S.acrylics[st.a].n,'']];
+const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+', '+m.people+')',fmt(mp(m,st.s))],['Shape',S.shapes[st.s].n,S.shapes[st.s].extra?'+'+fmt(S.shapes[st.s].extra):''],['Wood',S.woods[st.w].n,''],[st.fib?S.ui.fib:S.ui.acr,S.acrylics[st.a].n,'']];
  r.push(['Stove',st.acc.stove?S.stovePlaces[st.p].n:'None',st.acc.stove?fmt(S.accessories.find(a=>a.id==='stove').price+S.stovePlaces[st.p].extra):'']);
  S.accessories.filter(a=>a.id!=='stove'&&st.acc[a.id]&&!st.pend[a.id]).forEach(a=>r.push([a.name,'',fmt(a.price)]));
  r.push(['Total (indicative)','',fmt(total())]);return r;};
@@ -509,17 +512,17 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
  const nm=f.get('n');form.innerHTML='<div class="ty" role="status"><h3>Thank you, <span id="tyn"></span>!</h3><p>Thank you for your request. We will contact you within 24 hours.</p></div>';document.getElementById('tyn').textContent=nm;document.querySelector('.ty').scrollIntoView({behavior:'smooth',block:'center'});});
 </script>
 <script>
-document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=0;st.a=0;st.p=0;st.acc={stove:true,hydro:true};
- press($('oModel'),st.m);press($('oShape'),st.s);press($('oWood'),st.w);press($('oAcr'),st.a);
+document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=0;st.a=0;st.fib=0;st.p=0;st.acc={stove:true,hydro:true};
+ press($('oModel'),st.m);press($('oShape'),st.s);press($('oWood'),st.w);pressMat();
  setJets(6);syncUI();showTab(0);if(!rqs.hidden)showSum();};
 </script>
 <script>
 function readout(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n;$('rInfo').textContent=m.people+' · '+S.ui.total+' '+fmt(total());
- const L=[[m.name+' · '+m.size,fmt(mp(m,st.s))],['Shape: '+sh.n,sh.extra?'+'+fmt(sh.extra):''],['Wood: '+S.woods[st.w].n,''],['Acrylic: '+S.acrylics[st.a].n,''],
+ const L=[[m.name+' · '+m.size,fmt(mp(m,st.s))],['Shape: '+sh.n,sh.extra?'+'+fmt(sh.extra):''],['Wood: '+S.woods[st.w].n,''],[(st.fib?S.ui.fib:S.ui.acr)+': '+S.acrylics[st.a].n,''],
   st.acc.stove?['Stove: '+S.stovePlaces[st.p].n,fmt(sv.price+S.stovePlaces[st.p].extra)]:['Stove: None','']];
  S.accessories.filter(x=>x.id!=='stove'&&st.acc[x.id]&&!st.pend[x.id]).forEach(x=>L.push([x.name,fmt(x.price)]));
  $('rList').innerHTML=L.map(([k,v])=>'<div class="rr"><span>'+k+'</span><b>'+v+'</b></div>').join('')+'<div class="rr rt"><span>Total</span><b>'+fmt(total())+'</b></div>';}
-[...$('oWood').children,...$('oAcr').children].forEach(b=>b.addEventListener('click',readout));
+[...$('oWood').children,...$('oAcr').children,...$('oFib').children].forEach(b=>b.addEventListener('click',readout));
 readout();
 </script>
 <script>
@@ -574,6 +577,15 @@ function svis(){sw2.hidden=!st.acc.shelf||!shOpen;chg4.hidden=!st.acc.shelf||shO
 function setShelf(i){st.shelfC=i;SHA.name='Drink shelf \u00b7 '+SHC[i][0];SHA.price=SHC[i][2];chipEls.shelf.querySelector('small').textContent=plus(SHA.price);[...sw2.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));shOpen=false;svis();build();readout();if(!rqs.hidden)showSum();}
 const _s4=syncUI;syncUI=function(){if(!st.acc.shelf){shOpen=true;st.shelfC=0;SHA.name='Drink shelf \u00b7 Wooden';SHA.price=SHC[0][2];chipEls.shelf.querySelector('small').textContent='';[...sw2.children].forEach(b=>b.setAttribute('aria-pressed',false));}_s4();svis();};
 [...sw2.children].forEach(b=>b.setAttribute('aria-pressed',false));
+syncUI();readout();
+</script>
+<script>
+const CVA=S.accessories.find(x=>x.id==='cover');CVA.name='Thermal cover \u00b7 '+COVC[0][0];
+const swc=document.createElement('div');swc.className='sub sw2';
+COVC.forEach(([n,c],i)=>{const b=document.createElement('button');b.type='button';b.style.background=c;b.title=b.ariaLabel=n;b.dataset.i=i;b.onclick=()=>setCover(i);swc.appendChild(b);});
+chipEls.cover.after(swc);
+function setCover(i){st.coverC=i;CVA.name='Thermal cover \u00b7 '+COVC[i][0];[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));build();readout();if(!rqs.hidden)showSum();}
+const _s5=syncUI;syncUI=function(){if(!st.acc.cover){st.coverC=0;CVA.name='Thermal cover \u00b7 '+COVC[0][0];}_s5();swc.hidden=!st.acc.cover;[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===st.coverC));};
 syncUI();readout();
 </script>
 <script>
