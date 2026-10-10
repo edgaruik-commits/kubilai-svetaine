@@ -571,8 +571,8 @@ const clock=new THREE.Clock();
 <script>
 S.email='edgaruik@gmail.com';
 const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+', '+m.people+')',fmt(mp(m,st.s))],['Shape',S.shapes[st.s].n,S.shapes[st.s].extra?'+'+fmt(S.shapes[st.s].extra):''],['Wood',S.woods[st.w].n,''],[st.fib?S.ui.fib:S.ui.acr,S.acrylics[st.a].n,'']];
- r.push(['Stove',st.acc.stove?S.stoveTypes[st.t].n:'None',st.acc.stove?fmt(S.accessories.find(a=>a.id==='stove').price+S.stoveTypes[st.t].extra+(S.stoveTypes[st.t].electric?0:S.stovePlaces[st.p].extra)):'']);
- if(st.acc.stove&&!S.stoveTypes[st.t].electric) r.push(['Stove position',S.stovePlaces[st.p].n,'']);
+ r.push(['Stove',st.acc.stove?S.stoveTypes[st.t].n:'None',st.acc.stove?fmt(S.accessories.find(a=>a.id==='stove').price+S.stoveTypes[st.t].extra):'']);
+ if(st.acc.stove&&!S.stoveTypes[st.t].electric) r.push(['Stove position',S.stovePlaces[st.p].n,S.stovePlaces[st.p].extra?fmt(S.stovePlaces[st.p].extra):'']);
  S.accessories.filter(a=>a.id!=='stove'&&st.acc[a.id]&&!st.pend[a.id]).forEach(a=>r.push([a.name,'',fmt(a.price)]));
  r.push(['Total (indicative)','',fmt(total())]);return r;};
 const rqs=document.getElementById('rqf');
@@ -598,7 +598,8 @@ document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=5;st.a=2;st.fib=0
 <script>
 function readout(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n;
  const L=[[m.name,m.size,1],['Size: '+m.people,''],['Shape: '+sh.n,sh.extra?'+'+fmt(sh.extra):''],['Wood: '+S.woods[st.w].n,''],[(st.fib?S.ui.fib:S.ui.acr)+': '+S.acrylics[st.a].n,''],
-  st.acc.stove?['Stove: '+S.stoveTypes[st.t].n+(S.stoveTypes[st.t].electric?'':' · '+S.stovePlaces[st.p].n),fmt(sv.price+S.stoveTypes[st.t].extra+(S.stoveTypes[st.t].electric?0:S.stovePlaces[st.p].extra))]:['Stove: None','']];
+  st.acc.stove?['Stove: '+S.stoveTypes[st.t].n,fmt(sv.price+S.stoveTypes[st.t].extra)]:['Stove: None','']];
+ if(st.acc.stove&&!S.stoveTypes[st.t].electric) L.push(['Stove position: '+S.stovePlaces[st.p].n,S.stovePlaces[st.p].extra?fmt(S.stovePlaces[st.p].extra):'']);
  S.accessories.filter(x=>x.id!=='stove'&&st.acc[x.id]&&!st.pend[x.id]).forEach(x=>L.push([x.name,fmt(x.price)]));
  $('rList').innerHTML=L.map(([k,v,n])=>'<div class="rr"><span'+(n?' style="flex:none"':'')+'>'+k+'</span><b'+(n?' style="font-weight:400;white-space:normal;text-align:right"':'')+'>'+v+'</b></div>').join('')+'<div class="rr rt"><span>Total</span><b>'+fmt(total())+'</b></div>';}
 [...$('oWood').children,...$('oAcr').children,...$('oFib').children].forEach(b=>b.addEventListener('click',readout));
