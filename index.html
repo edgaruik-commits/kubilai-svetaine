@@ -666,7 +666,11 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
  btn.disabled=false;
  if(sent==='mailto'){ok.textContent='Your email app should open with the request. Press Send there to deliver it to '+MAIL_TO+'. (Automatic sending works only on the published website.)';ok.hidden=false;return;}
  if(!sent){ok.textContent='Sorry, sending failed. Please try again or write to '+MAIL_TO+'. ['+(window.mailErr||'unknown error')+']';ok.hidden=false;return;}
- const nm=f.get('n');form.innerHTML='<div class="ty" role="status"><h3>Thank you, <span id="tyn"></span>!</h3><p>Thank you for your request. We will contact you within 24 hours.</p></div>';document.getElementById('tyn').textContent=nm;});
+ const nm=f.get('n');const origHTML=form.innerHTML;form.innerHTML='<div class="ty" role="status"><h3>Thank you, <span id="tyn"></span>!</h3><p>Thank you for your request. We will contact you within 24 hours.</p></div>';document.getElementById('tyn').textContent=nm;
+ // Automatically close the request dialog 5 seconds after a successful send, then restore the empty form for next time
+ const tm=setTimeout(()=>{if(rqs.open)rqs.close();},5000);
+ rqs.addEventListener('close',()=>{clearTimeout(tm);form.innerHTML=origHTML;const m=document.getElementById('rqmail');if(m&&typeof MAIL_TO!=='undefined')m.textContent=MAIL_TO;},{once:true});
+});
 </script>
 <script>
 document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=5;st.a=2;st.fib=0;st.p=0;st.t=0;st.acc={stove:true,hydro:true,air:true,led:true,cover:true,ladder:true};st.stepOpen=1;
