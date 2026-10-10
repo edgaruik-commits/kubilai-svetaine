@@ -676,7 +676,7 @@ let distT=6.4, fitR=0;
 function resize(){ const p=canvas.parentElement,w=p.clientWidth,h=p.clientHeight,pn=p.querySelector('.panel');
   renderer.setSize(w,h,false); camera.aspect=w/h;
   let fw=w, fh=h, ox=0, oy=0;                              // free area not covered by the options panel
-  if(innerWidth>900){ const pw=pn.offsetWidth+30; fw=Math.max(200,w-pw); ox=pw/2; }   // desktop: panel on the right, tub moves left
+  if(innerWidth>900){ const pw=pn.offsetWidth+30; fw=Math.max(200,w-pw); ox=pw/2-Math.round(w*.068); }   // desktop: panel on the right, tub moves left
   else { const ph=pn.offsetHeight+64, top=80; fh=Math.max(200,h-ph-top); oy=(ph-top)/2; } // mobile: panel at the bottom, tub moves up
   camera.setViewOffset(w,h,ox,oy,w,h); camera.updateProjectionMatrix();
   const k=2*Math.tan(17*Math.PI/180);
