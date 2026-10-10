@@ -166,7 +166,7 @@ const SITE = {
     {id:'stove',  name:'External stove',             price:0, desc:'Wood-fired stove with chimney'},
     {id:'guard',  name:'Chimney guard',              price:90,  desc:'Perforated stainless guard around the chimney (needs a stove)'},
     {id:'led',    name:'LED lighting',               price:140, desc:'Colour lighting under the rim'},
-    {id:'cover',  name:'Thermal cover',              price:350, desc:'Insulated lid that keeps the heat in'},
+    {id:'cover',  name:'Thermal cover',              price:0,   desc:'Insulated lid that keeps the heat in'},
     {id:'sound',  name:'Sound system',               price:290, desc:'Waterproof speaker'},
     {id:'ladder', name:'Wooden steps',              price:160, desc:'Wooden steps outside plus a step inside the tub'},
     {id:'filter', name:'Filtration system',          price:0, desc:'Water filtration'}
@@ -591,9 +591,9 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
  const nm=f.get('n');form.innerHTML='<div class="ty" role="status"><h3>Thank you, <span id="tyn"></span>!</h3><p>Thank you for your request. We will contact you within 24 hours.</p></div>';document.getElementById('tyn').textContent=nm;});
 </script>
 <script>
-document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=5;st.a=2;st.fib=0;st.p=0;st.t=0;st.acc={stove:true,hydro:true,air:true,ladder:true};st.stepOpen=1;
+document.getElementById('std').onclick=()=>{st.m=0;st.s=0;st.w=5;st.a=2;st.fib=0;st.p=0;st.t=0;st.acc={stove:true,hydro:true,air:true,led:true,cover:true,ladder:true};st.stepOpen=1;
  press($('oModel'),st.m);press($('oShape'),st.s);press($('oWood'),st.w);pressMat();
- setJets(6);syncUI();showTab(0);if(rqs.open)showSum();};
+ setJets(6);setAir(0);setLed(0);setCover(0);syncUI();showTab(0);if(rqs.open)showSum();};
 </script>
 <script>
 function readout(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n;
