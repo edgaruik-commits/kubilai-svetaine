@@ -937,6 +937,9 @@ async function sendMail(data,subject){
       if(!ok){m.textContent='Sorry, sending failed. Please try again or write to '+MAIL_TO+'. ['+(window.mailErr||'unknown error')+']';m.className='err';m.hidden=false;return;}
       document.getElementById('cbody').innerHTML='<div class="ty" role="status"><h3></h3><p>Thank you for your message. We will contact you within 24 hours.</p></div>';
       document.querySelector('#cbody .ty h3').textContent='Thank you, '+d.get('name')+'!';
+      // Automatically close the contact dialog 2 seconds after a successful send (the close handler restores the empty form)
+      const tm=setTimeout(()=>{if(dlg.open)dlg.close();},2000);
+      dlg.addEventListener('close',()=>clearTimeout(tm),{once:true});
     });
   }
   wire();
