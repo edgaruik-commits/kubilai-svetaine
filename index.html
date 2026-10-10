@@ -648,13 +648,13 @@ const clock=new THREE.Clock();
 <script>document.querySelectorAll('.cs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.cs button').forEach(x=>x.setAttribute('aria-pressed',x===b));document.getElementById('dl').textContent='Delivery to '+b.dataset.n})</script>
 <script>
 S.email='edgaruik@gmail.com';
-const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+', '+m.people+')',fmt(mp(m,st.s))],['Shape',S.shapes[st.s].n,S.shapes[st.s].extra?'+'+fmt(S.shapes[st.s].extra):''],['Wood',S.woods[st.w].n,''],[st.fib?S.ui.fib:S.ui.acr,S.acrylics[st.a].n,'']];
+const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+')',fmt(mp(m,st.s))],['Size',m.people,''],['Shape',S.shapes[st.s].n,S.shapes[st.s].extra?'+'+fmt(S.shapes[st.s].extra):''],['Wood',S.woods[st.w].n,''],[st.fib?S.ui.fib:S.ui.acr,S.acrylics[st.a].n,'']];
  r.push(['Stove',st.acc.stove?S.stoveTypes[st.t].n:'None',st.acc.stove?fmt(S.accessories.find(a=>a.id==='stove').price+S.stoveTypes[st.t].extra):'']);
  if(st.acc.stove&&!S.stoveTypes[st.t].electric) r.push(['Stove position',S.stovePlaces[st.p].n,S.stovePlaces[st.p].extra?fmt(S.stovePlaces[st.p].extra):'']);
  S.accessories.filter(a=>a.id!=='stove'&&st.acc[a.id]&&!st.pend[a.id]).forEach(a=>r.push([a.name,'',fmt(a.price)]));
  r.push(['Total (indicative)','',fmt(total())]);return r;};
 const rqs=document.getElementById('rqf');
-function showSum(){const m=S.models[st.m];document.getElementById('rqm').textContent=m.name+' · '+fmt(mp(m,st.s));document.getElementById('sum').innerHTML=rows().map((x,i,a)=>i===a.length-1?`<tr class="tt"><td colspan="2">${x[0]}</td><td>${x[2]}</td></tr>`:i===0?`<tr><td>${x[0]}</td><td colspan="2" class="dsc">${S.models[st.m].size+', '+S.models[st.m].people}</td></tr>`:`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('');}
+function showSum(){const m=S.models[st.m];document.getElementById('rqm').textContent=m.name+' · '+fmt(mp(m,st.s));document.getElementById('sum').innerHTML=rows().map((x,i,a)=>i===a.length-1?`<tr class="tt"><td colspan="2">${x[0]}</td><td>${x[2]}</td></tr>`:i===0?`<tr><td>${x[0]}</td><td colspan="2" class="dsc">${S.models[st.m].size}</td></tr>`:`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('');}
 document.getElementById('rq').onclick=()=>{showSum();const c=document.querySelector('.cs button[aria-pressed=true]');if(c)document.getElementById('rqL').value=c.dataset.n;if(!rqs.open)rqs.showModal();};
 document.getElementById('rqe').onclick=()=>rqs.close();
 document.getElementById('rqclose').onclick=()=>rqs.close();
