@@ -452,17 +452,27 @@ function build(){
       side(n1,(x,z,o)=>nozzle(x?x*wx:o,.72,z?z*wz:o,x,z,.03));
       side(n2,(x,z,o)=>nozzle(x?x*hwx:o,.41,z?z*hwz:o,x,z,.026)); }
   }
-  if(A.air){ const nm=new THREE.MeshPhongMaterial({color:0xdfe6e8,specular:0xffffff,shininess:100});
-    // three chrome air buttons on the outside wall, next to the steps
-    const sOff=A.ladder?(sq?Math.min(.75,HZ-.12):.75):.62, eb=edge(Math.PI+(sq?Math.atan(sOff/HX):sOff/R)), bg=new THREE.Group();   // control buttons sit on the wall right next to the steps
-     bg.position.copy(eb.p); bg.rotation.y=-Math.atan2(eb.n.z,eb.n.x);
-    [-.1,0,.1].forEach(z=>{ const b=new THREE.Mesh(new THREE.CylinderGeometry(.034,.034,.025,20),nm); b.rotation.z=Math.PI/2; b.position.set(.04,.55,z); bg.add(b);
-      const c=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.03,16),ss); c.rotation.z=Math.PI/2; c.position.set(.04,.55,z); bg.add(c); });
-    tub.add(bg); }
+  { const nm=new THREE.MeshPhongMaterial({color:0xdfe6e8,specular:0xffffff,shininess:100}), rim=new THREE.MeshStandardMaterial({color:0x1d2326,roughness:.6});   // base element, always present: three round silver control buttons, each set into the wall in its own dark bezel
+    const sOff=(A.ladder?(sq?Math.min(.75,HZ-.12):.75):.62)+.24;
+    [.17,.27,.37].forEach(z=>{ const o=sOff+z, eb=edge(Math.PI+(sq?Math.atan(o/HX):o/R)), bg=new THREE.Group(); bg.position.copy(eb.p); bg.rotation.y=-Math.atan2(eb.n.z,eb.n.x);
+      const bz=new THREE.Mesh(new THREE.CylinderGeometry(.042,.042,.03,28),rim); bz.rotation.z=Math.PI/2; bz.position.set(.028,.84,0); bg.add(bz);   // bezel sunk into the stave, flush with the wood
+      const b=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.02,24),nm); b.rotation.z=Math.PI/2; b.position.set(.036,.84,0); bg.add(b);
+      const c=new THREE.Mesh(new THREE.CylinderGeometry(.017,.017,.022,16),ss); c.rotation.z=Math.PI/2; c.position.set(.037,.84,0); bg.add(c);
+      tub.add(bg); }); }
   if(A.shelf){ const g=new THREE.Group(); const b=new THREE.Mesh(new THREE.BoxGeometry(.32,.04,.7),new THREE.MeshStandardMaterial({color:(window.SHC&&st.shelfC)?new THREE.Color(window.SHC[st.shelfC][1]):wood.clone().multiplyScalar(.85),roughness:(window.SHC&&st.shelfC)?.45:.8})); b.position.x=.06; g.add(b);
     [[-.18,0xd9481f],[.18,0xffffff]].forEach(([z,c])=>{ const cup=new THREE.Mesh(new THREE.CylinderGeometry(.045,.035,.1,14),new THREE.MeshPhongMaterial({color:c})); cup.position.set(.06,.07,z); g.add(cup); });
     place(g,Math.PI/2,H+.2); }
-  if(A.thermo){ const g=new THREE.Group(); g.add(new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.24,10),new THREE.MeshPhongMaterial({color:0xf3f3f3})));
+  if(A.thermo&&st.th===0){   // integrated electronic thermometer: small round display high on the outside wall, a bit past the steps
+    const sOff=(A.ladder?(sq?Math.min(.75,HZ-.12):.75):.62)+.24, eb=edge(Math.PI+(sq?Math.atan(sOff/HX):sOff/R)), g=new THREE.Group();
+    g.position.copy(eb.p); g.rotation.y=-Math.atan2(eb.n.z,eb.n.x);
+    const Y=.84, ring=new THREE.Mesh(new THREE.CylinderGeometry(.048,.048,.026,32),new THREE.MeshPhongMaterial({color:0xdfe6e8,specular:0xffffff,shininess:100})); ring.rotation.z=Math.PI/2; ring.position.set(.032,Y,0); g.add(ring);   // round housing set into the wall
+    const cv=document.createElement('canvas'); cv.width=cv.height=256; const cx=cv.getContext('2d');   // electronic LCD display
+    cx.fillStyle='#0b1a14'; cx.beginPath(); cx.arc(128,128,126,0,Math.PI*2); cx.fill();
+    cx.fillStyle='#6dffb0'; cx.textAlign='center'; cx.textBaseline='middle'; cx.font='bold 92px monospace'; cx.fillText('38.5',128,112);
+    cx.font='bold 44px monospace'; cx.fillText('\u00b0C',128,186);
+    const face=new THREE.Mesh(new THREE.CircleGeometry(.04,40),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv)})); face.rotation.y=Math.PI/2; face.position.set(.0455,Y,0); g.add(face);
+    tub.add(g); }
+  if(A.thermo&&st.th===1){ const g=new THREE.Group(); g.add(new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.24,10),new THREE.MeshPhongMaterial({color:0xf3f3f3})));
     const t=new THREE.Mesh(new THREE.SphereGeometry(.045,10,10),new THREE.MeshPhongMaterial({color:0xd9302f})); t.position.y=.14; g.add(t);
     g.position.set(Math.cos(2.4)*bound*.7,H-.04,Math.sin(2.4)*bound*.7); g.rotation.z=.15; tub.add(g); }
   if(A.sound){ const g=new THREE.Group(); const b=new THREE.Mesh(new THREE.BoxGeometry(.1,.24,.16),new THREE.MeshStandardMaterial({color:0x15191b})); g.add(b);
