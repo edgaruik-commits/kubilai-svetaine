@@ -18,8 +18,18 @@ h2{font:700 30px Georgia,serif;margin:56px 0 24px;color:#1f3a34}
 details{border-bottom:1px solid #cfc6b6;padding:14px 0}summary{font-weight:700;cursor:pointer}details p{margin-top:8px;max-width:70ch}
 .ct{background:#1f3a34;color:#fff;padding:36px;border-radius:8px;margin:56px 0}.ct p{max-width:60ch;margin-top:8px}
 footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top:40px}footer nav{gap:18px;margin-bottom:14px}
-#ck{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:3px solid #1f3a34;padding:14px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center}
-#ck .b{margin:0;padding:8px 16px}@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}@media(max-width:700px){.hero{background-position:62% 40%;padding:64px 0}}:root{--fog2:#dbe3e0;--ink:#10282f;--muted:#4d6169;--line:#b9c6c2;--ember:#d9481f}[hidden]{display:none!important}.stage{position:relative;background:linear-gradient(180deg,#f4f7f6 0%,var(--fog2) 100%);border-radius:28px;min-height:660px;overflow:hidden;touch-action:pan-y}
+#ck{position:fixed;left:0;right:0;bottom:0;z-index:9998;background:#fff;color:#1a1410;border-top:3px solid #1f3a34;padding:14px 20px;display:flex;gap:12px 20px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:.92rem;line-height:1.45}
+#ck[hidden]{display:none}#ck>span{max-width:640px}#ck a{color:#1f3a34;text-decoration:underline}
+.ckb{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#ck .b,#ckm .b{margin:0;padding:9px 18px;font:inherit;font-weight:700;cursor:pointer;border:2px solid #d98a1c;background:#d98a1c;color:#1a1410;border-radius:6px}   /* Reject and Accept look identical */
+#ck .b.o,#ckm .b.o{background:#fff;color:#1a1410;border-color:#1f3a34}
+#ckm{border:0;border-radius:12px;padding:24px;max-width:560px;width:calc(100% - 28px);color:#1a1410;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.35)}#ckm::backdrop{background:rgba(20,30,28,.55)}
+#ckm h3{margin:0 0 8px;font-size:1.3rem}#ckm .ckl{font-size:.9rem;line-height:1.5;margin:0 0 14px}#ckm a{color:#1f3a34;text-decoration:underline}
+.ckc{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid #e3dccd}.ckc b{display:block;margin-bottom:2px}.ckc span{font-size:.84rem;color:#5c554c;line-height:1.4}
+.sw2t{display:flex;align-items:center;gap:8px;flex:none;cursor:pointer;font-size:.8rem;min-width:92px;justify-content:flex-end}.sw2t em{font-style:normal;color:#5c554c;order:-1}
+.sw2t input{position:absolute;opacity:0;width:1px;height:1px}.sw2t i{width:42px;height:24px;border-radius:999px;background:#b9b2a5;position:relative;transition:background .15s}.sw2t i:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s}
+.sw2t input:checked+i{background:#1f3a34}.sw2t input:checked+i:after{transform:translateX(18px)}.sw2t input:disabled+i{opacity:.6}.sw2t input:focus-visible+i{outline:3px solid #d98a1c;outline-offset:2px}
+.ckf{margin-top:14px;padding-top:14px;border-top:1px solid #e3dccd}@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}@media(max-width:700px){.hero{background-position:62% 40%;padding:64px 0}}:root{--fog2:#dbe3e0;--ink:#10282f;--muted:#4d6169;--line:#b9c6c2;--ember:#d9481f}[hidden]{display:none!important}.stage{position:relative;background:linear-gradient(180deg,#f4f7f6 0%,var(--fog2) 100%);border-radius:28px;min-height:660px;overflow:hidden;touch-action:pan-y}
 #c{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
 #c:active{cursor:grabbing}
 .hint{position:absolute;left:18px;bottom:14px;font-size:.8rem;color:var(--muted)}
@@ -128,8 +138,14 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 <button class="rvb" id="rvn" aria-label="Next">&#8250;</button></div>
 </div></section>
 <h2>Frequently asked questions</h2><details><summary>Do I need a building permit?</summary><p>It depends on your country, region and municipality. We send you a checklist for your country. Please check placement and chimney with your local authority before ordering.</p></details><details><summary>Does the wood stove meet local emission rules?</summary><p>Test report and certificate of the stove go here. Chimney and stove must be inspected according to local rules (e.g. chimney sweep in Germany). [Verify data before publishing]</p></details><details><summary>How does delivery work?</summary><p>Production takes 1–3 weeks, freight 5–10 working days. Delivery on a pallet to the kerb; for Switzerland we clarify customs (DAP/DDP) in advance.</p></details><details><summary>What about warranty and service?</summary><p>Statutory EU warranty applies. Additional manufacturer warranty: [insert terms].</p></details></main>
-<footer><div class="w"><nav><a href="Legal_Notice_Thermal_Heat.pdf" download="Legal_Notice_Thermal_Heat.pdf">Legal notice</a><a href="Terms_and_Conditions_Thermal_Heat.pdf" download="Terms_and_Conditions_Thermal_Heat.pdf">Terms & conditions</a><a href="#">Right of withdrawal</a><a href="Privacy_Policy_Thermal_Heat.pdf" download="Privacy_Policy_Thermal_Heat.pdf">Privacy policy</a><a href="Warranty_Thermal_Heat.pdf" download="Warranty_Thermal_Heat.pdf">Warranty</a></nav><p>Payment: bank transfer, invoice, PayPal, Google Pay</p><p style="margin-top:8px">Europaletės MB · Vytauto g. 9, Meškučių k., LT-68129 Marijampolė, Lithuania · Company code: 304924983 · VAT no.: LT100012395710<br>Bank: Swedbank, AB · IBAN: LT21 7300 0101 5643 0123</p></div></footer>
-<div id="ck" role="dialog"><span>We use cookies for statistics and marketing. You decide.</span><a class="b o" href="#" onclick="ck.remove();return false">Reject all</a><a class="b o" href="#">Settings</a><a class="b" href="#" onclick="ck.remove();return false">Accept all</a></div>
+<footer><div class="w"><nav><a href="Legal_Notice_Thermal_Heat.pdf" download="Legal_Notice_Thermal_Heat.pdf">Legal notice</a><a href="Terms_and_Conditions_Thermal_Heat.pdf" download="Terms_and_Conditions_Thermal_Heat.pdf">Terms & conditions</a><a href="#">Right of withdrawal</a><a href="Privacy_Policy_Thermal_Heat.pdf" download="Privacy_Policy_Thermal_Heat.pdf">Privacy policy</a><a href="Warranty_Thermal_Heat.pdf" download="Warranty_Thermal_Heat.pdf">Warranty</a><a href="#" id="ckOpen">Cookie settings</a></nav><p>Payment: bank transfer, invoice, PayPal, Google Pay</p><p style="margin-top:8px">Europaletės MB · Vytauto g. 9, Meškučių k., LT-68129 Marijampolė, Lithuania · Company code: 304924983 · VAT no.: LT100012395710<br>Bank: Swedbank, AB · IBAN: LT21 7300 0101 5643 0123</p></div></footer>
+<div id="ck" role="region" aria-label="Cookie consent" hidden><span>We use cookies. Necessary cookies are always active. Statistics, preference and marketing cookies are used only if you agree. You can change your choice at any time. See our <a href="Privacy_Policy_Thermal_Heat.pdf" download="Privacy_Policy_Thermal_Heat.pdf">privacy policy</a>.</span><div class="ckb"><button type="button" class="b" data-ck="reject">Reject all</button><button type="button" class="b o" data-ck="settings">Settings</button><button type="button" class="b" data-ck="accept">Accept all</button></div></div>
+<dialog id="ckm" aria-labelledby="ckmt"><h3 id="ckmt">Cookie settings</h3><p class="ckl">Choose which cookies you allow. Apart from strictly necessary cookies, nothing is set unless you agree. You can change or withdraw your consent at any time via &ldquo;Cookie settings&rdquo; in the footer. Details: <a href="Privacy_Policy_Thermal_Heat.pdf" download="Privacy_Policy_Thermal_Heat.pdf">privacy policy</a>.</p>
+<div class="ckc"><div><b>Strictly necessary</b><span>Required for the site to work, e.g. remembering your cookie choice and securing the request form. Cannot be switched off.</span></div><label class="sw2t"><input type="checkbox" checked disabled><i></i><em>Always on</em></label></div>
+<div class="ckc"><div><b>Preferences</b><span>Remember settings such as your language or last configuration.</span></div><label class="sw2t"><input type="checkbox" id="ckPref"><i></i><em>Off</em></label></div>
+<div class="ckc"><div><b>Statistics</b><span>Anonymous statistics about how the site is used, so we can improve it.</span></div><label class="sw2t"><input type="checkbox" id="ckStat"><i></i><em>Off</em></label></div>
+<div class="ckc"><div><b>Marketing</b><span>Used to show relevant offers and measure advertising.</span></div><label class="sw2t"><input type="checkbox" id="ckMkt"><i></i><em>Off</em></label></div>
+<div class="ckb ckf"><button type="button" class="b" data-ck="reject">Reject all</button><button type="button" class="b o" data-ck="save">Save selection</button><button type="button" class="b" data-ck="accept">Accept all</button></div></dialog>
 <div hidden><span id="brand"></span><span id="nav"></span><span id="h1"></span><span id="lead"></span><span id="cta"></span><span id="fTitle"></span><span id="feat"></span><span id="mTitle"></span><table id="mTable"></table><span id="dTitle"></span><span id="markets"></span><span id="cTitle"></span><span id="cText"></span><span id="fName"></span><span id="fMail"></span><span id="fLand"></span><span id="fMsg"></span><span id="fSend"></span><select id="selLand"></select><span id="foot"></span><form id="form"></form></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -882,6 +898,33 @@ async function sendMail(data,subject){
  document.addEventListener('invalid',e=>{ const el=e.target; if(!el.setCustomValidity) return; el.setCustomValidity(''); el.setCustomValidity(msg(el)); },true);
  const clear=e=>{ const el=e.target; if(el&&el.setCustomValidity) el.setCustomValidity(''); };
  document.addEventListener('input',clear,true); document.addEventListener('change',clear,true);
+})();
+</script>
+<script>
+/* Cookie consent: nothing but strictly necessary storage before the visitor agrees; Reject = Accept in prominence; choice can be changed any time (footer link) */
+(function(){
+ const KEY='ck_consent_v1', MAX=365*24*3600*1000, $=id=>document.getElementById(id);
+ const bar=$('ck'), dlg=$('ckm'), boxes={pref:$('ckPref'),stat:$('ckStat'),mkt:$('ckMkt')};
+ let mem=null;
+ const read=()=>{ try{ const v=JSON.parse(localStorage.getItem(KEY)||'null'); return v||mem; }catch(e){ return mem; } };
+ const write=v=>{ mem=v; try{ localStorage.setItem(KEY,JSON.stringify(v)); }catch(e){} };
+ const label=()=>Object.values(boxes).forEach(b=>{ b.parentNode.querySelector('em').textContent=b.checked?'On':'Off'; });
+ function apply(c){   // load optional scripts ONLY here, when the matching category is true
+  window.cookieConsent=c; document.dispatchEvent(new CustomEvent('cookieconsent',{detail:c}));
+  // if(c.stat){ /* load analytics script here */ }
+  // if(c.mkt){ /* load marketing pixels here */ }
+ }
+ function save(c){ c.ts=Date.now(); c.v=1; write(c); bar.hidden=true; if(dlg.open) dlg.close(); apply(c); }
+ function fill(c){ boxes.pref.checked=!!(c&&c.pref); boxes.stat.checked=!!(c&&c.stat); boxes.mkt.checked=!!(c&&c.mkt); label(); }
+ function openSettings(){ fill(read()); if(!dlg.open) dlg.showModal(); }
+ document.addEventListener('click',e=>{ const t=e.target.closest('[data-ck]'); if(!t) return; const a=t.dataset.ck;
+  if(a==='accept') save({pref:true,stat:true,mkt:true});
+  else if(a==='reject') save({pref:false,stat:false,mkt:false});
+  else if(a==='save') save({pref:boxes.pref.checked,stat:boxes.stat.checked,mkt:boxes.mkt.checked});
+  else if(a==='settings') openSettings(); });
+ Object.values(boxes).forEach(b=>b.addEventListener('change',label));
+ $('ckOpen').addEventListener('click',e=>{ e.preventDefault(); openSettings(); });
+ const c=read(); if(c&&c.ts&&Date.now()-c.ts<MAX){ bar.hidden=true; apply(c); } else { bar.hidden=false; apply({pref:false,stat:false,mkt:false}); }
 })();
 </script>
 </body></html>
