@@ -870,4 +870,18 @@ async function sendMail(data,subject){
   wire();
 })();
 </script>
+<script>
+/* English form-validation messages (browsers otherwise show them in the visitor's browser language) */
+(function(){
+ const msg=el=>{ const v=el.validity;
+  if(v.valueMissing) return el.type==='checkbox'?'Please tick this box to continue.':el.tagName==='SELECT'?'Please select an option.':'Please fill in this field.';
+  if(v.typeMismatch) return el.type==='email'?'Please enter a valid email address.':'Please enter a valid value.';
+  if(v.patternMismatch) return 'Please match the requested format.';
+  if(v.tooShort||v.tooLong||v.rangeUnderflow||v.rangeOverflow||v.badInput) return 'Please enter a valid value.';
+  return ''; };
+ document.addEventListener('invalid',e=>{ const el=e.target; if(!el.setCustomValidity) return; el.setCustomValidity(''); el.setCustomValidity(msg(el)); },true);
+ const clear=e=>{ const el=e.target; if(el&&el.setCustomValidity) el.setCustomValidity(''); };
+ document.addEventListener('input',clear,true); document.addEventListener('change',clear,true);
+})();
+</script>
 </body></html>
