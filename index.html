@@ -335,11 +335,21 @@ function particles(n,size,op){ const pos=new Float32Array(n*3), g=new THREE.Buff
   const p=new THREE.Points(g,new THREE.PointsMaterial({size,map:T,transparent:true,opacity:op,depthWrite:false})); scene.add(p);
   const seed=[...Array(n)].map(()=>({a:Math.random(),x:Math.random()*2-1,z:Math.random()*2-1,r:Math.random()})); return {p,pos,g,seed,n}; }
 const steam=particles(70,.35,.38), bubbles=particles(36,.09,.8);
+let hydroSrc=[], airSrc=[];   // jet nozzle / floor air-nozzle positions, filled in build()
+const spray=particles(36*12,.15,.9), airB=particles(36*5,.13,.95);
+function fadeTex(top){ const c=document.createElement('canvas'); c.width=4; c.height=128; const g=c.getContext('2d'), gr=g.createLinearGradient(0,0,0,128);   // alpha gradient along a cone/column: top=true -> opaque at the top end
+  gr.addColorStop(0,top?'rgba(235,250,255,.95)':'rgba(235,250,255,0)'); gr.addColorStop(1,top?'rgba(235,250,255,0)':'rgba(235,250,255,.95)'); g.fillStyle=gr; g.fillRect(0,0,4,128); return new THREE.CanvasTexture(c); }
+let hydroBeamM=null, popRings=null; const popP=particles(36*5*3,.1,1);   // bubbles bursting on the water surface: ring ripple + droplets
+{ const c=document.createElement('canvas'); c.width=c.height=64; const g=c.getContext('2d');   // soap-bubble sprite: dark teal outline + white shine, readable on light water
+  g.fillStyle='rgba(255,255,255,.35)'; g.beginPath(); g.arc(32,32,26,0,Math.PI*2); g.fill();
+  g.strokeStyle='rgba(14,92,122,.95)'; g.lineWidth=5; g.stroke();
+  g.strokeStyle='rgba(255,255,255,.95)'; g.lineWidth=5; g.lineCap='round'; g.beginPath(); g.arc(32,32,17,Math.PI*1.1,Math.PI*1.45); g.stroke();
+  const BT=new THREE.CanvasTexture(c); airB.p.material.map=BT; airB.p.material.size=.17; airB.p.material.needsUpdate=true; popP.p.material.map=BT; popP.p.material.needsUpdate=true; } bubbles.p.visible=false;
 
 let tub, fireDoor, R=1, HW=1, HX=1, HZ=1, sq=false, H=.95, bound=.8, bx=.8, bz=.8;
 function build(){
   if(tub) scene.remove(tub);
-  tub=new THREE.Group(); const m=S.models[st.m]; R=m.r; const gk=(R+1.35)/3.4; ground.scale.set(gk,gk,1); HW=R*.92; const shp=S.shapes[st.s].id, rect=shp==='rect'; sq=shp==='square'||rect; HX=rect?HW*1.2:HW; HZ=rect?HW*.82:HW;   // rectangular = longer along x, shallower along z
+  hydroSrc=[]; airSrc=[]; popRings=null; tub=new THREE.Group(); const m=S.models[st.m]; R=m.r; const gk=(R+1.35)/3.4; ground.scale.set(gk,gk,1); HW=R*.92; const shp=S.shapes[st.s].id, rect=shp==='rect'; sq=shp==='square'||rect; HX=rect?HW*1.2:HW; HZ=rect?HW*.82:HW;   // rectangular = longer along x, shallower along z
   bx=(sq?HX:R)-.28; bz=(sq?HZ:R)-.28; bound=Math.min(bx,bz);
   const wood=new THREE.Color(S.woods[st.w].c), acr=new THREE.Color(S.acrylics[st.a].c), A=visAcc();
   const steel=new THREE.MeshStandardMaterial({color:0x2b3236,metalness:.7,roughness:.4});
@@ -456,13 +466,15 @@ function build(){
     tub.add(g); }
   if(A.hydro){ const nm=new THREE.MeshPhongMaterial({color:0xdfe6e8,specular:0xffffff,shininess:100}), nd=new THREE.MeshPhongMaterial({color:0x20282b});
     // jet nozzle: chrome ring with dark centre, facing the water (nx,nz = outward normal of the wall it sits in)
-    const nozzle=(x,y,z,nx,nz,r)=>{ const g=new THREE.Group(); g.position.set(x,y,z); g.rotation.y=-Math.atan2(nz,nx);
+    hydroBeamM=new THREE.MeshBasicMaterial({map:fadeTex(true),transparent:true,depthWrite:false,side:THREE.DoubleSide,opacity:.6}); const hbg=new THREE.ConeGeometry(.15,.78,20,1,true); hbg.translate(0,-.39,0);   // water stream cone: apex at the nozzle
+    const nozzle=(x,y,z,nx,nz,r)=>{ hydroSrc.push({x,y,z,nx,nz}); const g=new THREE.Group(); { const hb=new THREE.Mesh(hbg,hydroBeamM); hb.rotation.z=-Math.PI/2; hb.position.x=-.012; g.add(hb); } g.position.set(x,y,z); g.rotation.y=-Math.atan2(nz,nx);
       const ring=new THREE.Mesh(new THREE.CylinderGeometry(r,r,.02,18),nm); ring.rotation.z=Math.PI/2; g.add(ring);
       const hole=new THREE.Mesh(new THREE.CylinderGeometry(r*.45,r*.45,.022,14),nd); hole.rotation.z=Math.PI/2; hole.position.x=-.003; g.add(hole); tub.add(g); };
-    const N=st.jets||6, n2=Math.round(N/3), n1=N-n2, ls=(p,q,n)=>n<1?[]:n<2?[(p+q)/2]:[...Array(n)].map((_,i)=>p+i*(q-p)/(n-1));
+    const N=st.jets||6, n2=2*Math.round(N/6), n1=N-n2,   /* even counts in both rows, so every jet has one straight opposite */ ls=(p,q,n)=>n<1?[]:n<2?[(p+q)/2]:[...Array(n)].map((_,i)=>p+i*(q-p)/(n-1));
     if(!sq){ const rw=R-.155, Rw=R-.42;
-      ls(.9,4.7,n1).forEach(a=>nozzle(Math.cos(a)*(rw+.004),.72,Math.sin(a)*(rw+.004),Math.cos(a),Math.sin(a),.03));
-      ls(.5,5.1,n2).forEach(a=>nozzle(Math.cos(a)*(Rw+.004),.41,Math.sin(a)*(Rw+.004),Math.cos(a),Math.sin(a),.026)); }
+      const reg=n=>[...Array(n)].map((_,i)=>Math.PI/n+i*2*Math.PI/n);   // evenly spaced round the whole tub, symmetrical about the stove axis
+      reg(n1).forEach(a=>nozzle(Math.cos(a)*(rw+.004),.72,Math.sin(a)*(rw+.004),Math.cos(a),Math.sin(a),.03));
+      reg(n2).forEach(a=>nozzle(Math.cos(a)*(Rw+.004),.41,Math.sin(a)*(Rw+.004),Math.cos(a),Math.sin(a),.026)); }
     else { const tx=HX*.42, tz=HZ*.42, wx=hix+.004, wz=hiz+.004, hwx=hix-.26+.004, hwz=hiz-.26+.004, sd=[[1,0],[-1,0],[0,1],[0,-1]];
       const side=(n,fn)=>sd.forEach(([x,z],k)=>{ const c=Math.floor(n/4)+(k<n%4?1:0), t=x?tz:tx; ls(-t,t,c).forEach(o=>fn(x,z,o)); });
       side(n1,(x,z,o)=>nozzle(x?x*wx:o,.72,z?z*wz:o,x,z,.03));
@@ -545,7 +557,32 @@ function build(){
       (open?upperOpen:upperClosed)();                                  // upper step, against the tub
       sb(x1,.82*K,z0,z1,.32*K);                                        // lower step, straight and the same width
       place(g,Math.PI); } }
-  if(A.led){ loopMesh(H-.12,-.12,new THREE.MeshBasicMaterial({color:0x7fe8ff}),.018); }
+  if(A.air){   // air massage: small nozzles spread over the tub floor (12 / 18 / 24 / 36), bubbles rise from each
+    const N=[12,18,24,36][st.air||0]||12, fy=.17, rx=sq?hix-.4:R-.62, rz=sq?hiz-.4:R-.62, am=new THREE.MeshPhongMaterial({color:0xdfe6e8,specular:0xffffff,shininess:100}), dm=new THREE.MeshBasicMaterial({color:0x20282b});
+    const colG=new THREE.CylinderGeometry(.03,.06,H-.12-fy,12,1,true), colM=new THREE.MeshBasicMaterial({map:fadeTex(false),transparent:true,depthWrite:false,side:THREE.DoubleSide,opacity:.55});   // faint rising air column above each nozzle
+    for(let i=0;i<N;i++){ const r=Math.sqrt((i+.5)/N), a=i*2.399963, x=Math.cos(a)*r*rx, z=Math.sin(a)*r*rz; airSrc.push({x,y:fy,z});
+      const d=new THREE.Mesh(new THREE.CylinderGeometry(.022,.022,.012,16),am); d.position.set(x,fy,z); tub.add(d);
+      { const col=new THREE.Mesh(colG,colM); col.position.set(x,fy+(H-.12-fy)/2,z); tub.add(col); }
+      const h=new THREE.Mesh(new THREE.CylinderGeometry(.009,.009,.014,10),dm); h.position.set(x,fy+.001,z); tub.add(h); }
+    popRings=new THREE.InstancedMesh(new THREE.RingGeometry(.03,.05,28).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0x1f86a8,transparent:true,opacity:.9,depthWrite:false,side:THREE.DoubleSide}),Math.max(1,N*5)); popRings.frustumCulled=false; popRings.count=N*5; tub.add(popRings); }
+  if(A.led){   // individual LED lamps set into the inner wall (2 / 3 pcs, or 4 mini lamps), same size as the jet nozzles, each throwing a cone of light into the water
+    const N=[2,3,4][st.led]||2, lr=.03, ly=.62;
+    const gc=document.createElement('canvas'); gc.width=gc.height=128; const gx=gc.getContext('2d'), gg=gx.createRadialGradient(64,64,0,64,64,64);
+    gg.addColorStop(0,'rgba(190,245,255,.95)'); gg.addColorStop(.25,'rgba(110,225,255,.55)'); gg.addColorStop(1,'rgba(80,200,255,0)'); gx.fillStyle=gg; gx.fillRect(0,0,128,128);
+    const lensM=new THREE.MeshBasicMaterial({color:0xe6fbff}), rimM=new THREE.MeshPhongMaterial({color:0xdfe6e8,specular:0xffffff,shininess:100}),
+          haloM=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(gc),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}),
+          beamM=new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide});
+    const bg=new THREE.ConeGeometry(.2,.62,28,1,true); bg.translate(0,-.31,0);   // apex at the lamp, opening into the tub
+    { const pos=bg.attributes.position, col=[]; for(let q=0;q<pos.count;q++){ const t=Math.min(1,-pos.getY(q)/.62); col.push(.32*(1-t),.78*(1-t),.95*(1-t)); } bg.setAttribute('color',new THREE.Float32BufferAttribute(col,3)); }
+    for(let k=0;k<N;k++){ const a=.5+(k+.5)/N*Math.PI*2; let p,n;
+      if(!sq){ const rw=R-.155+.004; p=new THREE.Vector3(Math.cos(a)*rw,ly,Math.sin(a)*rw); n=new THREE.Vector3(Math.cos(a),0,Math.sin(a)); }
+      else { const c=Math.cos(a), sn=Math.sin(a), kx=(hix+.004)/Math.abs(c), kz=(hiz+.004)/Math.abs(sn), kk=Math.min(kx,kz); p=new THREE.Vector3(c*kk,ly,sn*kk); n=kx<=kz?new THREE.Vector3(Math.sign(c),0,0):new THREE.Vector3(0,0,Math.sign(sn)); }
+      const g=new THREE.Group(); g.position.copy(p); g.rotation.y=-Math.atan2(n.z,n.x);
+      const ring=new THREE.Mesh(new THREE.CylinderGeometry(lr,lr,.02,24),rimM); ring.rotation.z=Math.PI/2; g.add(ring);
+      const lens=new THREE.Mesh(new THREE.CircleGeometry(lr*.62,24),lensM); lens.rotation.y=-Math.PI/2; lens.position.x=-.0105; g.add(lens);
+      const halo=new THREE.Mesh(new THREE.PlaneGeometry(.2,.2),haloM); halo.rotation.y=-Math.PI/2; halo.position.x=-.016; g.add(halo);
+      const beam=new THREE.Mesh(bg,beamM); beam.rotation.z=-Math.PI/2; beam.position.x=-.012; g.add(beam);
+      tub.add(g); } }
   if(A.cover){ const lm=new THREE.MeshStandardMaterial({color:new THREE.Color(COVC[st.coverC||0][1]),roughness:.7});
     const c=sq?new THREE.Mesh(new THREE.BoxGeometry(2*HX+.24,.09,2*HZ+.24),lm):new THREE.Mesh(new THREE.CylinderGeometry(R+.06,R+.06,.09,48),lm);
     c.position.y=H+.17; c.castShadow=true; tub.add(c); }
@@ -583,7 +620,22 @@ const clock=new THREE.Clock();
   if(fireDoor){ fireDoor.visible=f; if(f){ fireDoor.scale.y=1+Math.sin(t*13)*.07; fireDoor.scale.x=1+Math.sin(t*9+1)*.05; } }
   ledLight.intensity=A.led&&!A.cover?1.1:0;
   steam.p.visible=!A.cover; steam.p.material.opacity=f?.38:.12;
-  bubbles.p.visible=!!A.air&&!A.cover;
+  bubbles.p.visible=false;
+  { const show=!A.cover; spray.p.visible=!!A.hydro&&show; airB.p.visible=!!A.air&&show;
+    if(hydroBeamM) hydroBeamM.opacity=.5+.12*Math.sin(t*9);
+    if(A.hydro){ let c=0; hydroSrc.forEach((j,i)=>{ for(let k=0;k<12;k++){ const life=(t*.9+k/12+i*.137)%1, d=.04+life*.7, w=Math.sin(i*12.9+k*7.7)*.06*life;
+        spray.pos[c*3]=j.x-j.nx*d-j.nz*w; spray.pos[c*3+1]=j.y+Math.sin(life*Math.PI)*.07+Math.cos(i*3.1+k*5.3)*.025*life; spray.pos[c*3+2]=j.z-j.nz*d+j.nx*w; c++; } });
+      spray.g.setDrawRange(0,c); spray.g.attributes.position.needsUpdate=true; }
+    popP.p.visible=!!A.air&&show;
+    if(A.air){ let c=0, c2=0; const surf=H-.12, dm=new THREE.Object3D(), RISE=.8;
+      airSrc.forEach((a,i)=>{ for(let k=0;k<5;k++){ const life=(t*.5+k/5+i*.211)%1, u=Math.min(life/RISE,1), q=life>RISE?(life-RISE)/(1-RISE):-1, idx=i*5+k;
+        const bx=a.x+Math.sin(t*3+i*5.1+k*2)*.03*u, bz=a.z+Math.cos(t*2.6+i*3.7+k)*.03*u;
+        airB.pos[c*3]=bx; airB.pos[c*3+1]=q<0?a.y+.02+u*(surf-a.y-.02):-10; airB.pos[c*3+2]=bz; c++;   // rising bubble; hidden once it has burst
+        if(popRings){ const sc=q<0?0.0001:.35+q*3.4; dm.position.set(bx,surf+.004,bz); dm.scale.set(sc,1,sc); dm.updateMatrix(); popRings.setMatrixAt(idx,dm.matrix); }
+        for(let d=0;d<3;d++){ const ang=(idx*2.399+d*2.094), r=q<0?0:q*.1, h=q<0?-10:surf+Math.sin(q*Math.PI)*.12+.01;   // droplets flung up and outwards
+          popP.pos[c2*3]=bx+Math.cos(ang)*r; popP.pos[c2*3+1]=h; popP.pos[c2*3+2]=bz+Math.sin(ang)*r; c2++; } } });
+      airB.g.setDrawRange(0,c); airB.g.attributes.position.needsUpdate=true;
+      popP.g.setDrawRange(0,c2); popP.g.attributes.position.needsUpdate=true; if(popRings) popRings.instanceMatrix.needsUpdate=true; } }
   steam.seed.forEach((s,i)=>{ const life=(t*(f?.18:.08)+s.a)%1, a=s.a*60, rr=Math.sqrt(s.r)*bound;
     steam.pos[i*3]=(sq?s.x*bx:Math.cos(a)*rr)+Math.sin(t+i)*.08*life; steam.pos[i*3+1]=H+.05+life*1.3; steam.pos[i*3+2]=(sq?s.z*bz:Math.sin(a)*rr)+Math.cos(t*.8+i)*.08*life; });
   bubbles.seed.forEach((s,i)=>{ const life=(t*.45+s.a)%1, a=s.a*60, rr=Math.sqrt(s.r)*bound*.9;
@@ -737,7 +789,7 @@ syncUI();readout();
 /* price is counted only after a choice in the sub-menu */
 (function(){
  const mark=(id,f,rb)=>{const o=window[f];window[f]=function(){st.pend[id]=false;const r=o.apply(this,arguments);if(rb)build();return r;};};
- mark('hydro','setJets');mark('thermo','setTh',1);mark('shelf','setShelf');mark('led','setLed',1);mark('air','setAir');mark('filter','setFilter');
+ mark('hydro','setJets');mark('thermo','setTh',1);mark('shelf','setShelf');mark('led','setLed',1);mark('air','setAir',1);mark('filter','setFilter');
  const o=syncUI;syncUI=function(){['hydro','thermo','shelf','led','air','filter'].forEach(id=>{if(!st.acc[id])st.pend[id]=true;});return o.apply(this,arguments);};
  syncUI();readout();if(rqs.open)showSum();
 })();
