@@ -128,7 +128,7 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 <button class="rvb" id="rvn" aria-label="Next">&#8250;</button></div>
 </div></section>
 <h2>Frequently asked questions</h2><details><summary>Do I need a building permit?</summary><p>It depends on your country, region and municipality. We send you a checklist for your country. Please check placement and chimney with your local authority before ordering.</p></details><details><summary>Does the wood stove meet local emission rules?</summary><p>Test report and certificate of the stove go here. Chimney and stove must be inspected according to local rules (e.g. chimney sweep in Germany). [Verify data before publishing]</p></details><details><summary>How does delivery work?</summary><p>Production takes 1–3 weeks, freight 5–10 working days. Delivery on a pallet to the kerb; for Switzerland we clarify customs (DAP/DDP) in advance.</p></details><details><summary>What about warranty and service?</summary><p>Statutory EU warranty applies. Additional manufacturer warranty: [insert terms].</p></details></main>
-<footer><div class="w"><nav><a href="Legal_Notice_Thermal_Heat.pdf" download="Legal_Notice_Thermal_Heat.pdf">Legal notice</a><a href="Terms_and_Conditions_Thermal_Heat.pdf" download="Terms_and_Conditions_Thermal_Heat.pdf">Terms & conditions</a><a href="#">Right of withdrawal</a><a href="Privacy_Policy_Thermal_Heat.pdf" download="Privacy_Policy_Thermal_Heat.pdf">Privacy policy</a></nav><p>Payment: bank transfer, invoice, PayPal, Google Pay</p><p style="margin-top:8px">Europaletės MB · Vytauto g. 9, Meškučių k., LT-68129 Marijampolė, Lithuania · Company code: 304924983 · VAT no.: LT100012395710<br>Bank: Swedbank, AB · IBAN: LT21 7300 0101 5643 0123</p></div></footer>
+<footer><div class="w"><nav><a href="Legal_Notice_Thermal_Heat.pdf" download="Legal_Notice_Thermal_Heat.pdf">Legal notice</a><a href="Terms_and_Conditions_Thermal_Heat.pdf" download="Terms_and_Conditions_Thermal_Heat.pdf">Terms & conditions</a><a href="#">Right of withdrawal</a><a href="Privacy_Policy_Thermal_Heat.pdf" download="Privacy_Policy_Thermal_Heat.pdf">Privacy policy</a><a href="Warranty_Thermal_Heat.pdf" download="Warranty_Thermal_Heat.pdf">Warranty</a></nav><p>Payment: bank transfer, invoice, PayPal, Google Pay</p><p style="margin-top:8px">Europaletės MB · Vytauto g. 9, Meškučių k., LT-68129 Marijampolė, Lithuania · Company code: 304924983 · VAT no.: LT100012395710<br>Bank: Swedbank, AB · IBAN: LT21 7300 0101 5643 0123</p></div></footer>
 <div id="ck" role="dialog"><span>We use cookies for statistics and marketing. You decide.</span><a class="b o" href="#" onclick="ck.remove();return false">Reject all</a><a class="b o" href="#">Settings</a><a class="b" href="#" onclick="ck.remove();return false">Accept all</a></div>
 <div hidden><span id="brand"></span><span id="nav"></span><span id="h1"></span><span id="lead"></span><span id="cta"></span><span id="fTitle"></span><span id="feat"></span><span id="mTitle"></span><table id="mTable"></table><span id="dTitle"></span><span id="markets"></span><span id="cTitle"></span><span id="cText"></span><span id="fName"></span><span id="fMail"></span><span id="fLand"></span><span id="fMsg"></span><span id="fSend"></span><select id="selLand"></select><span id="foot"></span><form id="form"></form></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -157,7 +157,7 @@ const SITE = {
   stoveTypes: [ {id:'s304_15', n:'Stove AISI 304 1.5 mm', extra:0}, {id:'s316_15', n:'Stove AISI 316 1.5 mm', extra:0}, {id:'s304_20', n:'Stove AISI 304 2.0 mm', extra:0}, {id:'el9', n:'Electric 9 kW', extra:0, electric:true} ],
   woods:    [{n:'Spruce',c:'#c9a46c'},{n:'Thermowood',c:'#6d4b34'},{n:'Larch',c:'#b8733b'},{n:'Natural pine',c:'#dcbc8a'},{n:'Red cedar',c:'#a4512f'},{n:'Walnut',c:'#4f3526'},{n:'Grey wash',c:'#8d918e'},{n:'Black stain',c:'#2c2b29'}],
   acrylics: [{n:'Ice blue',c:'#bfe3ee'},{n:'Pearl white',c:'#f1f3f2'},{n:'Graphite',c:'#4b555a'},{n:'Mocha brown',c:'#9a7058'},{n:'Sky blue',c:'#7cc2e3'},{n:'Deep blue',c:'#2f6f9f'},{n:'Sand beige',c:'#d9c9a8'},{n:'Sage green',c:'#8fb09f'}],
-  // ids are used by the 3D scene: hydro, air, thermo, shelf, stove, guard, led, cover, sound, ladder, care
+  // ids are used by the 3D scene: hydro, air, thermo, shelf, stove, guard, led, cover, sound, ladder, filter
   accessories: [
     {id:'hydro',  name:'Hydro massage system', price:0, desc:'Massage jets'},
     {id:'air',    name:'Air massage system',   price:0, desc:'Air bubbles'},
@@ -169,7 +169,8 @@ const SITE = {
     {id:'cover',  name:'Thermal cover',              price:350, desc:'Insulated lid that keeps the heat in'},
     {id:'sound',  name:'Sound system',               price:290, desc:'Waterproof speaker'},
     {id:'ladder', name:'Wooden steps',              price:160, desc:'Wooden steps outside plus a step inside the tub'},
-    {id:'care',   name:'Maintenance & care',         price:120, desc:'Cleaning and care set'}
+    {id:'filter', name:'Filtration system',          price:0, desc:'Water filtration'}
+    ,{id:'wifi',   name:'Hot tub control (Wi-Fi)',    price:150, desc:'Control your hot tub via Wi-Fi'}
   ],
   defaultAccessories: ['stove'],
   features: {
@@ -204,7 +205,7 @@ const SITE = {
 
 const $ = id => document.getElementById(id);
 const S = SITE;
-const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, stepOpen:1, p:0, t:0, fire:true, acc:{ladder:true}, pend:{hydro:false,thermo:true,shelf:true,led:true,air:true} };   // fire is always on
+const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, stepOpen:1, p:0, t:0, fire:true, acc:{ladder:true}, pend:{hydro:false,thermo:true,shelf:true,led:true,air:true,filter:true} };   // fire is always on
 S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
 const plus = n => n ? '+'+fmt(n) : '';   // price shown in the option menus, e.g. +€120
@@ -677,6 +678,17 @@ function setAir(i){st.air=i;AD.price=AO[i][1];AD.name='Air massage system \u00b7
  [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));aOpen=false;avis();readout();if(rqs.open)showSum();}
 const _sA=syncUI;syncUI=function(){if(!st.acc.air){aOpen=true;st.air=0;AD.name='Air massage system';AD.price=AO[0][1];[...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.air.querySelector('small').textContent=plus(AD.price);}_sA();avis();};
 [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));
+const FD=S.accessories.find(x=>x.id==='filter'),FO=[['Filter box',120],['Sand filter',250]];
+let fOpen=true;st.filter=0;
+const subF=document.createElement('div');subF.className='sub';
+FO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p?' '+plus(p):'');b.dataset.i=i;b.onclick=()=>setFilter(i);subF.appendChild(b);});
+const chgF=document.createElement('button');chgF.type='button';chgF.className='chg';chgF.onclick=()=>{fOpen=true;syncUI();};
+chipEls.filter.after(subF);subF.after(chgF);
+function fvis(){subF.hidden=!st.acc.filter||!fOpen;chgF.hidden=!st.acc.filter||fOpen;chgF.innerHTML=FO[st.filter][0]+' \u00b7 <b class="cw">change</b>';}
+function setFilter(i){st.filter=i;FD.price=FO[i][1];FD.name='Filtration system \u00b7 '+FO[i][0];chipEls.filter.querySelector('small').textContent='';
+ [...subF.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));fOpen=false;fvis();readout();if(rqs.open)showSum();}
+const _sF=syncUI;syncUI=function(){if(!st.acc.filter){fOpen=true;st.filter=0;FD.name='Filtration system';FD.price=0;[...subF.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.filter.querySelector('small').textContent='';}_sF();fvis();};
+[...subF.children].forEach(b=>b.setAttribute('aria-pressed',false));
 syncUI();readout();
 </script>
 <script>
@@ -695,8 +707,8 @@ syncUI();readout();
 /* price is counted only after a choice in the sub-menu */
 (function(){
  const mark=(id,f,rb)=>{const o=window[f];window[f]=function(){st.pend[id]=false;const r=o.apply(this,arguments);if(rb)build();return r;};};
- mark('hydro','setJets');mark('thermo','setTh',1);mark('shelf','setShelf');mark('led','setLed',1);mark('air','setAir');
- const o=syncUI;syncUI=function(){['hydro','thermo','shelf','led','air'].forEach(id=>{if(!st.acc[id])st.pend[id]=true;});return o.apply(this,arguments);};
+ mark('hydro','setJets');mark('thermo','setTh',1);mark('shelf','setShelf');mark('led','setLed',1);mark('air','setAir');mark('filter','setFilter');
+ const o=syncUI;syncUI=function(){['hydro','thermo','shelf','led','air','filter'].forEach(id=>{if(!st.acc[id])st.pend[id]=true;});return o.apply(this,arguments);};
  syncUI();readout();if(rqs.open)showSum();
 })();
 </script>
