@@ -152,6 +152,42 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 @media(max-width:560px){.rvc{flex-basis:100%}}
 .readout strong{transition:color .6s}
 .stage.night .readout strong{color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+
+#bdlg{position:fixed;inset:0;margin:auto;border:0;border-radius:14px;padding:24px 28px 22px;max-width:640px;width:calc(100% - 32px);max-height:calc(100vh - 32px);overflow:auto;box-sizing:border-box;background:#faf6ee;color:#2a2420;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+#bdlg::backdrop{background:rgba(16,40,47,.65)}
+#bdlg h3{font:700 26px Georgia,serif;margin:0 0 6px;color:#1f3a34}
+#bdlg .cx{position:absolute;top:12px;right:16px;background:none;border:0;font-size:30px;line-height:1;cursor:pointer;color:#5d544b}
+#bdlg .cx:hover{color:#1f3a34}
+#bdlg .rqn{margin-top:0}
+#bForm{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin-top:14px}
+#bForm label:has(textarea),#bForm .ck2,#bForm .b,#bForm #bmsg,#bForm .full{grid-column:1/-1}
+#bdlg label{display:grid;gap:7px;font:600 14px system-ui,sans-serif;color:#4a4036}
+#bdlg input:not([type=checkbox]),#bdlg textarea,#bdlg select{width:100%;box-sizing:border-box;font:400 16px system-ui,sans-serif;color:#2a2420;padding:10px 14px;border:1.5px solid #cfc6b6;border-radius:8px;background:#fff;transition:border-color .15s,box-shadow .15s}
+#bdlg textarea{min-height:70px;resize:vertical}
+#bdlg input:not([type=checkbox]):focus,#bdlg textarea:focus,#bdlg select:focus{outline:0;border-color:#d98a1c;box-shadow:0 0 0 3px rgba(217,138,28,.22)}
+#bdlg label.ck2{display:flex;gap:10px;align-items:flex-start;font:400 13px/1.45 system-ui,sans-serif;color:#5d544b}
+#bdlg label.ck2 input{width:18px;height:18px;margin:1px 0 0;accent-color:#d98a1c;flex:none}
+#bForm .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#bForm .b{width:100%;margin:4px 0 0;padding:14px}
+#bForm .b[disabled]{opacity:.6;cursor:wait}
+#bdlg .ty{margin-top:8px}
+#bmsg{font-size:14px;color:#5d544b;margin:0}
+#bmsg.err{color:#b3261e}
+@media(max-width:560px){#bForm{grid-template-columns:1fr}}
+#bdlg{padding:16px 22px 16px;max-width:620px}
+#bdlg h3{font-size:22px;margin:0 0 2px}
+#bdlg .rqn{font-size:13px}
+#bForm{grid-template-columns:repeat(6,1fr);gap:9px 12px;margin-top:10px}
+#bForm>label{grid-column:span 3}
+#bForm>label.third{grid-column:span 2}
+#bForm label:has(textarea),#bForm .ck2,#bForm .b,#bForm #bmsg{grid-column:1/-1}
+#bdlg label{gap:4px;font-size:13px}
+#bdlg input:not([type=checkbox]),#bdlg textarea,#bdlg select{padding:7px 11px;font-size:15px}
+#bdlg textarea{min-height:44px}
+#bdlg label.ck2{font-size:12.5px;line-height:1.35}
+#bForm .b{padding:11px;margin:0}
+#bdlg .cx{top:8px;right:12px}
+@media(max-width:560px){#bForm{grid-template-columns:1fr}#bForm>label,#bForm>label.third{grid-column:1/-1}}
 </style></head><body>
 <div class="bar"><div class="w"><span>Customer reviews</span><span id="dl">Fast delivery</span><span>24-month warranty</span><span>14-day right of withdrawal</span></div></div>
 <header><div class="w"><a class="logo" href="#" aria-label="Thermal Heat"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1.5C17 8 25.5 11 25.5 20a9.5 9.5 0 0 1-19 0c0-5 3.2-7.200 4.200-11 2.100 1.800 3 3.200 3.600 5.200C15.800 10.500 15 6 16 1.500Z" fill="#d98a1c"/><path d="M16 17.500c2.200 3 4.200 4.600 4.200 7.200a4.200 4.200 0 0 1-8.400 0c0-2.600 2-4.200 4.200-7.200Z" fill="#1f3a34"/></svg><span class="wm"><b>Thermal</b><i>Heat</i></span></a><nav><a href="thermal-heat-gallery.html">Gallery</a><a href="#">About us</a><a href="#" id="navContact">Contact</a><div class="soc" aria-label="Social media">
@@ -160,7 +196,7 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M13.500 22v-8.200h2.800l.5-3.300h-3.300V8.400c0-.9.400-1.700 1.800-1.700h1.600V3.800c-.3 0-1.300-.2-2.400-.2-2.500 0-4.100 1.500-4.100 4.200v2.700H7.600v3.300h2.800V22z"/></svg></a>
 <a href="https://wa.me/" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-7.700 13.600L3 21l4.500-1.200A9 9 0 1 0 12 3z"/><path fill="currentColor" stroke="none" d="M9 7.800c-.4.400-.7 1-.5 1.800.5 2.200 3.200 4.900 5.400 5.500.8.200 1.400-.1 1.800-.5l.4-.9-1.900-1-.8.800c-1-.4-2.200-1.500-2.700-2.500l.8-.8-.9-1.900z"/></svg></a>
 </div></nav></div></header>
-<section class="hero"><div class="w"><h1>Hot tub with wood-fired stove. Built in Lithuania, delivered to your doors</h1><p>Thermo wood, acrylic or fiberglass liner, stainless steel stove. Personalize with a massage system, LED lighting, and accessories.</p><a class="b" href="#m">Start configurator</a><a class="b o" href="#k">Book a consultation</a></div></section>
+<section class="hero"><div class="w"><h1>Hot tub with wood-fired stove. Built in Lithuania, delivered to your doors</h1><p>Thermo wood, acrylic or fiberglass liner, stainless steel stove. Personalize with a massage system, LED lighting, and accessories.</p><a class="b" href="#m">Start configurator</a><a class="b o" href="#book" id="bookBtn">Book a consultation</a></div></section>
 <section class="w" id="trust"><h2>Why you can trust us</h2><div class="tc"><article class="tcc"><span class="ti"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/></svg></span><h3>Own Production in Lithuania</h3><p>Manufacturer with our own production and 7 years of manufacturing experience. Lead times 3-4 weeks</p></article><article class="tcc"><span class="ti"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span><h3>CE-Marked Electrics</h3><p>All electrical parts CE-marked, declaration of conformity available as PDF</p></article><article class="tcc"><span class="ti"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.500 7.500-7.660 8.950a1 1 0 0 1-.67-.01C7.500 20.500 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.500-1.200 6.240-2.720a1.170 1.170 0 0 1 1.520 0C14.510 3.810 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>2-Year Warranty</h3><p>2-year statutory warranty; service and spare parts via partners in your country</p></article><article class="tcc"><span class="ti"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span><h3>Price &amp; Delivery</h3><p>Get more information about final price incl. VAT and transport costs to your country</p></article></div></section>
 <main class="w"><h2 id="m">Configure your hot tub</h2><div class="stage" style="margin-bottom:8px">
         <canvas id="c" aria-label="3D view of the hot tub. Drag to rotate." role="img"></canvas>
@@ -976,6 +1012,57 @@ document.getElementById('rvn').onclick=function(){step(1)};
 </form>
 </div>
 </dialog>
+
+<dialog id="bdlg" aria-labelledby="bdt">
+<button class="cx" type="button" id="bclose" aria-label="Close">&times;</button>
+<div id="bbody">
+<h3 id="bdt">Book a consultation</h3>
+<p class="rqn">Tell us when suits you and we will confirm your free consultation by email within 24 hours.</p>
+<form id="bForm">
+<label>Name<input name="name" required autocomplete="name"></label>
+<label>Email<input name="email" type="email" required autocomplete="email"></label>
+<label>Phone<input name="phone" type="tel" required autocomplete="tel"></label>
+<label>Country<select name="country" required><option value="" disabled selected>Select country</option><option>Germany</option><option>Austria</option><option>Switzerland</option><option>France</option><option>Other</option></select></label>
+<label class="third">Preferred date<input name="date" type="date" id="bDate" required></label>
+<label class="third">Preferred time<select name="time" required><option>Morning (9-12)</option><option selected>Afternoon (12-17)</option><option>Evening (17-20)</option></select></label>
+<label class="third">Contact by<select name="channel"><option>Phone call</option><option>Video call</option><option>Email</option><option>WhatsApp</option></select></label>
+<label>Message (optional)<textarea name="message" rows="2"></textarea></label>
+<div class="hp" aria-hidden="true"><label>Leave empty<input name="_honey" tabindex="-1" autocomplete="off"></label></div>
+<label class="ck2"><input type="checkbox" required> I agree that Thermal Heat may use my data to arrange this consultation (privacy policy).</label>
+<button class="b" type="submit">Book consultation</button>
+<p id="bmsg" role="status" hidden></p>
+</form>
+</div>
+</dialog>
+<script>
+(function(){
+  const dlg=document.getElementById('bdlg'),body=document.getElementById('bbody'),html=body.innerHTML;
+  function setMin(){const d=document.getElementById('bDate');if(!d)return;const t=new Date();t.setDate(t.getDate()+1);d.min=t.toISOString().slice(0,10);}
+  function open(){setMin();dlg.showModal();}
+  document.getElementById('bookBtn').addEventListener('click',e=>{e.preventDefault();open();});
+  if(location.hash==='#book')open();
+  document.getElementById('bclose').addEventListener('click',()=>dlg.close());
+  dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close();});
+  dlg.addEventListener('close',()=>{if(!document.getElementById('bForm')){body.innerHTML=html;wire();}});
+  function wire(){
+    const f=document.getElementById('bForm'),m=document.getElementById('bmsg');
+    f.addEventListener('submit',async e=>{
+      e.preventDefault();const btn=f.querySelector('button[type=submit]'),d=new FormData(f);
+      if(d.get('_honey'))return;
+      btn.disabled=true;m.hidden=true;m.className='';
+      const ok=await sendMail({name:d.get('name'),email:d.get('email'),phone:d.get('phone'),country:d.get('country'),preferred_date:d.get('date'),preferred_time:d.get('time'),contact_by:d.get('channel'),message:d.get('message')||'-'},'Consultation booking request');
+      btn.disabled=false;
+      if(ok==='mailto'){m.textContent='Your email app should open with your request. Press Send there to deliver it to '+MAIL_TO+'. (Automatic sending works only on the published website.)';m.hidden=false;return;}
+      if(!ok){m.textContent='Sorry, sending failed. Please try again or write to '+MAIL_TO+'. ['+(window.mailErr||'unknown error')+']';m.className='err';m.hidden=false;return;}
+      body.innerHTML='<div class="ty" role="status"><h3></h3><p>Your consultation request has been received. We will confirm the appointment by email within 24 hours.</p></div>';
+      body.querySelector('.ty h3').textContent='Thank you, '+d.get('name')+'!';
+      const tm=setTimeout(()=>{if(dlg.open)dlg.close();},3000);
+      dlg.addEventListener('close',()=>clearTimeout(tm),{once:true});
+    });
+  }
+  wire();
+})();
+</script>
 <script>
 /* Messages are sent by the website itself (not from the visitor's mail app). */
 const MAIL_TO='edgaruik@gmail.com';
