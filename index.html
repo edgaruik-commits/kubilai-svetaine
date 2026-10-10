@@ -23,9 +23,9 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 #c{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
 #c:active{cursor:grabbing}
 .hint{position:absolute;left:18px;bottom:14px;font-size:.8rem;color:var(--muted)}
-.panel{position:absolute;right:14px;top:14px;display:flex;flex-direction:column;gap:10px;background:rgba(244,247,246,.94);padding:12px 14px 14px;border-radius:18px;width:320px}
+.panel{position:absolute;right:14px;top:14px;display:flex;flex-direction:column;gap:10px;background:rgba(244,247,246,.94);padding:12px 14px 14px;border-radius:18px;width:280px}
 .tabs{display:flex;gap:2px;background:var(--fog2);padding:3px;border-radius:999px;overflow:hidden}
-.tabs button{flex:1 1 auto;min-width:0;font:inherit;font-size:.72rem;font-weight:600;padding:6px 7px;border:0;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tabs button{flex:1 1 auto;min-width:0;font:inherit;font-size:.74rem;font-weight:600;padding:6px 9px;border:0;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap}
 .tabs button[aria-selected=true]{background:var(--ink);color:#fff}
 .pane{display:flex;flex-direction:column;gap:6px}
 .acc{display:flex;flex-direction:column;gap:5px}
@@ -107,12 +107,10 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
           </div>
           <div class="pane" id="pane1" hidden>
             <b id="lStove"></b><div class="stv" id="oStove"></div>
-          </div>
-          <div class="pane" id="pane2" hidden>
             <b id="lPos"></b><div class="opts" id="oPos"></div>
             <b id="lSteps"></b><div class="opts" id="oSteps"></div>
           </div>
-          <div class="pane" id="pane3" hidden>
+          <div class="pane" id="pane2" hidden>
             <div class="acc" id="chips"></div>
           </div>
           <button class="b o" id="std" type="button">Standard setup</button>
@@ -145,7 +143,7 @@ const SITE = {
     lead: 'Wood-fired acrylic hot tubs, round, square or rectangular. No power, no hookup, just wood, water and time. Delivery to Germany, Austria, Switzerland and France.',
     cta: 'Request a quote'
   },
-  ui: { tabs:['Shape & finish','Stove','Equipment','Accessories'], stoveType:'Stove type', none:'None', model:'Size', shape:'Shape', wood:'Wood', acr:'Acrylic', fib:'Fiberglass', on:'On', off:'Off',
+  ui: { tabs:['Shape & finish','Equipment','Accessories'], stoveType:'Stove type', none:'None', model:'Size', shape:'Shape', wood:'Wood', acr:'Acrylic', fib:'Fiberglass', on:'On', off:'Off',
         hint:'Drag to rotate', stovePos:'Stove position', steps:'Steps', guard:'Chimney guard', accessories:'Accessories', total:'Total', currency:'EUR' },
   // r = radius in 3D units (size in the configurator). Prices are placeholders (EUR).
   models: [
@@ -156,7 +154,7 @@ const SITE = {
   // stove position: inside the tub (integrated stove behind a wooden guard) or outside (free-standing)
   stovePlaces: [ {id:'out', n:'Outside', extra:0}, {id:'in', n:'Inside', extra:200} ],
   // stove types (Stove tab). extra = surcharge in EUR (set the real prices here). electric:true = no chimney / no fire
-  stoveTypes: [ {id:'s304_15', n:'Krosnelė AISI 304 1,5 mm', extra:0}, {id:'s316_15', n:'Krosnelė AISI 316 1,5 mm', extra:0}, {id:'s304_20', n:'Krosnelė AISI 304 2,0 mm', extra:0}, {id:'el9', n:'Elektrinis 9 kW', extra:0, electric:true} ],
+  stoveTypes: [ {id:'s304_15', n:'Stove AISI 304 1.5 mm', extra:0}, {id:'s316_15', n:'Stove AISI 316 1.5 mm', extra:0}, {id:'s304_20', n:'Stove AISI 304 2.0 mm', extra:0}, {id:'el9', n:'Electric 9 kW', extra:0, electric:true} ],
   woods:    [{n:'Spruce',c:'#c9a46c'},{n:'Thermowood',c:'#6d4b34'},{n:'Larch',c:'#b8733b'},{n:'Natural pine',c:'#dcbc8a'},{n:'Red cedar',c:'#a4512f'},{n:'Walnut',c:'#4f3526'},{n:'Grey wash',c:'#8d918e'},{n:'Black stain',c:'#2c2b29'}],
   acrylics: [{n:'Ice blue',c:'#bfe3ee'},{n:'Pearl white',c:'#f1f3f2'},{n:'Graphite',c:'#4b555a'},{n:'Mocha brown',c:'#9a7058'},{n:'Sky blue',c:'#7cc2e3'},{n:'Deep blue',c:'#2f6f9f'},{n:'Sand beige',c:'#d9c9a8'},{n:'Sage green',c:'#8fb09f'}],
   // ids are used by the 3D scene: hydro, air, thermo, shelf, stove, guard, led, cover, sound, ladder, care
@@ -167,7 +165,7 @@ const SITE = {
     {id:'shelf',  name:'Drink shelf',                price:80, desc:'Wooden or metal shelf on the rim'},
     {id:'stove',  name:'External stove',             price:0, desc:'Wood-fired stove with chimney'},
     {id:'guard',  name:'Chimney guard',              price:90,  desc:'Perforated stainless guard around the chimney (needs a stove)'},
-    {id:'led',    name:'LED lighting',               price:190, desc:'Colour lighting under the rim'},
+    {id:'led',    name:'LED lighting',               price:140, desc:'Colour lighting under the rim'},
     {id:'cover',  name:'Thermal cover',              price:350, desc:'Insulated lid that keeps the heat in'},
     {id:'sound',  name:'Sound system',               price:290, desc:'Waterproof speaker'},
     {id:'ladder', name:'Wooden steps',              price:160, desc:'Wooden steps outside plus a step inside the tub'},
@@ -206,7 +204,7 @@ const SITE = {
 
 const $ = id => document.getElementById(id);
 const S = SITE;
-const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, stepOpen:1, p:0, t:0, fire:true, acc:{ladder:true}, pend:{hydro:false,thermo:true,shelf:true,led:true} };   // fire is always on
+const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, stepOpen:1, p:0, t:0, fire:true, acc:{ladder:true}, pend:{hydro:false,thermo:true,shelf:true,led:true,air:true} };   // fire is always on
 S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
 const plus = n => n ? '+'+fmt(n) : '';   // price shown in the option menus, e.g. +€120
@@ -262,7 +260,7 @@ function syncUI(){ const v=!!st.acc.stove;
   Object.keys(chipEls).forEach(id=>chipEls[id].setAttribute('aria-pressed',!!st.acc[id]));
   if(chipEls.guard) chipEls.guard.disabled=!v||el; }           // chimney guard needs a stove
 function setAcc(id,v){ st.acc[id]=v; if(id==='stove'&&(!v||S.stoveTypes[st.t].electric)) st.acc.guard=false; syncUI(); build(); readout(); }
-// Stove tab: stove type (the stove is always included; price = surcharge of the chosen type)
+// Equipment tab: stove type (the stove is always included; price = surcharge of the chosen type)
 S.stoveTypes.forEach((t,i)=>{ const b=document.createElement('button'); b.innerHTML=`<span>${t.n}</span><small>${plus(t.extra)}</small>`; b.onclick=()=>{ st.t=i; if(t.electric) st.acc.guard=false; setAcc('stove',true); }; $('oStove').appendChild(b); });
 // Equipment tab: stove position (outside / inside; the stove is always included) and steps
 S.stovePlaces.forEach((p,i)=>btn($('oPos'),p.n+(p.extra?' '+plus(p.extra):''),()=>{ st.p=i; setAcc('stove',true); }));
@@ -279,7 +277,7 @@ S.accessories.filter(a=>a.id!=='stove'&&a.id!=='ladder').forEach(a=>{
 });
 syncUI();
 // main tabs
-function showTab(i){ [...$('tabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===i)); [0,1,2,3].forEach(j=>$('pane'+j).hidden=j!==i); }
+function showTab(i){ [...$('tabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===i)); [0,1,2].forEach(j=>$('pane'+j).hidden=j!==i); }
 S.ui.tabs.forEach((t,i)=>{ const b=document.createElement('button'); b.textContent=t; b.setAttribute('role','tab'); b.onclick=()=>showTab(i); $('tabs').appendChild(b); });
 showTab(0);
 function readout(){ const m=S.models[st.m]; $('rName').textContent=m.name+' · '+S.shapes[st.s].n; }
@@ -657,6 +655,28 @@ function svis(){sw2.hidden=!st.acc.shelf||!shOpen;chg4.hidden=!st.acc.shelf||shO
 function setShelf(i){st.shelfC=i;SHA.name='Drink shelf \u00b7 '+SHC[i][0];SHA.price=SHC[i][2];chipEls.shelf.querySelector('small').textContent=plus(SHA.price);[...sw2.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));shOpen=false;svis();build();readout();if(rqs.open)showSum();}
 const _s4=syncUI;syncUI=function(){if(!st.acc.shelf){shOpen=true;st.shelfC=0;SHA.name='Drink shelf \u00b7 Wooden';SHA.price=SHC[0][2];chipEls.shelf.querySelector('small').textContent='';[...sw2.children].forEach(b=>b.setAttribute('aria-pressed',false));}_s4();svis();};
 [...sw2.children].forEach(b=>b.setAttribute('aria-pressed',false));
+const LD=S.accessories.find(x=>x.id==='led'),LO=[['LED RGB lighting, 2 pcs',0],['LED RGB lighting, 3 pcs',270],['MINI LED RGB lighting',140]];
+let lOpen=true;st.led=0;
+const sub3=document.createElement('div');sub3.className='sub';
+LO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p?' '+plus(p):'');b.dataset.i=i;b.onclick=()=>setLed(i);sub3.appendChild(b);});
+const chg3=document.createElement('button');chg3.type='button';chg3.className='chg';chg3.onclick=()=>{lOpen=true;syncUI();};
+chipEls.led.after(sub3);sub3.after(chg3);
+function lvis(){sub3.hidden=!st.acc.led||!lOpen;chg3.hidden=!st.acc.led||lOpen;chg3.innerHTML=LO[st.led][0]+' \u00b7 <b class="cw">change</b>';}
+function setLed(i){st.led=i;LD.price=LO[i][1];LD.name=LO[i][0];chipEls.led.querySelector('small').textContent=plus(LD.price);
+ [...sub3.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));lOpen=false;lvis();readout();if(rqs.open)showSum();}
+const _sL=syncUI;syncUI=function(){if(!st.acc.led){lOpen=true;st.led=0;LD.name=LO[0][0];LD.price=LO[0][1];[...sub3.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.led.querySelector('small').textContent=plus(LD.price);}_sL();lvis();};
+LD.name=LO[0][0];LD.price=LO[0][1];[...sub3.children].forEach(b=>b.setAttribute('aria-pressed',false));
+const AD=S.accessories.find(x=>x.id==='air'),AO=[['12 jets \u00b7 750 W',0],['18 jets \u00b7 750 W',120],['24 jets \u00b7 2 x 750 W',300],['36 jets \u00b7 2 x 750 W',500]];
+let aOpen=true;st.air=0;
+const subZ=document.createElement('div');subZ.className='sub';
+AO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p?' '+plus(p):'');b.dataset.i=i;b.onclick=()=>setAir(i);subZ.appendChild(b);});
+const chgZ=document.createElement('button');chgZ.type='button';chgZ.className='chg';chgZ.onclick=()=>{aOpen=true;syncUI();};
+chipEls.air.after(subZ);subZ.after(chgZ);
+function avis(){subZ.hidden=!st.acc.air||!aOpen;chgZ.hidden=!st.acc.air||aOpen;chgZ.innerHTML=AO[st.air][0]+' \u00b7 <b class="cw">change</b>';}
+function setAir(i){st.air=i;AD.price=AO[i][1];AD.name='Air massage system \u00b7 '+AO[i][0];chipEls.air.querySelector('small').textContent=plus(AD.price);
+ [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));aOpen=false;avis();readout();if(rqs.open)showSum();}
+const _sA=syncUI;syncUI=function(){if(!st.acc.air){aOpen=true;st.air=0;AD.name='Air massage system';AD.price=AO[0][1];[...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.air.querySelector('small').textContent=plus(AD.price);}_sA();avis();};
+[...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));
 syncUI();readout();
 </script>
 <script>
@@ -669,26 +689,14 @@ const _s5=syncUI;syncUI=function(){if(!st.acc.cover){st.coverC=0;CVA.name='Therm
 syncUI();readout();
 </script>
 <script>
-const LD=S.accessories.find(x=>x.id==='led'),LO=[['7-colour LED lights, 20 mm',190],['7-colour LED lights, 50 mm',240],['7-colour LED lights, 60 mm',290]];
-let lOpen=true;st.led=0;
-const sub3=document.createElement('div');sub3.className='sub';
-LO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p?' '+plus(p):'');b.dataset.i=i;b.onclick=()=>setLed(i);sub3.appendChild(b);});
-[...sub3.children].sort((a,b)=>LO[+a.dataset.i][1]-LO[+b.dataset.i][1]).forEach(b=>sub3.appendChild(b));   // cheapest first
-const chg3=document.createElement('button');chg3.type='button';chg3.className='chg';chg3.onclick=()=>{lOpen=true;syncUI();};
-chipEls.led.after(sub3);sub3.after(chg3);
-function lvis(){sub3.hidden=!st.acc.led||!lOpen;chg3.hidden=!st.acc.led||lOpen;chg3.innerHTML=LO[st.led][0]+' \u00b7 <b class="cw">change</b>';}
-function setLed(i){st.led=i;LD.price=LO[i][1];LD.name=LO[i][0];chipEls.led.querySelector('small').textContent=plus(LD.price);
- [...sub3.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));lOpen=false;lvis();readout();if(rqs.open)showSum();}
-const _s5=syncUI;syncUI=function(){if(!st.acc.led){lOpen=true;st.led=0;LD.name=LO[0][0];LD.price=LO[0][1];[...sub3.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.led.querySelector('small').textContent=plus(LD.price);}_s5();lvis();};
-LD.name=LO[0][0];LD.price=LO[0][1];[...sub3.children].forEach(b=>b.setAttribute('aria-pressed',false));
 syncUI();readout();
 </script>
 <script>
 /* price is counted only after a choice in the sub-menu */
 (function(){
  const mark=(id,f,rb)=>{const o=window[f];window[f]=function(){st.pend[id]=false;const r=o.apply(this,arguments);if(rb)build();return r;};};
- mark('hydro','setJets');mark('thermo','setTh',1);mark('shelf','setShelf');mark('led','setLed',1);
- const o=syncUI;syncUI=function(){['hydro','thermo','shelf','led'].forEach(id=>{if(!st.acc[id])st.pend[id]=true;});return o.apply(this,arguments);};
+ mark('hydro','setJets');mark('thermo','setTh',1);mark('shelf','setShelf');mark('led','setLed',1);mark('air','setAir');
+ const o=syncUI;syncUI=function(){['hydro','thermo','shelf','led','air'].forEach(id=>{if(!st.acc[id])st.pend[id]=true;});return o.apply(this,arguments);};
  syncUI();readout();if(rqs.open)showSum();
 })();
 </script>
