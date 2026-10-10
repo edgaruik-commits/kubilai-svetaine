@@ -154,7 +154,7 @@ const SITE = {
   // stove position: inside the tub (integrated stove behind a wooden guard) or outside (free-standing)
   stovePlaces: [ {id:'out', n:'Outside', extra:0}, {id:'in', n:'Inside', extra:200} ],
   // stove types (Stove tab). extra = surcharge in EUR (set the real prices here). electric:true = no chimney / no fire
-  stoveTypes: [ {id:'s304_15', n:'Stove AISI 304 1.5 mm', extra:0}, {id:'s316_15', n:'Stove AISI 316 1.5 mm', extra:0}, {id:'s304_20', n:'Stove AISI 304 2.0 mm', extra:0}, {id:'el9', n:'Electric 9 kW', extra:0, electric:true} ],
+  stoveTypes: [ {id:'s304_15', n:'Stove AISI 304 1.5 mm', extra:0, free:true}, {id:'s316_15', n:'Stove AISI 316 1.5 mm', extra:150}, {id:'s304_20', n:'Stove AISI 304 2.0 mm', extra:200}, {id:'el9', n:'Electric 9 kW', extra:250, electric:true} ],
   woods:    [{n:'Spruce',c:'#c9a46c'},{n:'Thermowood',c:'#6d4b34'},{n:'Larch',c:'#b8733b'},{n:'Natural pine',c:'#dcbc8a'},{n:'Red cedar',c:'#a4512f'},{n:'Walnut',c:'#4f3526'},{n:'Grey wash',c:'#8d918e'},{n:'Black stain',c:'#2c2b29'}],
   acrylics: [{n:'Ice blue',c:'#bfe3ee'},{n:'Pearl white',c:'#f1f3f2'},{n:'Graphite',c:'#4b555a'},{n:'Mocha brown',c:'#9a7058'},{n:'Sky blue',c:'#7cc2e3'},{n:'Deep blue',c:'#2f6f9f'},{n:'Sand beige',c:'#d9c9a8'},{n:'Sage green',c:'#8fb09f'}],
   // ids are used by the 3D scene: hydro, air, thermo, shelf, stove, guard, led, cover, sound, ladder, filter
@@ -262,7 +262,7 @@ function syncUI(){ const v=!!st.acc.stove;
   if(chipEls.guard) chipEls.guard.disabled=!v||el; }           // chimney guard needs a stove
 function setAcc(id,v){ st.acc[id]=v; if(id==='stove'&&(!v||S.stoveTypes[st.t].electric)) st.acc.guard=false; syncUI(); build(); readout(); }
 // Equipment tab: stove type (the stove is always included; price = surcharge of the chosen type)
-S.stoveTypes.forEach((t,i)=>{ const b=document.createElement('button'); b.innerHTML=`<span>${t.n}</span><small>${plus(t.extra)}</small>`; b.onclick=()=>{ st.t=i; if(t.electric) st.acc.guard=false; setAcc('stove',true); }; $('oStove').appendChild(b); });
+S.stoveTypes.forEach((t,i)=>{ const b=document.createElement('button'); b.innerHTML=`<span>${t.n}</span><small>${t.extra?plus(t.extra):(t.free?'free':'')}</small>`; b.onclick=()=>{ st.t=i; if(t.electric) st.acc.guard=false; setAcc('stove',true); }; $('oStove').appendChild(b); });
 // Equipment tab: stove position (outside / inside; the stove is always included) and steps
 S.stovePlaces.forEach((p,i)=>btn($('oPos'),p.n+(p.extra?' '+plus(p.extra):''),()=>{ st.p=i; setAcc('stove',true); }));
 const LAD=S.accessories.find(a=>a.id==='ladder'), LAD_CLOSED=LAD.price;   // closed steps are paid, open steps are free
@@ -696,8 +696,11 @@ const CVA=S.accessories.find(x=>x.id==='cover');CVA.name='Thermal cover \u00b7 '
 const swc=document.createElement('div');swc.className='sub sw2';
 COVC.forEach(([n,c],i)=>{const b=document.createElement('button');b.type='button';b.style.background=c;b.title=b.ariaLabel=n;b.dataset.i=i;b.onclick=()=>setCover(i);swc.appendChild(b);});
 chipEls.cover.after(swc);
-function setCover(i){st.coverC=i;CVA.name='Thermal cover \u00b7 '+COVC[i][0];[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));build();readout();if(rqs.open)showSum();}
-const _s5=syncUI;syncUI=function(){if(!st.acc.cover){st.coverC=0;CVA.name='Thermal cover \u00b7 '+COVC[0][0];}_s5();swc.hidden=!st.acc.cover;[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===st.coverC));};
+let cOpen=true;   // swatches collapse into "<colour> \u00b7 change" after picking, like the other submenus
+const chgC=document.createElement('button');chgC.type='button';chgC.className='chg';chgC.onclick=()=>{cOpen=true;syncUI();};swc.after(chgC);
+function cvis(){swc.hidden=!st.acc.cover||!cOpen;chgC.hidden=!st.acc.cover||cOpen;chgC.innerHTML=COVC[st.coverC||0][0]+' \u00b7 <b class="cw">change</b>';}
+function setCover(i){cOpen=false;st.coverC=i;CVA.name='Thermal cover \u00b7 '+COVC[i][0];[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));cvis();build();readout();if(rqs.open)showSum();}
+const _s5=syncUI;syncUI=function(){if(!st.acc.cover){cOpen=true;st.coverC=0;CVA.name='Thermal cover \u00b7 '+COVC[0][0];}_s5();cvis();[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===st.coverC));};
 syncUI();readout();
 </script>
 <script>
