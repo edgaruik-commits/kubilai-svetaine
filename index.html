@@ -278,7 +278,7 @@ const SITE = {
     {id:'thermo', name:'Water thermometer',          price:25,  desc:'Floating thermometer'},
     {id:'shelf',  name:'Drink shelf',                price:80, desc:'Wooden or metal shelf on the rim'},
     {id:'stove',  name:'External stove',             price:0, desc:'Wood-fired stove with chimney'},
-    {id:'guard',  name:'Chimney guard',              price:90,  desc:'Perforated stainless guard around the chimney (needs a stove)'},
+    {id:'guard',  name:'Chimney',                    price:0,   desc:'Chimney options: guard, spark arrestor (needs a stove)'},
     {id:'led',    name:'LED lighting',               price:140, desc:'Colour lighting under the rim'},
     {id:'cover',  name:'Thermal cover',              price:0,   desc:'Insulated lid that keeps the heat in'},
     {id:'sound',  name:'Sound system',               price:290, desc:'Waterproof speaker'},
@@ -319,7 +319,7 @@ const SITE = {
 
 const $ = id => document.getElementById(id);
 const S = SITE;
-const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, stepOpen:1, p:0, t:0, fire:true, acc:{ladder:true}, pend:{hydro:false,thermo:true,shelf:true,led:true,air:true,filter:true} };   // fire is always on
+const st = { m:0, s:0, w:5, a:2, fib:0, coverC:0, stepOpen:1, p:0, t:0, fire:true, acc:{ladder:true}, chim:{g:false,k:false}, pend:{hydro:false,thermo:true,shelf:true,led:true,air:true,filter:true,cover:true} };   // fire is always on
 S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
 const plus = n => n ? '+'+fmt(n) : '';   // price shown in the option menus, e.g. +€120
@@ -456,6 +456,7 @@ let hydroBeamM=null, popRings=null; const popP=particles(36*5*3,.1,1);   // bubb
   g.strokeStyle='rgba(255,255,255,.95)'; g.lineWidth=5; g.lineCap='round'; g.beginPath(); g.arc(32,32,17,Math.PI*1.1,Math.PI*1.45); g.stroke();
   const BT=new THREE.CanvasTexture(c); airB.p.material.map=BT; airB.p.material.size=.17; airB.p.material.needsUpdate=true; popP.p.material.map=BT; popP.p.material.needsUpdate=true; } bubbles.p.visible=false;
 
+var lidG=null, lidAng=0, lidAnim=null, lidTimer=null;   // thermal cover hinge state
 let tub, fireDoor, R=1, HW=1, HX=1, HZ=1, sq=false, H=.95, bound=.8, bx=.8, bz=.8;
 function build(){
   if(tub) scene.remove(tub);
@@ -539,10 +540,15 @@ function build(){
       fireDoor=add(bx(.17,.17,.012),flameMat,0,.02,.044);
       [-.14,-.115].forEach(py=>add(bx(.2,.012,.012),dark,0,py,.034)); add(bx(.02,.1,.025),blk,.12,0,.04); }
     // stainless chimney, optional perforated guard
-    function chimney(x,y0,z){ const top=2.4;
+    function chimney(x,y0,z){ const top=2.25;
       mk(cy(.05,.05,top-y0,16),ss,x,(y0+top)/2,z);
-      if(A.guard){ const h=1.7-y0, gm=guardTube(.1,h); mk(cy(.075,.075,h,16),blk,x,y0+h/2,z); gm.position.set(x,y0+h/2,z); gm.castShadow=true; g.add(gm); [y0+.015,1.7].forEach(y=>mk(cy(.105,.105,.03,24),ss,x,y,z)); }
-      mk(new THREE.ConeGeometry(.11,.13,16),ss,x,top+.06,z); }
+      if(A.guard&&st.chim.g){ const h=1.62-y0, gm=guardTube(.1,h); mk(cy(.075,.075,h,16),blk,x,y0+h/2,z); gm.position.set(x,y0+h/2,z); gm.castShadow=true; g.add(gm); [y0+.015,1.62].forEach(y=>mk(cy(.105,.105,.03,24),ss,x,y,z)); }
+      if(st.chim.k){   // spark arrestor (optional): collar ring + three struts + wide shallow conical rain/spark cap
+        mk(cy(.058,.058,.07,24),ss,x,top-.035,z);                       // collar band on the pipe
+        const sh=.16;
+        [.0,2.094,4.189].forEach(an=>{ const m=mk(cy(.007,.007,sh,8),ss,x+Math.cos(an)*.04,top+sh/2,z+Math.sin(an)*.04); });
+        mk(new THREE.ConeGeometry(.17,.07,40),ss,x,top+sh+.03,z); }    // umbrella cap
+      /* standard chimney: open stainless pipe, no cap */ }
     const electric=!!S.stoveTypes[st.t].electric;
     if(electric){
       // electric 9 kW heater: compact stainless unit next to the tub, joined by two pipes, control panel, no chimney / no fire
@@ -694,8 +700,17 @@ function build(){
       const beam=new THREE.Mesh(bg,beamM); beam.rotation.z=-Math.PI/2; beam.position.x=-.012; g.add(beam);
       tub.add(g); } }
   if(A.cover){ const lm=new THREE.MeshStandardMaterial({color:new THREE.Color(COVC[st.coverC||0][1]),roughness:.7});
-    const c=sq?new THREE.Mesh(new THREE.BoxGeometry(2*HX+.24,.09,2*HZ+.24),lm):new THREE.Mesh(new THREE.CylinderGeometry(R+.06,R+.06,.09,48),lm);
-    c.position.y=H+.17; c.castShadow=true; tub.add(c); }
+    const um=lm, TH=.09, LY=H+.17;   // underside is the same chosen colour; lid folds in half along the middle
+    const mk=(side)=>{   // side=+1 -> half over +x (folds up), side=-1 -> half over -x (stays fixed)
+      let m;
+      if(sq){ const w=HX+.12; m=new THREE.Mesh(new THREE.BoxGeometry(w,TH,2*HZ+.24),[lm,lm,lm,um,lm,lm]); m.position.x=side*w/2; }
+      else { m=new THREE.Mesh(new THREE.CylinderGeometry(R+.06,R+.06,TH,48,1,false,side>0?0:Math.PI,Math.PI),[lm,lm,um]); }
+      m.castShadow=true;
+      const cut=new THREE.Mesh(new THREE.PlaneGeometry(sq?2*HZ+.24:2*(R+.06),TH),lm); cut.material=lm.clone(); cut.material.side=THREE.DoubleSide; cut.rotation.y=Math.PI/2;
+      const g=new THREE.Group(); g.add(m); g.add(cut); return g; };
+    const fixedH=mk(-1); fixedH.position.set(0,LY,0); tub.add(fixedH);
+    const movH=mk(1); movH.position.y=-.045;   // top face of the half sits on the hinge axis
+    lidG=new THREE.Group(); lidG.position.set(0,LY+.05,0); lidG.rotation.z=lidAng; lidG.add(movH); tub.add(lidG); } else lidG=null;
   scene.add(tub); ledLight.position.set(0,H-.25,0); poolLight.position.set(0,.8,0); poolLight.color.set(0xffffff);
 }
 build();
@@ -753,10 +768,13 @@ const clock=new THREE.Clock();
   camera.lookAt(0,lookY,0);
   fireLight.intensity=f?(1.1+Math.sin(t*14)*.25+Math.sin(t*23)*.15)*(1+night*1.5):0; fireLight.distance=5+night*3;
   if(fireDoor){ fireDoor.visible=f; if(f){ fireDoor.scale.y=1+Math.sin(t*13)*.07; fireDoor.scale.x=1+Math.sin(t*9+1)*.05; } }
-  ledLight.intensity=A.led&&!A.cover?1.1+night*1.4:0;
-  steam.p.visible=!A.cover; steam.p.material.opacity=f?.38:.12;
+  if(lidAnim){ const k=Math.min(1,(performance.now()-lidAnim.t0)/lidAnim.d), e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2; lidAng=lidAnim.a+(lidAnim.b-lidAnim.a)*e; if(k>=1) lidAnim=null; }
+  if(lidG) lidG.rotation.z=lidAng;
+  const lidOpen=lidAng>.35;
+  ledLight.intensity=A.led&&(!A.cover||lidOpen)?1.1+night*1.4:0;
+  steam.p.visible=!A.cover||lidOpen; steam.p.material.opacity=f?.38:.12;
   bubbles.p.visible=false;
-  { const show=!A.cover; spray.p.visible=!!A.hydro&&show; airB.p.visible=!!A.air&&show;
+  { const show=!A.cover||lidOpen; spray.p.visible=!!A.hydro&&show; airB.p.visible=!!A.air&&show;
     if(hydroBeamM) hydroBeamM.opacity=.5+.12*Math.sin(t*9);
     if(A.hydro){ let c=0; hydroSrc.forEach((j,i)=>{ for(let k=0;k<12;k++){ const life=(t*.9+k/12+i*.137)%1, d=.04+life*.7, w=Math.sin(i*12.9+k*7.7)*.06*life;
         spray.pos[c*3]=j.x-j.nx*d-j.nz*w; spray.pos[c*3+1]=j.y+Math.sin(life*Math.PI)*.07+Math.cos(i*3.1+k*5.3)*.025*life; spray.pos[c*3+2]=j.z-j.nz*d+j.nx*w; c++; } });
@@ -772,7 +790,7 @@ const clock=new THREE.Clock();
       airB.g.setDrawRange(0,c); airB.g.attributes.position.needsUpdate=true;
       popP.g.setDrawRange(0,c2); popP.g.attributes.position.needsUpdate=true; if(popRings) popRings.instanceMatrix.needsUpdate=true; } }
   steam.seed.forEach((s,i)=>{ const life=(t*(f?.18:.08)+s.a)%1, a=s.a*60, rr=Math.sqrt(s.r)*bound;
-    steam.pos[i*3]=(sq?s.x*bx:Math.cos(a)*rr)+Math.sin(t+i)*.08*life; steam.pos[i*3+1]=H+.05+life*1.3; steam.pos[i*3+2]=(sq?s.z*bz:Math.sin(a)*rr)+Math.cos(t*.8+i)*.08*life; });
+    { let sx=(sq?s.x*bx:Math.cos(a)*rr)+Math.sin(t+i)*.08*life; if(A.cover) sx=Math.min(Math.abs(sx)+.12,sq?bx:bound);   /* open cover: steam only over the open half */ steam.pos[i*3]=sx; } steam.pos[i*3+1]=H+.05+life*1.3; steam.pos[i*3+2]=(sq?s.z*bz:Math.sin(a)*rr)+Math.cos(t*.8+i)*.08*life; });
   bubbles.seed.forEach((s,i)=>{ const life=(t*.45+s.a)%1, a=s.a*60, rr=Math.sqrt(s.r)*bound*.9;
     bubbles.pos[i*3]=sq?s.x*bx*.9:Math.cos(a)*rr; bubbles.pos[i*3+1]=.2+life*(H-.35); bubbles.pos[i*3+2]=sq?s.z*bz*.9:Math.sin(a)*rr; });
   steam.g.attributes.position.needsUpdate=true; bubbles.g.attributes.position.needsUpdate=true;
@@ -917,8 +935,9 @@ chipEls.cover.after(swc);
 let cOpen=true;   // swatches collapse into "<colour> \u00b7 change" after picking, like the other submenus
 const chgC=document.createElement('button');chgC.type='button';chgC.className='chg';chgC.onclick=()=>{cOpen=true;syncUI();};swc.after(chgC);
 function cvis(){swc.hidden=!st.acc.cover||!cOpen;chgC.hidden=!st.acc.cover||cOpen;chgC.innerHTML=COVC[st.coverC||0][0]+' \u00b7 <b class="cw">change</b>';}
-function setCover(i){cOpen=false;st.coverC=i;CVA.name='Thermal cover \u00b7 '+COVC[i][0];[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));cvis();build();readout();if(rqs.open)showSum();}
-const _s5=syncUI;syncUI=function(){if(!st.acc.cover){cOpen=true;st.coverC=0;CVA.name='Thermal cover \u00b7 '+COVC[0][0];}_s5();cvis();[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===st.coverC));};
+function setCover(i){cOpen=false;st.coverC=i;CVA.name='Thermal cover \u00b7 '+COVC[i][0];[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));cvis();lidAng=0;lidAnim=null;clearTimeout(lidTimer);build();readout();if(rqs.open)showSum();
+ lidTimer=setTimeout(()=>{ if(!st.acc.cover) return; lidAnim={a:lidAng,b:Math.PI,t0:performance.now(),d:(typeof reduce!=='undefined'&&reduce)?1:1400}; },2000);}
+const _s5=syncUI;syncUI=function(){if(!st.acc.cover){cOpen=true;st.coverC=0;CVA.name='Thermal cover \u00b7 '+COVC[0][0];lidAng=0;lidAnim=null;clearTimeout(lidTimer);}_s5();cvis();[...swc.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===st.coverC));};
 syncUI();readout();
 </script>
 <script>
@@ -928,9 +947,27 @@ syncUI();readout();
 /* price is counted only after a choice in the sub-menu */
 (function(){
  const mark=(id,f,rb)=>{const o=window[f];window[f]=function(){st.pend[id]=false;const r=o.apply(this,arguments);if(rb)build();return r;};};
- mark('hydro','setJets');mark('thermo','setTh',1);mark('shelf','setShelf');mark('led','setLed',1);mark('air','setAir',1);mark('filter','setFilter');
- const o=syncUI;syncUI=function(){['hydro','thermo','shelf','led','air','filter'].forEach(id=>{if(!st.acc[id])st.pend[id]=true;});return o.apply(this,arguments);};
+ mark('hydro','setJets');mark('thermo','setTh',1);mark('shelf','setShelf');mark('led','setLed',1);mark('air','setAir',1);mark('filter','setFilter');mark('cover','setCover');
+ const o=syncUI;syncUI=function(){['hydro','thermo','shelf','led','air','filter','cover'].forEach(id=>{if(!st.acc[id])st.pend[id]=true;});return o.apply(this,arguments);};
  syncUI();readout();if(rqs.open)showSum();
+})();
+</script>
+<script>
+/* Chimney: one menu item with paid sub-options (guard, spark arrestor) */
+(function(){
+ const GD=S.accessories.find(x=>x.id==='guard');
+ const GO=[['g','Chimney guard',90],['k','Spark arrestor',45]];   // placeholder prices (EUR), edit here
+ const none=()=>({g:false,k:false}); st.chim=none();
+ Object.defineProperty(GD,'price',{get:()=>GO.reduce((t,o)=>t+(st.chim[o[0]]?o[2]:0),0),configurable:true});
+ Object.defineProperty(GD,'name',{get:()=>{const l=GO.filter(o=>st.chim[o[0]]).map(o=>o[1]);return 'Chimney'+(l.length?' \u00b7 '+l.join(', '):'');},configurable:true});
+ chipEls.guard.querySelector('small').textContent='';
+ const sub=document.createElement('div'); sub.className='sub';
+ GO.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.textContent=o[1]+' '+plus(o[2]); b.dataset.k=o[0]; b.title=o[1];
+  b.onclick=()=>{ st.chim[o[0]]=!st.chim[o[0]]; gvis(); build(); readout(); if(rqs.open) showSum(); }; sub.appendChild(b); });
+ chipEls.guard.after(sub);
+ function gvis(){ sub.hidden=!st.acc.guard; [...sub.children].forEach(b=>b.setAttribute('aria-pressed',!!st.chim[b.dataset.k])); }
+ const _o=syncUI; syncUI=function(){ if(!st.acc.guard) st.chim=none(); _o.apply(this,arguments); gvis(); };
+ syncUI(); readout(); build();
 })();
 </script>
 <script>
