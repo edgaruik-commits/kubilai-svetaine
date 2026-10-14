@@ -64,8 +64,8 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 <div class="loc">
 <h3>Our workshop</h3>
 <address>Vytauto g. 9, Meškučių k.,<br>LT-68129 Marijampolė, Lithuania</address>
-<iframe title="Thermal Heat on Google Maps" src="https://www.google.com/maps?q=Vytauto%20g.%209%2C%20Me%C5%A1ku%C4%8Di%C5%B3%20k.%2C%20LT-68129%20Marijampol%C4%97%2C%20Lithuania&amp;output=embed" width="600" height="300" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
-<a class="ml" href="https://www.google.com/maps/search/?api=1&amp;query=Vytauto%20g.%209%2C%20Me%C5%A1ku%C4%8Di%C5%B3%20k.%2C%20LT-68129%20Marijampol%C4%97%2C%20Lithuania" target="_blank" rel="noopener">Open in Google Maps</a>
+<iframe title="Thermal Heat on Google Maps" src="https://www.google.com/maps?q=Vytauto%20g.%209%2C%20Me%C5%A1ku%C4%8Di%C5%B3%20k.%2C%20LT-68129%20Marijampol%C4%97%2C%20Lithuania&amp;z=19&amp;output=embed" width="600" height="300" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+<a class="ml" href="https://www.google.com/maps?q=Vytauto%20g.%209%2C%20Me%C5%A1ku%C4%8Di%C5%B3%20k.%2C%20LT-68129%20Marijampol%C4%97%2C%20Lithuania&amp;z=19" target="_blank" rel="noopener">Open in Google Maps</a>
 </div>
 </div>
 
@@ -89,4 +89,15 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 </main>
 
 <footer><div class="w"><nav><a href="Legal_Notice_Thermal_Heat.pdf" download="Legal_Notice_Thermal_Heat.pdf">Legal notice</a><a href="Terms_and_Conditions_Thermal_Heat.pdf" download="Terms_and_Conditions_Thermal_Heat.pdf">Terms &amp; conditions</a><a href="#">Right of withdrawal</a><a href="Privacy_Policy_Thermal_Heat.pdf" download="Privacy_Policy_Thermal_Heat.pdf">Privacy policy</a><a href="Warranty_Thermal_Heat.pdf" download="Warranty_Thermal_Heat.pdf">Warranty</a></nav><p>Payment: bank transfer, invoice, PayPal, Google Pay</p><p style="margin-top:8px">Europaletės MB · Vytauto g. 9, Meškučių k., LT-68129 Marijampolė, Lithuania · Company code: 304924983 · VAT no.: LT100012395710<br>Bank: Swedbank, AB · IBAN: LT21 7300 0101 5643 0123</p></div></footer>
+<script>
+/* Map: put the exact coordinates here (Google Maps: right-click the building > first line "54.xxxxx, 23.xxxxx").
+   With coordinates the map opens exactly there at zoom 19 (about 50 m scale). Without them it falls back to the address. */
+var MAP={lat:54.51749512045698,lng:23.3033435702284,zoom:17};
+(function(){
+ if(MAP.lat===null||MAP.lng===null) return;
+ var ll=MAP.lat+','+MAP.lng;
+ document.querySelector('.loc iframe').src='https://www.google.com/maps?q='+ll+'&ll='+ll+'&z='+MAP.zoom+'&output=embed';
+ document.querySelector('.loc .ml').href='https://www.google.com/maps?q='+ll+'&z='+MAP.zoom;
+})();
+</script>
 </body></html>
