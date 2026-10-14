@@ -220,7 +220,7 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
             <div class="acc" id="chips"></div>
           </div>
           <button class="b" id="rq" type="button">Send request</button>
-          <button class="b o" id="std" type="button">Standard setup</button>
+          <div class="sets"><button class="b o" id="std" type="button">Standard setup</button><button class="b o" id="prem" type="button">Premium setup</button></div>
         </div>
         <div class="hint" id="hint"></div>
 <div class="vbar" id="vbar" role="toolbar" aria-label="Camera view and ambiance"><span class="vl">VIEW:</span><button type="button" data-v="front" aria-pressed="false">Front</button><button type="button" data-v="persp" aria-pressed="false">Perspective</button><button type="button" data-v="top" aria-pressed="false">Top Down</button><button type="button" data-v="liner" aria-pressed="false">Liner View</button><button type="button" id="vauto" aria-pressed="true">Auto rotate</button><span class="vs" aria-hidden="true"></span><span class="vl">AMBIANCE:</span><button type="button" data-a="day" aria-pressed="true">Day</button><button type="button" data-a="night" aria-pressed="false">Night</button></div>
@@ -849,7 +849,7 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
 <script>
 document.getElementById('std').onclick=()=>{if(window.eqStd)window.eqStd();st.m=0;st.s=0;st.w=5;st.wpc=0;st.a=2;st.fib=1;st.p=0;st.t=0;st.sv={o:0,g:1,m:0,h:0};st.acc={stove:true,hydro:true,air:true,led:true,cover:true,ladder:true};st.stepOpen=1;
  press($('oModel'),st.m);press($('oShape'),st.s);pressWood();pressMat();
- setJets(6);setAir(0);setLed(0);setCover(0);syncUI();showTab(0);if(rqs.open)showSum();};
+ setJets(6);setAir(0);setLed(0);setCover(0);syncUI();if(window.stvReset)window.stvReset();showTab(0);if(rqs.open)showSum();};
 </script>
 <script>
 function readout(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n;
@@ -1031,7 +1031,17 @@ syncUI();readout();
  syncUI();
 })();
 </script>
-<style>#oStove{gap:4px!important;padding:1px 0 3px 10px!important}#oStove .rw{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:4px}#oStove .sl{flex:0 0 100%;font-size:.66rem;font-weight:600;color:#4d6169;margin-top:3px}#oStove button{font-size:.74rem!important;padding:2px 9px!important}</style>
+<style>
+.sets{display:flex;gap:8px;flex:none}.panel .sets #std,.panel .sets #prem{margin:4px 0 0;width:auto;flex:1 1 0;min-width:0;padding:10px 8px}/* panel buttons: same look as the menu pills */
+.panel #rq,.panel .sets #std,.panel .sets #prem{font:600 .84rem system-ui,sans-serif;border-radius:12px;border-width:1.5px;padding:9px 12px;letter-spacing:.01em;transition:background .15s,color .15s,border-color .15s}
+.panel #rq{margin:6px 0 0;border-color:#d98a1c;background:#d98a1c;color:#1a1410;font-weight:700}
+.panel #rq:hover{background:#c27a14;border-color:#c27a14}
+.panel .sets{margin-top:0}
+.panel .sets #std{margin:0;background:transparent;border-color:#b9c6c2;color:#10282f}
+.panel .sets #std:hover{background:#10282f;border-color:#10282f;color:#fff}
+.panel .sets #prem{margin:0;background:#10282f;border-color:#10282f;color:#fff}
+.panel .sets #prem:hover{background:#1c4350;border-color:#1c4350;color:#fff}
+#oStove{gap:4px!important;padding:1px 0 3px 10px!important}#oStove .rw{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:4px}#oStove .sl{flex:0 0 100%;font-size:.66rem;font-weight:600;color:#4d6169;margin-top:3px}#oStove button{font-size:.74rem!important;padding:2px 9px!important}</style>
 <script>
 /* Stove type menu: Wood-fired / Electric > Orientation > Glass > Metal (AISI 304 / 316) > Thickness (1.5 / 2 mm); each choice unlocks the next row */
 (function(){
@@ -1053,8 +1063,20 @@ syncUI();readout();
   gb.push([key,row]); });
  function pr(){ gb.forEach(([key,row])=>row.forEach((b,i)=>b.setAttribute('aria-pressed',String(pk[key]===i)))); wb.setAttribute('aria-pressed',String(pk.f==='w')); eb.setAttribute('aria-pressed',String(pk.f==='e')); rws.forEach((r,k)=>r.hidden=k>stp); }
  const _p=syncUI; syncUI=function(){ _p.apply(this,arguments); pr(); };
+ window.stvReset=()=>{ stp=0; pk={f:null,o:null,g:null,m:null,h:null}; pr(); };
  syncUI(); readout();
 })();
+</script>
+
+<script>
+/* Premium setup: larger tub, thermo wood, acrylic, 316 stove 2 mm with glass, full equipment. Edit the choices here. */
+document.getElementById('prem').onclick=()=>{
+ if(window.eqStd)window.eqStd();
+ st.m=1;st.s=0;st.w=1;st.wpc=0;st.a=2;st.fib=0;st.p=0;st.t=0;st.sv={o:0,g:1,m:1,h:1};st.stepOpen=0;st.chim={g:true,k:true};
+ st.acc={stove:true,guard:true,ladder:true,hydro:true,air:true,led:true,cover:true,thermo:true,shelf:true,sound:true,filter:true,wifi:true};
+ press($('oModel'),st.m);press($('oShape'),st.s);pressWood();pressMat();
+ setJets(12);setAir(3);setLed(1);setCover(0);setShelf(1);setTh(0);setFilter(1);
+ syncUI();if(window.stvReset)window.stvReset();showTab(0);readout();if(rqs.open)showSum();};
 </script>
 <script>
 /* Customer reviews. Only publish genuine reviews that you have the customers' permission to use. */
