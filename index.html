@@ -249,6 +249,8 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* ============ EDIT HERE: all content of the page ============ */
+/* Stove type options: [label, surcharge EUR]. Edit prices here. */
+const STV={ orient:[['Vertical',0],['Horizontal',0]], glass:[['Without glass',0],['With glass',0]], metal:[['AISI 304',0],['AISI 316',150]], thick:[['1.5 mm',0],['2 mm',200]] };
 const SITE = {
   brand: 'Fjord|fire',               // "|" splits the coloured part
   email: 'edgaruik@gmail.com',   // placeholder
@@ -269,7 +271,10 @@ const SITE = {
   // stove position: inside the tub (integrated stove behind a wooden guard) or outside (free-standing)
   stovePlaces: [ {id:'out', n:'Outside', extra:0}, {id:'in', n:'Inside', extra:200} ],
   // stove types (Stove tab). extra = surcharge in EUR (set the real prices here). electric:true = no chimney / no fire
-  stoveTypes: [ {id:'s304_15', n:'Stove AISI 304 1.5 mm', extra:0, free:true}, {id:'s316_15', n:'Stove AISI 316 1.5 mm', extra:150}, {id:'s304_20', n:'Stove AISI 304 2.0 mm', extra:200}, {id:'el9', n:'Electric 9 kW', extra:250, electric:true} ],
+  stoveTypes: [ {id:'wood', free:true,
+      get n(){ const v=st.sv; return STV.orient[v.o][0]+' \u00b7 '+STV.glass[v.g][0].toLowerCase()+' \u00b7 '+STV.metal[v.m][0]+' \u00b7 '+STV.thick[v.h][0]; },
+      get extra(){ const v=st.sv; return STV.orient[v.o][1]+STV.glass[v.g][1]+STV.metal[v.m][1]+STV.thick[v.h][1]; } },
+    {id:'el9', n:'Electric 9 kW', extra:250, electric:true} ],
   woods:    [{n:'Spruce',c:'#c9a46c'},{n:'Thermowood',c:'#6d4b34'},{n:'Larch',c:'#b8733b'},{n:'Natural pine',c:'#dcbc8a'},{n:'Red cedar',c:'#a4512f'},{n:'Walnut',c:'#4f3526'},{n:'Grey wash',c:'#8d918e'},{n:'Black stain',c:'#2c2b29'}],
   acrylics: [{n:'Ice blue',c:'#bfe3ee'},{n:'Pearl white',c:'#f1f3f2'},{n:'Graphite',c:'#4b555a'},{n:'Mocha brown',c:'#9a7058'},{n:'Sky blue',c:'#7cc2e3'},{n:'Deep blue',c:'#2f6f9f'},{n:'Sand beige',c:'#d9c9a8'},{n:'Sage green',c:'#8fb09f'}],
   // ids are used by the 3D scene: hydro, air, thermo, shelf, stove, guard, led, cover, sound, ladder, filter
@@ -322,7 +327,7 @@ const $ = id => document.getElementById(id);
 const S = SITE;
 const ACR_PRICE = 400;   // acrylic liner surcharge over fiberglass (EUR), any colour
 const WPC_PRICE = 200;   // WPC finish surcharge (EUR), any colour
-const st = { m:0, s:0, w:5, wpc:0, a:2, fib:1, coverC:0, stepOpen:1, p:0, t:0, fire:true, acc:{ladder:true}, chim:{g:false,k:false}, pend:{hydro:false,thermo:true,shelf:true,led:true,air:true,filter:true,cover:true} };   // fire is always on
+const st = { sv:{o:0,g:1,m:0,h:0}, m:0, s:0, w:5, wpc:0, a:2, fib:1, coverC:0, stepOpen:1, p:0, t:0, fire:true, acc:{ladder:true}, chim:{g:false,k:false}, pend:{hydro:false,thermo:true,shelf:true,led:true,air:true,filter:true,cover:true} };   // fire is always on
 S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
 const plus = n => n ? '+'+fmt(n) : '';   // price shown in the option menus, e.g. +€120
@@ -533,16 +538,17 @@ function build(){
 
   // accessories
   fireDoor=null;
-  if(A.stove){ const inside=S.stovePlaces[st.p].id==='in'; const g=new THREE.Group(); const e=edge(0);
+  if(A.stove){ const ss=new THREE.MeshPhongMaterial({color:(!S.stoveTypes[st.t].electric&&st.sv.m)?0x93a5ae:0xaeb8bc,specular:0xffffff,shininess:80}); const inside=S.stovePlaces[st.p].id==='in'; const g=new THREE.Group(); const e=edge(0);
     g.position.copy(e.p); g.rotation.y=-Math.atan2(e.n.z,e.n.x);   // local +x = away from the tub
     const mk=(geo,mat,x,y,z)=>{ const o=new THREE.Mesh(geo,mat); o.position.set(x,y,z); o.castShadow=true; o.receiveShadow=true; g.add(o); return o; };
     const bx=(w,h,d)=>new THREE.BoxGeometry(w,h,d), cy=(a,b,h,n)=>new THREE.CylinderGeometry(a,b,h,n||20);
     const dark=new THREE.MeshPhongMaterial({color:0x14100d});
     // door with glass window and flame; built facing +z, then turned
-    function door(x,y,z,ry){ const d=new THREE.Group(); d.position.set(x,y,z); d.rotation.y=ry||0; g.add(d);
+    function door(x,y,z,ry,sx,sy){ const d=new THREE.Group(); d.position.set(x,y,z); d.rotation.y=ry||0; d.scale.set(sx||1,sy||1,1); g.add(d);
       const add=(geo,mat,px,py,pz)=>{ const o=new THREE.Mesh(geo,mat); o.position.set(px,py,pz); o.castShadow=true; d.add(o); return o; };
-      add(bx(.3,.34,.03),ss,0,0,.015); add(bx(.2,.2,.02),dark,0,.02,.03);
-      fireDoor=add(bx(.17,.17,.012),flameMat,0,.02,.044);
+      add(bx(.3,.34,.03),ss,0,0,.015);
+      if(st.sv.g){ add(bx(.2,.2,.02),dark,0,.02,.03); fireDoor=add(bx(.17,.17,.012),flameMat,0,.02,.044); }   // with glass: window + flame
+      else add(bx(.24,.26,.012),ss,0,.02,.036);                                                              // without glass: solid door
       [-.14,-.115].forEach(py=>add(bx(.2,.012,.012),dark,0,py,.034)); add(bx(.02,.1,.025),blk,.12,0,.04); }
     // stainless chimney, optional perforated guard
     function chimney(x,y0,z){ const top=2.25;
@@ -568,20 +574,30 @@ function build(){
       // stove built into the tub wall: stainless panel with door, chimney beside it
       const zc=.45, xw=sq?0:Math.sqrt(R*R-zc*zc)-R;
       mk(bx(.15,H,.62),ss,.005,.06+H/2,0);
-      door(.08,.46,0,Math.PI/2);
+      door(.08,.46,0,Math.PI/2,st.sv.o?1.5:1,st.sv.o?.7:1);
       const pp=mk(cy(.04,.04,.2,12),ss,xw+.17,.55,.38); pp.rotation.x=Math.PI/2;
       chimney(xw+.17,.1,zc);
       fireLight.position.set(e.p.x+e.n.x*.45,.5,e.p.z+e.n.z*.45);
     } else {
       // free-standing stainless stove next to the tub, joined by two pipes
       const cx=.5, bw=.42, bd=.48;
+      if(st.sv.o===1){   // horizontal stove: cylinder lying on its side, door on the front end, chimney at the rear
+        const L=.62, rr=.2, cyY=.33;
+        mk(cy(rr,rr,L,32),ss,cx,cyY,0).rotation.x=Math.PI/2;
+        mk(cy(rr+.012,rr+.012,.03,32),ss,cx,cyY,L/2).rotation.x=Math.PI/2;
+        mk(cy(rr+.012,rr+.012,.03,32),ss,cx,cyY,-L/2).rotation.x=Math.PI/2;
+        [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([a,b])=>mk(bx(.05,.13,.05),blk,cx+a*.13,.065,b*.22));
+        door(cx,cyY,L/2+.015,0,.8,.8);
+        [.24,.40].forEach(y=>{ const q=mk(cy(.028,.028,.3,12),blk,.15,y,0); q.rotation.z=Math.PI/2; });
+        chimney(cx,cyY+rr-.02,-.2);
+      } else {
       mk(bx(bw,.5,bd),ss,cx,.35,0);
       const rg=new THREE.CylinderGeometry(.1,.297,.14,4); rg.rotateY(Math.PI/4); const rf=mk(rg,ss,cx,.67,0); rf.scale.z=bd/bw;
       [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([a,b])=>mk(bx(.06,.1,.06),blk,cx+a*.16,.05,b*.2));
       door(cx,.4,bd/2);
       mk(bx(.22,.08,.03),ss,cx,.2,bd/2+.015); mk(bx(.1,.012,.02),blk,cx,.2,bd/2+.04);
       [.3,.52].forEach(y=>{ const q=mk(cy(.028,.028,.3,12),blk,.15,y,0); q.rotation.z=Math.PI/2; });
-      chimney(cx,.72,0);
+      chimney(cx,.72,0); }
       fireLight.position.set(e.p.x+e.n.x*.5,.4,e.p.z+e.n.z*.5);
     }
     tub.add(g); }
@@ -831,7 +847,7 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
 });
 </script>
 <script>
-document.getElementById('std').onclick=()=>{if(window.eqStd)window.eqStd();st.m=0;st.s=0;st.w=5;st.wpc=0;st.a=2;st.fib=1;st.p=0;st.t=0;st.acc={stove:true,hydro:true,air:true,led:true,cover:true,ladder:true};st.stepOpen=1;
+document.getElementById('std').onclick=()=>{if(window.eqStd)window.eqStd();st.m=0;st.s=0;st.w=5;st.wpc=0;st.a=2;st.fib=1;st.p=0;st.t=0;st.sv={o:0,g:1,m:0,h:0};st.acc={stove:true,hydro:true,air:true,led:true,cover:true,ladder:true};st.stepOpen=1;
  press($('oModel'),st.m);press($('oShape'),st.s);pressWood();pressMat();
  setJets(6);setAir(0);setLed(0);setCover(0);syncUI();showTab(0);if(rqs.open)showSum();};
 </script>
@@ -1013,6 +1029,31 @@ syncUI();readout();
   const gs=chipEls.guard.querySelector('small'); if(gs) gs.textContent=(st.acc.guard&&GDI.price)?plus(GDI.price):''; }
  const _e=syncUI; syncUI=function(){ _e.apply(this,arguments); eqsync(); };
  syncUI();
+})();
+</script>
+<style>#oStove{gap:4px!important;padding:1px 0 3px 10px!important}#oStove .rw{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:4px}#oStove .sl{flex:0 0 100%;font-size:.66rem;font-weight:600;color:#4d6169;margin-top:3px}#oStove button{font-size:.74rem!important;padding:2px 9px!important}</style>
+<script>
+/* Stove type menu: Wood-fired / Electric > Orientation > Glass > Metal (AISI 304 / 316) > Thickness (1.5 / 2 mm); each choice unlocks the next row */
+(function(){
+ const box=$('oStove'); box.innerHTML='';
+ const groups=[['Orientation','o',STV.orient],['Glass','g',STV.glass],['Metal','m',STV.metal],['Thickness','h',STV.thick]], gb=[], rws=[]; let stp=0; const KS=['o','g','m','h']; let pk={f:null,o:null,g:null,m:null,h:null};   // pk = choices made while this menu is open (nothing is pre-selected)
+ const mkRow=t=>{ const r=document.createElement('div'); r.className='rw'; if(t) r.title=t; box.appendChild(r); rws.push(r); return r; };
+ const top=mkRow('Fuel');
+ const wb=document.createElement('button'); wb.type='button'; wb.textContent='Wood-fired';
+ wb.onclick=e=>{ st.t=0; stp=1; pk={f:'w',o:null,g:null,m:null,h:null}; e.stopPropagation(); setAcc('stove',true); };
+ const eb=document.createElement('button'); eb.type='button'; eb.textContent=S.stoveTypes[1].n+' '+plus(S.stoveTypes[1].extra);
+ eb.onclick=()=>{ stp=0; st.t=1; st.acc.guard=false; setAcc('stove',true); pk={f:null,o:null,g:null,m:null,h:null}; pr(); };   // electric closes the menu
+ top.append(wb,eb);
+ groups.forEach(([lab,key,arr],gi)=>{
+  const rw=mkRow(lab);
+  if(key==='m'||key==='h'){ const sl=document.createElement('div'); sl.className='sl'; sl.textContent=key==='m'?'Stove metal':'Stove metal thickness'; rw.appendChild(sl); }
+  const row=[]; arr.forEach(([n,p],i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=n+(p?' '+plus(p):'');
+   b.onclick=e=>{ st.sv[key]=i; st.t=0; const last=gi===groups.length-1; stp=last?0:gi+2; pk.f='w'; pk[key]=i; KS.slice(gi+1).forEach(k=>pk[k]=null); if(!last) e.stopPropagation(); setAcc('stove',true); if(last){ pk={f:null,o:null,g:null,m:null,h:null}; pr(); } };
+   rw.appendChild(b); row.push(b); });
+  gb.push([key,row]); });
+ function pr(){ gb.forEach(([key,row])=>row.forEach((b,i)=>b.setAttribute('aria-pressed',String(pk[key]===i)))); wb.setAttribute('aria-pressed',String(pk.f==='w')); eb.setAttribute('aria-pressed',String(pk.f==='e')); rws.forEach((r,k)=>r.hidden=k>stp); }
+ const _p=syncUI; syncUI=function(){ _p.apply(this,arguments); pr(); };
+ syncUI(); readout();
 })();
 </script>
 <script>
