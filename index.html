@@ -876,8 +876,28 @@ document.getElementById('rqclose').onclick=()=>rqs.close();
 rqs.addEventListener('click',e=>{if(e.target===rqs)rqs.close();});
 document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.target,f=new FormData(form),btn=form.querySelector('button[type=submit]'),ok=document.getElementById('rqok');
  const body='CONFIGURATION\n'+rows().map(x=>x.filter(Boolean).join(' | ')).join('\n')+'\n\n'+(f.get('m')||'');
+ const mdl=S.models[st.m],now=new Date(),oid='TH-'+now.toISOString().replace(/\D/g,'').slice(0,14);
+ const order={
+  order_id:oid,
+  created_at:now.toISOString(),
+  page_url:location.href,
+  customer:{name:f.get('n'),email:f.get('e'),phone:f.get('p')||null,message:f.get('m')||null},
+  delivery:{country:f.get('l'),postcode:f.get('z')||null,city:f.get('c')||null},
+  configuration:{
+   model:{id:mdl.id,name:mdl.name,size:mdl.size,capacity:mdl.people,base_price_eur:mp(mdl,st.s)},
+   shape:S.shapes[st.s].n,
+   wood:S.woods[st.w].n,wpc_finish:!!st.wpc,
+   liner:(st.fib?S.ui.fib:S.ui.acr)+' - '+S.acrylics[st.a].n,
+   stove:st.acc.stove?{type:S.stoveTypes[st.t].n,position:S.stoveTypes[st.t].electric?null:S.stovePlaces[st.p].n}:null,
+   accessories:S.accessories.filter(a=>a.id!=='stove'&&st.acc[a.id]&&!st.pend[a.id]).map(a=>({id:a.id,name:a.name,price_eur:a.price}))
+  },
+  line_items:rows().slice(0,-1).map(x=>({item:x[0],option:x[1]||null,price:x[2]||null})),
+  total_indicative_eur:total(),
+  currency:'EUR'
+ };
+ const attach={filename:'order-'+oid+'.json',content:JSON.stringify(order,null,2)};
  btn.disabled=true;ok.hidden=true;
- const sent=await sendMail({name:f.get('n'),email:f.get('e'),phone:f.get('p')||'-',delivery_country:f.get('l'),postcode:f.get('z')||'-',city:f.get('c')||'-',message:body},'Hot tub request');
+ const sent=await sendMail({name:f.get('n'),email:f.get('e'),phone:f.get('p')||'-',delivery_country:f.get('l'),postcode:f.get('z')||'-',city:f.get('c')||'-',message:body},'Hot tub request',attach);
  btn.disabled=false;
  if(sent==='mailto'){ok.textContent='Your email app should open with the request. Press Send there to deliver it to '+MAIL_TO+'. (Automatic sending works only on the published website.)';ok.hidden=false;return;}
  if(!sent){ok.textContent='Sorry, sending failed. Please try again or write to '+MAIL_TO+'. ['+(window.mailErr||'unknown error')+']';ok.hidden=false;return;}
@@ -1256,12 +1276,16 @@ document.getElementById('rvn').onclick=function(){step(1)};
 /* Messages are sent by the website itself (not from the visitor's mail app). */
 const MAIL_TO='edgaruik@gmail.com';
 const WEB3_KEY=''; /* optional: free access key from web3forms.com (works from a local file too). Empty = use FormSubmit. */
-async function sendMail(data,subject){
+async function sendMail(data,subject,attach){
+  /* attach = {filename,content}: sent as a file attachment (used for the order JSON) */
+  const file=attach?new File([attach.content],attach.filename,{type:'application/json'}):null;
+  const toFD=obj=>{const fd=new FormData();Object.entries(obj).forEach(([k,v])=>fd.append(k,v));if(file)fd.append('attachment',file,file.name);return fd;};
   if(WEB3_KEY){
     try{
-      const res=await fetch('https://api.web3forms.com/submit',{method:'POST',
+      const w3=Object.assign({access_key:WEB3_KEY,subject:subject,from_name:'Thermal Heat website'},data);
+      const res=await fetch('https://api.web3forms.com/submit',file?{method:'POST',headers:{'Accept':'application/json'},body:toFD(w3)}:{method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify(Object.assign({access_key:WEB3_KEY,subject:subject,from_name:'Thermal Heat website'},data))});
+        body:JSON.stringify(w3)});
       const j=await res.json().catch(()=>({}));
       const ok=res.ok&&j.success===true;
       window.mailErr=ok?'':(j.message||('HTTP '+res.status));
@@ -1276,15 +1300,17 @@ async function sendMail(data,subject){
       f.action='https://formsubmit.co/'+MAIL_TO;f.acceptCharset='UTF-8';
       Object.entries(Object.assign({_subject:subject,_template:'table',_captcha:'false'},data)).forEach(([k,v])=>{
         const i=document.createElement('input');i.type='hidden';i.name=k;i.value=v;f.appendChild(i);});
+      if(file){f.enctype='multipart/form-data';try{const fi=document.createElement('input');fi.type='file';fi.name='attachment';const dt=new DataTransfer();dt.items.add(file);fi.files=dt.files;f.appendChild(fi);}catch(e){}}
       document.body.append(fr,f);
       let done=false;const fin=()=>{if(done)return;done=true;setTimeout(()=>{fr.remove();f.remove();},500);resolve(true);};
       fr.addEventListener('load',fin);f.submit();setTimeout(fin,5000);
     });
   }
   try{
-    const res=await fetch('https://formsubmit.co/ajax/'+MAIL_TO,{method:'POST',
+    const base=Object.assign({_subject:subject,_template:'table',_captcha:'false'},data);
+    const res=await fetch('https://formsubmit.co/ajax/'+MAIL_TO,file?{method:'POST',headers:{'Accept':'application/json'},body:toFD(base)}:{method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify(Object.assign({_subject:subject,_template:'table',_captcha:'false'},data))});
+      body:JSON.stringify(base)});
     const j=await res.json().catch(()=>({}));
     const ok=res.ok&&String(j.success)==='true';
     window.mailErr=ok?'':(j.message||('HTTP '+res.status));
