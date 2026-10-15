@@ -190,7 +190,7 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 @media(max-width:560px){#bForm{grid-template-columns:1fr}#bForm>label,#bForm>label.third{grid-column:1/-1}}
 </style></head><body>
 <div class="bar"><div class="w"><span>Customer reviews</span><span id="dl">Fast delivery</span><span>24-month warranty</span><span>14-day right of withdrawal</span></div></div>
-<header><div class="w"><a class="logo" href="#" aria-label="Thermal Heat"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1.5C17 8 25.5 11 25.5 20a9.5 9.5 0 0 1-19 0c0-5 3.2-7.200 4.200-11 2.100 1.800 3 3.200 3.600 5.200C15.800 10.500 15 6 16 1.500Z" fill="#d98a1c"/><path d="M16 17.500c2.200 3 4.200 4.600 4.200 7.200a4.200 4.200 0 0 1-8.400 0c0-2.600 2-4.200 4.200-7.200Z" fill="#1f3a34"/></svg><span class="wm"><b>Thermal</b><i>Heat</i></span></a><nav><a href="thermal-heat-gallery.html">Gallery</a><a href="thermal-heat-about.html">About us</a><a href="become-an-expert.html">Become an expert</a><a href="#" id="navContact">Contact</a><div class="soc" aria-label="Social media">
+<header><div class="w"><a class="logo" href="#" aria-label="Thermal Heat"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1.5C17 8 25.5 11 25.5 20a9.5 9.5 0 0 1-19 0c0-5 3.2-7.200 4.200-11 2.100 1.800 3 3.200 3.600 5.200C15.800 10.500 15 6 16 1.500Z" fill="#d98a1c"/><path d="M16 17.500c2.200 3 4.200 4.600 4.200 7.200a4.200 4.200 0 0 1-8.400 0c0-2.600 2-4.200 4.200-7.200Z" fill="#1f3a34"/></svg><span class="wm"><b>Thermal</b><i>Heat</i></span></a><nav><a href="thermal-heat-about.html">About us</a><a href="become-an-expert.html">Become an expert</a><a href="thermal-heat-gallery.html">Gallery</a><a href="#" id="navContact">Contact</a><div class="soc" aria-label="Social media">
 <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
 <a href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.200 0-7.800.4A2.600 2.600 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.600 2.600 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.600 2.600 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800z"/><path fill="#e6dfd1" d="M10 15V9l5.200 3z"/></svg></a>
 <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M13.500 22v-8.200h2.800l.5-3.300h-3.300V8.400c0-.9.400-1.700 1.800-1.700h1.600V3.800c-.3 0-1.300-.2-2.400-.2-2.500 0-4.100 1.500-4.100 4.200v2.700H7.600v3.300h2.800V22z"/></svg></a>
@@ -551,7 +551,7 @@ function build(){
       else add(bx(.24,.26,.012),ss,0,.02,.036);                                                              // without glass: solid door
       [-.14,-.115].forEach(py=>add(bx(.2,.012,.012),dark,0,py,.034)); add(bx(.02,.1,.025),blk,.12,0,.04); }
     // stainless chimney, optional perforated guard
-    function chimney(x,y0,z){ const top=2.25;
+    function chimney(x,y0,z){ const top=2.25+(st.chim.e?CHX:0);   // optional extra chimney section (shown only slightly longer)
       mk(cy(.05,.05,top-y0,16),ss,x,(y0+top)/2,z);
       if(A.guard&&st.chim.g){ const h=1.62-y0, gm=guardTube(.1,h); mk(cy(.075,.075,h,16),blk,x,y0+h/2,z); gm.position.set(x,y0+h/2,z); gm.castShadow=true; g.add(gm); [y0+.015,1.62].forEach(y=>mk(cy(.105,.105,.03,24),ss,x,y,z)); }
       if(st.chim.k){   // spark arrestor (optional): collar ring + three struts + wide shallow conical rain/spark cap
@@ -783,7 +783,9 @@ canvas.addEventListener('pointermove',e=>{ if(!dragging)return; theta-=(e.client
 ['pointerup','pointercancel'].forEach(t=>canvas.addEventListener(t,()=>dragging=false));
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const VIEW_SCALE=1;   // 1 = tub fills the free area, higher = smaller tub, lower = bigger
-let distT=6.4, fitR=0;
+let distT=6.4, fitR=0, fitE=0;
+const CHX=.15;   // visual length of the extra chimney section in the 3D view (m); the price / label still say +1 m
+const chE=()=>(st.chim&&st.chim.e)?CHX:0;   // 1 when the extra 1 m chimney section is chosen: camera zooms out / looks higher just enough to keep the whole chimney in view
 function resize(){ const p=canvas.parentElement,w=p.clientWidth,h=p.clientHeight,pn=p.querySelector('.panel');
   renderer.setSize(w,h,false); camera.aspect=w/h;
   let fw=w, fh=h, ox=0, oy=0;                              // free area not covered by the options panel
@@ -791,7 +793,7 @@ function resize(){ const p=canvas.parentElement,w=p.clientWidth,h=p.clientHeight
   else { const ph=pn.offsetHeight+64, top=80; fh=Math.max(200,h-ph-top); oy=(ph-top)/2; } // mobile: panel at the bottom, tub moves up
   camera.setViewOffset(w,h,ox,oy,w,h); camera.updateProjectionMatrix();
   const k=2*Math.tan(17*Math.PI/180);
-  distT=VIEW_SCALE*Math.max(4,(2*R+1.9)*(w/fw)/(k*camera.aspect),3.1*(h/fh)/k); }
+  distT=VIEW_SCALE*Math.max(4,(2*R+1.9)*(w/fw)/(k*camera.aspect),(3.1+.75*chE())*(h/fh)/k); }
 addEventListener('resize',resize); resize();
 if(window.ResizeObserver) new ResizeObserver(()=>resize()).observe(canvas.parentElement.querySelector('.panel'));
 
@@ -818,12 +820,12 @@ const clock=new THREE.Clock();
   if(!dragging){ if(autoRot&&!reduce) theta+=.00175;
     if(thetaT!==null){ let d=thetaT-theta; d=Math.atan2(Math.sin(d),Math.cos(d)); theta+=d*.1; if(Math.abs(d)<.002) thetaT=null; }
     phi+=(phiT-phi)*.1; }
-  viewMul+=(viewMulT-viewMul)*.1; lookY+=(lookYT-lookY)*.1;
+  viewMul+=(viewMulT-viewMul)*.1; lookY+=((lookYT+(viewMulT>=1?.4*chE():0))-lookY)*.1;
   night+=(nightT-night)*.06; if(Math.abs(nightT-night)<.002) night=nightT;
   hemi.color.copy(hSkyD).lerp(hSkyN,night); hemi.groundColor.copy(hGrD).lerp(hGrN,night); hemi.intensity=.85-night*.5;
   sun.color.copy(sunCol).lerp(moonCol,night); sun.intensity=.8-night*.45; sun.position.set(3-night*6,5,2.5-night*5);
   ground.material.color.copy(gD).lerp(gN,night);
-  dist+=(distT*viewMul-dist)*.08; if(fitR!==R){ fitR=R; resize(); }
+  dist+=(distT*viewMul-dist)*.08; if(fitR!==R||fitE!==chE()){ fitR=R; fitE=chE(); resize(); }
   camera.position.set(Math.sin(theta)*Math.cos(phi)*dist, Math.sin(phi)*dist+.8, Math.cos(theta)*Math.cos(phi)*dist);
   camera.lookAt(0,lookY,0);
   fireLight.intensity=f?(1.1+Math.sin(t*14)*.25+Math.sin(t*23)*.15)*(1+night*1.5):0; fireLight.distance=5+night*3;
@@ -1021,13 +1023,13 @@ syncUI();readout();
 /* Chimney: one menu item with paid sub-options (guard, spark arrestor) */
 (function(){
  const GD=S.accessories.find(x=>x.id==='guard');
- const GO=[['g','Chimney guard',90],['k','Spark arrestor',45]];   // placeholder prices (EUR), edit here
- const none=()=>({g:false,k:false}); st.chim=none();
+ const GO=[['g','Chimney guard',90],['k','Spark arrestor',45],['e','Extra chimney +1 m',50]];   // placeholder prices (EUR), edit here
+ const none=()=>({g:false,k:false,e:false}); st.chim=none();
  Object.defineProperty(GD,'price',{get:()=>GO.reduce((t,o)=>t+(st.chim[o[0]]?o[2]:0),0),configurable:true});
  Object.defineProperty(GD,'name',{get:()=>{const l=GO.filter(o=>st.chim[o[0]]).map(o=>o[1]);return 'Chimney'+(l.length?' \u00b7 '+l.join(', '):'');},configurable:true});
  chipEls.guard.querySelector('small').textContent='';
  const sub=document.createElement('div'); sub.className='sub';
- GO.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.textContent=o[1]+' '+plus(o[2]); b.dataset.k=o[0]; b.title=o[1];
+ GO.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.textContent=o[0]==='e'?'Extra 1 m '+plus(o[2]):o[1]+' '+plus(o[2]); b.dataset.k=o[0]; b.title=o[1];
   b.onclick=()=>{ st.chim[o[0]]=!st.chim[o[0]]; gvis(); build(); readout(); if(rqs.open) showSum(); }; sub.appendChild(b); });
  chipEls.guard.after(sub);
  function gvis(){ sub.hidden=!st.acc.guard; [...sub.children].forEach(b=>b.setAttribute('aria-pressed',!!st.chim[b.dataset.k])); }
@@ -1114,7 +1116,7 @@ syncUI();readout();
 /* Premium setup: larger tub, thermo wood, acrylic, 316 stove 2 mm with glass, full equipment. Edit the choices here. */
 document.getElementById('prem').onclick=()=>{
  if(window.eqStd)window.eqStd();
- st.m=1;st.s=0;st.w=1;st.wpc=0;st.a=2;st.fib=0;st.p=0;st.t=0;st.sv={o:0,g:1,m:1,h:1};st.stepOpen=0;st.chim={g:true,k:true};
+ st.m=1;st.s=0;st.w=1;st.wpc=0;st.a=2;st.fib=0;st.p=0;st.t=0;st.sv={o:0,g:1,m:1,h:1};st.stepOpen=0;st.chim={g:true,k:true,e:false};
  st.acc={stove:true,guard:true,ladder:true,hydro:true,air:true,led:true,cover:true,thermo:true,shelf:true,sound:true,filter:true,wifi:true};
  press($('oModel'),st.m);press($('oShape'),st.s);pressWood();pressMat();
  setJets(12);setAir(3);setLed(1);setCover(0);setShelf(1);setTh(0);setFilter(1);
