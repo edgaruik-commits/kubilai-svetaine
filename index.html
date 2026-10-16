@@ -220,7 +220,7 @@ h2{font-size:24px;margin:36px 0 16px}
 .panel{left:8px;right:8px;bottom:58px;padding:10px;gap:8px;max-height:56%}
 .tabs button{padding:10px 6px;font-size:.78rem}
 .opts button,.acc button,.stv button{padding:9px 14px;font-size:.88rem}
-.pane{flex-direction:column!important;flex-wrap:nowrap!important;gap:6px!important}.pane>b{margin-top:6px}.pane>b:first-child{margin-top:0}.sw{gap:10px;flex-wrap:wrap}.sw button{width:34px;height:34px}
+.pane{flex-direction:column!important;flex-wrap:nowrap!important;gap:6px!important}.acc,.stv{flex-direction:column!important;flex-wrap:nowrap!important;align-items:stretch;gap:8px!important}.acc>button,.stv>button{width:100%}.acc .sub{display:flex;flex-wrap:wrap;gap:6px;padding:0 0 4px 10px}.acc .sub[hidden]{display:none}.pane>b{margin-top:6px}.pane>b:first-child{margin-top:0}.sw{gap:10px;flex-wrap:wrap}.sw button{width:34px;height:34px}
 .acc .sub.sw2 button{width:32px;height:32px}
 .panel .b{padding:13px 16px}
 .vbar{left:8px;right:8px;bottom:8px}
@@ -1155,7 +1155,16 @@ syncUI();readout();
 .panel .sets #std:hover{background:#10282f;border-color:#10282f;color:#fff}
 .panel .sets #prem{margin:0;background:#10282f;border-color:#10282f;color:#fff}
 .panel .sets #prem:hover{background:#1c4350;border-color:#1c4350;color:#fff}
-#oStove{gap:4px!important;padding:1px 0 3px 10px!important}#oStove .rw{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:4px}#oStove .sl{flex:0 0 100%;font-size:.66rem;font-weight:600;color:#4d6169;margin-top:3px}#oStove button{font-size:.74rem!important;padding:2px 9px!important}</style>
+#oStove{gap:4px!important;padding:1px 0 3px 10px!important}#oStove .rw{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:4px}#oStove .sl{flex:0 0 100%;font-size:.66rem;font-weight:600;color:#4d6169;margin-top:3px}#oStove button{font-size:.74rem!important;padding:2px 9px!important}
+/* mobile: Equipment + Accessories menus vertical, slimmer (shorter) buttons */
+@media(max-width:900px){
+.panel .pane{flex-direction:column;flex-wrap:nowrap;gap:4px}
+.panel .acc,.panel .stv{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:4px}
+.panel .acc>button:not(.chg),.panel .stv>button{width:100%;box-sizing:border-box;padding:3px 12px;min-height:0;line-height:1.25;font-family:inherit;font-size:.82rem;border-radius:10px}
+.panel .acc .chg{padding:2px 10px;line-height:1.2}
+.panel .acc .sub button{padding:2px 10px;line-height:1.2}
+}
+</style>
 <script>
 /* Stove type menu: Wood-fired / Electric > Orientation > Glass > Metal (AISI 304 / 316) > Thickness (1.5 / 2 mm); each choice unlocks the next row */
 (function(){
