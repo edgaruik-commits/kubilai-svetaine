@@ -1100,10 +1100,15 @@ syncUI();readout();
  chipEls.guard.querySelector('small').textContent='';
  const sub=document.createElement('div'); sub.className='sub';
  GO.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.textContent=o[0]==='e'?'Extra 1 m '+plus(o[2]):o[1]+' '+plus(o[2]); b.dataset.k=o[0]; b.title=o[1];
-  b.onclick=()=>{ st.chim[o[0]]=!st.chim[o[0]]; gvis(); build(); readout(); if(rqs.open) showSum(); }; sub.appendChild(b); });
+  b.onclick=()=>{ st.chim[o[0]]=!st.chim[o[0]]; gOpen=true; clearTimeout(gT); if(GO.some(x=>st.chim[x[0]])) gT=setTimeout(()=>{ gOpen=false; gvis(); },3000); gvis(); build(); readout(); if(rqs.open) showSum(); }; sub.appendChild(b); });
  chipEls.guard.after(sub);
- function gvis(){ sub.hidden=!st.acc.guard; [...sub.children].forEach(b=>b.setAttribute('aria-pressed',!!st.chim[b.dataset.k])); }
- const _o=syncUI; syncUI=function(){ if(!st.acc.guard) st.chim=none(); _o.apply(this,arguments); gvis(); };
+ /* after a choice, the sub-menu closes by itself in 3 s and turns into "<choice> · change" like the other menus */
+ let gOpen=true,gT=0; const gchg=document.createElement('button'); gchg.type='button'; gchg.className='chg'; gchg.hidden=true; sub.after(gchg); window.guardChg=gchg;
+ gchg.onclick=()=>{ gOpen=true; clearTimeout(gT); gvis(); };
+ function gvis(){ const any=GO.some(o=>st.chim[o[0]]); sub.hidden=!st.acc.guard||!gOpen; gchg.hidden=!st.acc.guard||gOpen||!any;
+  gchg.innerHTML=GO.filter(o=>st.chim[o[0]]).map(o=>o[0]==='e'?'Extra 1 m':o[1]).join(', ')+' \u00b7 <b class="cw">change</b>';
+  [...sub.children].forEach(b=>b.setAttribute('aria-pressed',!!st.chim[b.dataset.k])); }
+ const _o=syncUI; syncUI=function(){ if(!st.acc.guard){ st.chim=none(); gOpen=true; clearTimeout(gT); } _o.apply(this,arguments); gvis(); };
  syncUI(); readout(); build();
 })();
 </script>
@@ -1130,7 +1135,7 @@ syncUI();readout();
   g.chg.onclick=()=>{ g.open=true; eqsync(); };
   g.box.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b&&!b.disabled){ g.open=false; eqsync(); } });
  });
- if(gsub&&gsub.classList.contains('sub')) G[2].chip.before(chipEls.guard,gsub); else G[2].chip.before(chipEls.guard);   // Chimney: after Stove position, before Steps
+ if(gsub&&gsub.classList.contains('sub')) G[2].chip.before(...[chipEls.guard,gsub,window.guardChg].filter(Boolean)); else G[2].chip.before(chipEls.guard);   // Chimney: after Stove position, before Steps
  window.eqStd=()=>G.forEach(g=>{ g.done=true; g.open=false; });   // Standard setup: stove type, stove position and steps become selected (defaults)
  Object.defineProperty(window,'eqDone',{get:()=>G.map(g=>g.done),configurable:true});
  const GDI=S.accessories.find(x=>x.id==='guard');
