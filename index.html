@@ -1145,12 +1145,15 @@ syncUI();readout();
   g.box.hidden=na||!g.open; g.chg.hidden=na||g.open||!g.done;
   g.chg.innerHTML=g.val()+' \u00b7 <b class="cw">change</b>'; }); 
   readout();
-  const gs=chipEls.guard.querySelector('small'); if(gs) gs.textContent=(st.acc.guard&&GDI.price)?plus(GDI.price):''; }
+  const gs=chipEls.guard.querySelector('small'); if(gs) gs.textContent=(st.acc.guard&&GDI.price)?plus(GDI.price):'';
+  const elec=!!S.stoveTypes[st.t].electric;   // electric heater: hide the locked Stove position and Chimney items completely
+  G[1].chip.hidden=elec; chipEls.guard.hidden=elec; if(elec){ if(gsub) gsub.hidden=true; if(window.guardChg) window.guardChg.hidden=true; } }
  const _e=syncUI; syncUI=function(){ _e.apply(this,arguments); eqsync(); };
  syncUI();
 })();
 </script>
 <style>
+.panel .acc>button[hidden]{display:none!important}
 .sets{display:flex;gap:8px;flex:none}.panel .sets #std,.panel .sets #prem{margin:4px 0 0;width:auto;flex:1 1 0;min-width:0;padding:10px 8px}/* panel buttons: same look as the menu pills */
 .panel #rq,.panel .sets #std,.panel .sets #prem{font:600 .84rem system-ui,sans-serif;border-radius:12px;border-width:1.5px;padding:9px 12px;letter-spacing:.01em;transition:background .15s,color .15s,border-color .15s}
 .panel #rq{margin:6px 0 0;border-color:#d98a1c;background:#d98a1c;color:#1a1410;font-weight:700}
