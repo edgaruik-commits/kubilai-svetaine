@@ -106,6 +106,33 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 #lb button:hover{background:rgba(255,255,255,.3)}
 #lb .x{top:16px;right:16px}#lb .pv{left:16px;top:50%;transform:translateY(-50%)}#lb .nx{right:16px;top:50%;transform:translateY(-50%)}
 .logotxt{display:block;width:250px;height:auto}@media(max-width:700px){.logotxt{width:170px}}.logoimg{display:block;height:92px;width:auto;border-radius:6px}@media(max-width:700px){.logoimg{height:74px}}
+
+/* ===== mobile (phones) – header identical to index.html ===== */
+@media(max-width:700px){
+html{-webkit-text-size-adjust:100%}
+body{overflow-x:hidden}
+.w{padding:0 14px}
+.bar .w{justify-content:center;font-size:12px;padding:6px 14px;gap:2px 14px}
+header .w{padding:10px 14px;gap:8px}
+header nav{width:100%;justify-content:space-between;gap:6px 14px;font-size:15px}
+header nav a{padding:6px 0}
+.soc a{width:40px;height:40px}
+h2{font-size:24px;margin:36px 0 16px}
+.ct{padding:24px 18px;margin:36px 0}
+.b{padding:14px 18px}
+main img,main iframe,main video{max-width:100%}
+footer{padding:28px 0}
+footer nav{gap:10px 16px}
+}
+@media(max-width:700px){
+.gp h1{font-size:28px;margin:28px 0 10px}.gp .lead{font-size:16px}
+.gp .back{margin-top:18px}
+.gg{grid-template-columns:repeat(2,1fr);gap:8px;margin-top:22px}
+#lb{padding:10px}
+#lb button{width:44px;height:44px;font-size:24px}
+#lb .x{top:10px;right:10px}#lb .pv{left:8px}#lb .nx{right:8px}
+}
+@media(max-width:380px){.gg{grid-template-columns:1fr}}
 </style></head>
 <body>
 <div class="bar"><div class="w"><span>Customer reviews</span><span id="dl">Fast delivery</span><span>24-month warranty</span><span>14-day right of withdrawal</span></div></div>
