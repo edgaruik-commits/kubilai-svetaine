@@ -277,7 +277,7 @@ footer nav{gap:10px 16px}
 
       </div>
 <dialog id="rqf" class="rqf" aria-labelledby="rqt"><button class="cx" type="button" id="rqclose" aria-label="Close">&times;</button><h3 id="rqt">Your request</h3>
-<div class="rqg"><div><h3 id="rqh"><span>Your configuration</span><span id="rqm"></span></h3><table id="sum"></table><p class="rqn">Prices are indicative. We confirm the final price, delivery cost and date by email. <a href="#m" id="rqe">Change configuration</a></p></div>
+<div class="rqg"><div><h3 id="rqh"><span id="rqm"></span></h3><table id="sum"></table><p class="rqn">Prices are indicative. We confirm the final price, delivery cost and date by email. <a href="#m" id="rqe">Change configuration</a></p></div>
 <form id="rqForm"><label>Name<input name="n" required autocomplete="name"></label><label>Email<input name="e" type="email" required autocomplete="email"></label><label>Phone (optional)<input name="p" type="tel" autocomplete="tel"></label><label>Delivery country<select name="l" id="rqL"><option>Germany</option><option>Austria</option><option>Switzerland</option><option>France</option></select></label><label>Postcode<input name="z" autocomplete="postal-code"></label><label>City<input name="c" autocomplete="address-level2"></label><label>Message<textarea name="m"></textarea></label><label class="ck2"><input type="checkbox" required> I agree that Thermal Heat may use my data to answer this request (privacy policy).</label><button class="b" type="submit">Send request</button><p id="rqok" class="rqn" hidden>Your email app should open with the request. If not, write to <b id="rqmail"></b> and paste the configuration.</p></form></div></dialog>
 <section class="rv" id="k"><div class="w">
 <h2 class="rvh">Customer reviews</h2>
@@ -919,7 +919,7 @@ const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+')',fmt(mp
  S.accessories.filter(a=>a.id!=='stove'&&st.acc[a.id]&&!st.pend[a.id]).forEach(a=>r.push([a.name,'',fmt(a.price)]));
  r.push(['Total (indicative)','',fmt(total())]);return r;};
 const rqs=document.getElementById('rqf');
-function showSum(){const m=S.models[st.m];document.getElementById('rqm').textContent=m.name+' · '+fmt(mp(m,st.s));document.getElementById('sum').innerHTML=rows().map((x,i,a)=>i===a.length-1?`<tr class="tt"><td colspan="2">${x[0]}</td><td>${x[2]}</td></tr>`:i===0?`<tr><td>${x[0]}</td><td colspan="2" class="dsc">${S.models[st.m].size}</td></tr>`:`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('');}
+function showSum(){const m=S.models[st.m];document.getElementById('rqm').textContent='Hot tub '+m.name.toUpperCase();document.getElementById('sum').innerHTML=rows().map((x,i,a)=>i===a.length-1?`<tr class="tt"><td colspan="2">${x[0]}</td><td>${x[2]}</td></tr>`:i===0?`<tr><td>${x[0]}</td><td colspan="2" class="dsc">${S.models[st.m].size}</td></tr>`:x[1]===''?`<tr><td colspan="2" class="wide">${x[0]}</td><td>${x[2]}</td></tr>`:`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('');}
 document.getElementById('rq').onclick=()=>{showSum();const c=document.querySelector('.cs button[aria-pressed=true]');if(c)document.getElementById('rqL').value=c.dataset.n;if(!rqs.open)rqs.showModal();};
 document.getElementById('rqe').onclick=()=>rqs.close();
 document.getElementById('rqclose').onclick=()=>rqs.close();
@@ -1284,7 +1284,8 @@ document.getElementById('tcn').onclick=function(){step(1)};
 #rqf #sum td{overflow-wrap:anywhere;word-break:normal}
 #rqf #sum td:first-child{white-space:normal;width:auto;padding-right:10px}
 #rqf #sum td:last-child{white-space:nowrap;padding-right:0;text-align:right}
-#rqf #sum td.dsc{overflow-wrap:break-word}
+#rqf #sum td.dsc{overflow-wrap:break-word;text-align:left}
+#rqf #sum td.wide{white-space:normal;overflow-wrap:normal;word-break:normal;text-align:left}
 #rqForm{grid-template-columns:1fr}
 }
 </style>
