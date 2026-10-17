@@ -919,7 +919,7 @@ const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+')',fmt(mp
  S.accessories.filter(a=>a.id!=='stove'&&st.acc[a.id]&&!st.pend[a.id]).forEach(a=>r.push([a.name,'',fmt(a.price)]));
  r.push(['Total (indicative)','',fmt(total())]);return r;};
 const rqs=document.getElementById('rqf');
-function showSum(){const m=S.models[st.m];document.getElementById('rqm').textContent=m.name.toUpperCase();document.getElementById('sum').innerHTML=rows().map((x,i,a)=>i===a.length-1?`<tr class="tt"><td colspan="2">${x[0]}</td><td>${x[2]}</td></tr>`:i===0?`<tr><td>${x[0]}</td><td colspan="2" class="dsc">${S.models[st.m].size}</td></tr>`:x[1]===''?`<tr><td colspan="2" class="wide">${x[0]}</td><td>${x[2]}</td></tr>`:`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('');}
+function showSum(){const m=S.models[st.m];document.getElementById('rqm').textContent=m.name.toUpperCase();document.getElementById('sum').innerHTML=rows().map((x,i,a)=>i===a.length-1?`<tr class="tt"><td colspan="2">${x[0]}</td><td>${x[2]}</td></tr>`:i===0?`<tr><td>${x[0]}</td><td colspan="2" class="dsc">${S.models[st.m].size}</td></tr>`:x[1]===''?`<tr><td colspan="2" class="wide">${x[0]}</td><td>${x[2]}</td></tr>`:x[2]===''?`<tr><td>${x[0]}</td><td colspan="2" class="val">${x[1]}</td></tr>`:`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('');}
 document.getElementById('rq').onclick=()=>{showSum();const c=document.querySelector('.cs button[aria-pressed=true]');if(c)document.getElementById('rqL').value=c.dataset.n;if(!rqs.open)rqs.showModal();};
 document.getElementById('rqe').onclick=()=>rqs.close();
 document.getElementById('rqclose').onclick=()=>rqs.close();
@@ -1289,6 +1289,7 @@ document.getElementById('tcn').onclick=function(){step(1)};
 #rqf #sum td:last-child{white-space:nowrap;padding-right:0;text-align:right}
 #rqf #sum td.dsc{overflow-wrap:break-word;text-align:left}
 #rqf #sum tr.tt td:last-child{font-size:18.4px}
+#rqf #sum td.val{white-space:normal;text-align:left;padding-right:0}
 #rqf #sum td.wide{white-space:nowrap;overflow-wrap:normal;word-break:normal;text-align:left}
 #rqForm{grid-template-columns:1fr}
 }
