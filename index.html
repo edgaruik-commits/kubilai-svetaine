@@ -674,9 +674,22 @@ function build(){
       const b=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.02,24),nm); b.rotation.z=Math.PI/2; b.position.set(.036,.84,0); bg.add(b);
       const c=new THREE.Mesh(new THREE.CylinderGeometry(.017,.017,.022,16),ss); c.rotation.z=Math.PI/2; c.position.set(.037,.84,0); bg.add(c);
       tub.add(bg); }); }
-  if(A.shelf){ const g=new THREE.Group(); const b=new THREE.Mesh(new THREE.BoxGeometry(.32,.04,.7),new THREE.MeshStandardMaterial({color:(window.SHC&&st.shelfC)?new THREE.Color(window.SHC[st.shelfC][1]):wood.clone().multiplyScalar(.85),roughness:(window.SHC&&st.shelfC)?.45:.8})); b.position.x=.06; g.add(b);
-    [[-.18,0xd9481f],[.18,0xffffff]].forEach(([z,c])=>{ const cup=new THREE.Mesh(new THREE.CylinderGeometry(.045,.035,.1,14),new THREE.MeshPhongMaterial({color:c})); cup.position.set(.06,.07,z); g.add(cup); });
-    place(g,Math.PI/2,H+.2); }
+  if(A.shelf){   // drink shelf: bolted to the outer wall just under the acrylic rim; round tub = board curved to follow the wall, square/rectangular = straight board. 5 drink holes, no visible fixings
+    const g=new THREE.Group(), SD=.26, SL=.84, ST=.035, hr=.042, wallX=.03, ZS=[-.3,-.15,0,.15,.3];   // depth (out from wall), length along the wall, board thickness, hole radius, hole positions
+    const smat=new THREE.MeshStandardMaterial({color:(window.SHC&&st.shelfC)?new THREE.Color(window.SHC[st.shelfC][1]):wood.clone().multiplyScalar(.85),roughness:(window.SHC&&st.shelfC)?.45:.8});
+    const sh=new THREE.Shape(), yTop=H-.03, holes=[];   // holes: [x,z] centres in the group frame, braces: [x,z,yaw]
+    if(!sq){
+      const r0=R+.035, r1=r0+SD, rm=(r0+r1)/2, a=(SL/2)/rm, rh=r0+SD*.55;   // tub centre is at local x=-R
+      sh.absarc(-R,0,r1,-a,a,false); sh.lineTo(-R+r0*Math.cos(a),r0*Math.sin(a)); sh.absarc(-R,0,r0,a,-a,true); sh.lineTo(-R+r1*Math.cos(-a),r1*Math.sin(-a));
+      ZS.forEach(z=>{ const t=z/rh, h=new THREE.Path(); h.absarc(-R+rh*Math.cos(t),rh*Math.sin(t),hr,0,Math.PI*2,true); sh.holes.push(h); holes.push([-R+rh*Math.cos(t),-rh*Math.sin(t)]); });
+    } else {
+      sh.moveTo(wallX-.03,-SL/2); sh.lineTo(wallX-.03+SD,-SL/2); sh.lineTo(wallX-.03+SD,SL/2); sh.lineTo(wallX-.03,SL/2); sh.lineTo(wallX-.03,-SL/2);
+      ZS.forEach(z=>{ const h=new THREE.Path(); h.absarc(wallX-.03+SD*.55,z,hr,0,Math.PI*2,true); sh.holes.push(h); holes.push([wallX-.03+SD*.55,-z]); });
+    }
+    const bg=new THREE.ExtrudeGeometry(sh,{depth:ST,bevelEnabled:false,curveSegments:28}); bg.rotateX(-Math.PI/2);   // board lies flat, holes go straight through
+    const b=new THREE.Mesh(bg,smat); b.position.set(0,yTop-ST,0); b.castShadow=true; b.receiveShadow=true; g.add(b);
+    [[1,0xd9481f],[3,0xffffff]].forEach(([k,col])=>{ const cup=new THREE.Mesh(new THREE.CylinderGeometry(.045,.034,.1,14),new THREE.MeshPhongMaterial({color:col})); cup.position.set(holes[k][0],yTop-ST+.03,holes[k][1]); g.add(cup); });   // two glasses sitting in the holes
+    place(g,Math.PI/2,0); }
   if(A.thermo&&st.th===0){   // integrated electronic thermometer: small round display high on the outside wall, a bit past the steps
     const sOff=(A.ladder?(sq?Math.min(.75,HZ-.12):.75):.62)+.24, eb=edge(Math.PI+(sq?Math.atan(sOff/HX):sOff/R)), g=new THREE.Group();
     g.position.copy(eb.p); g.rotation.y=-Math.atan2(eb.n.z,eb.n.x);
