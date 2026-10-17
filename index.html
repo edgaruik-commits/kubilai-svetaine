@@ -941,7 +941,7 @@ const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+')',fmt(mp
  r.push(['Stove',st.acc.stove?S.stoveTypes[st.t].n:'None',st.acc.stove?fmt(S.accessories.find(a=>a.id==='stove').price+S.stoveTypes[st.t].extra):'']);
  if(st.acc.stove&&!S.stoveTypes[st.t].electric) r.push(['Stove position',S.stovePlaces[st.p].n,S.stovePlaces[st.p].extra?fmt(S.stovePlaces[st.p].extra):'']);
  S.accessories.filter(a=>a.id!=='stove'&&st.acc[a.id]&&!st.pend[a.id]).forEach(a=>r.push([a.name,'',fmt(a.price)]));
- r.push(['Total (indicative)','',fmt(total())]);return r;};
+ r.push(['Total','',fmt(total())]);return r;};
 const rqs=document.getElementById('rqf');
 function showSum(){const m=S.models[st.m];document.getElementById('rqm').textContent=m.name.toUpperCase();const P=v=>'<td class="'+(v?'pr':'pr inc')+'">'+(v||'incl.')+'</td>';document.getElementById('sum').innerHTML=rows().map((x,i,a)=>i===a.length-1?`<tr class="tt"><td colspan="3"><div class="tl"><span>${x[0]}</span><span class="tv">${x[2]}</span></div></td></tr>`:i===0?`<tr><td>${x[0]}</td><td class="val">${S.models[st.m].size}</td>${P('')}</tr>`:x[1]===''?`<tr><td colspan="2" class="wide">${x[0]}</td>${P(x[2])}</tr>`:`<tr><td>${x[0]}</td><td class="val">${x[1]}</td>${P(x[2])}</tr>`).join('');}
 document.getElementById('rq').onclick=()=>{showSum();const c=document.querySelector('.cs button[aria-pressed=true]');if(c)document.getElementById('rqL').value=c.dataset.n;if(!rqs.open)rqs.showModal();};
