@@ -1154,6 +1154,8 @@ syncUI();readout();
 </script>
 <style>
 .panel .acc>button[hidden]{display:none!important}
+.panel .pane{overflow-x:hidden!important;padding-bottom:14px!important}   /* no horizontal scrollbar over the last menu item + space below it */
+.panel .acc .chg{width:auto!important;max-width:calc(100% - 10px);box-sizing:border-box}
 .sets{display:flex;gap:8px;flex:none}.panel .sets #std,.panel .sets #prem{margin:4px 0 0;width:auto;flex:1 1 0;min-width:0;padding:10px 8px}/* panel buttons: same look as the menu pills */
 .panel #rq,.panel .sets #std,.panel .sets #prem{font:600 .84rem system-ui,sans-serif;border-radius:12px;border-width:1.5px;padding:9px 12px;letter-spacing:.01em;transition:background .15s,color .15s,border-color .15s}
 .panel #rq{margin:6px 0 0;border-color:#d98a1c;background:#d98a1c;color:#1a1410;font-weight:700}
