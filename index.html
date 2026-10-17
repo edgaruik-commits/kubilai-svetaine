@@ -1272,6 +1272,21 @@ document.getElementById('tcn').onclick=function(){step(1)};
 #rqf .ty{margin-top:8px}
 #cmsg{font-size:14px;color:#5d544b;margin:0}
 #cmsg.err{color:#b3261e}
+
+/* mobile: "Your request" dialog fits the screen (no sideways overflow), table wraps */
+@media(max-width:700px){
+#rqf{overflow-x:hidden!important;padding:24px 16px 18px!important;width:calc(100% - 16px)!important}
+#rqf h3{font-size:22px;padding-right:34px}
+#rqf .rqg>*{min-width:0}
+#rqf #rqh{display:block}
+#rqf #rqh span{display:block}
+#rqf #sum{width:100%;table-layout:auto;font-size:13.5px}
+#rqf #sum td{overflow-wrap:anywhere;word-break:normal}
+#rqf #sum td:first-child{white-space:normal;width:auto;padding-right:10px}
+#rqf #sum td:last-child{white-space:nowrap;padding-right:0;text-align:right}
+#rqf #sum td.dsc{overflow-wrap:break-word}
+#rqForm{grid-template-columns:1fr}
+}
 </style>
 <dialog id="cdlg" aria-labelledby="cdt">
 <button class="cx" type="button" id="cclose" aria-label="Close">&times;</button>
