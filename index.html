@@ -852,6 +852,17 @@ build();
 /* ---------- Camera & drag ---------- */
 let theta=.9, phi=.5, dist=6.2, dragging=false, lx=0, ly=0;
 let phiT=.5, thetaT=null, viewMul=1, viewMulT=1, lookY=.9, lookYT=.9, autoRot=true, night=0, nightT=0;
+/* Menu focus: turn the camera to the side of the tub where the chosen item sits, hold 2 s, then resume auto rotation */
+let focusWas=false, focusPoll=null, focusTimer=null;
+window.focusCancel=function(){ clearInterval(focusPoll); clearTimeout(focusTimer); focusPoll=focusTimer=null; focusWas=false; };
+window.focusAngle=function(a){
+  if(!focusPoll&&!focusTimer) focusWas=autoRot;   // remember whether it was rotating before the first focus
+  clearInterval(focusPoll); clearTimeout(focusTimer);
+  autoRot=false; const ab=document.getElementById('vauto'); if(ab) ab.setAttribute('aria-pressed','false');
+  thetaT=Math.PI/2-a;   // camera sits on the side the item faces: item angle a (x=cos a, z=sin a)
+  focusPoll=setInterval(()=>{ if(thetaT!==null) return; clearInterval(focusPoll); focusPoll=null;
+    focusTimer=setTimeout(()=>{ focusTimer=null; if(focusWas&&!reduce){ autoRot=true; if(ab) ab.setAttribute('aria-pressed','true'); } focusWas=false; },2000); },80);
+};
 canvas.addEventListener('pointerdown',e=>{dragging=true;thetaT=null;lx=e.clientX;ly=e.clientY;canvas.setPointerCapture(e.pointerId);});
 canvas.addEventListener('pointermove',e=>{ if(!dragging)return; theta-=(e.clientX-lx)*.008; phi=Math.min(1.5,Math.max(.1,phi+(e.clientY-ly)*.005)); phiT=phi; lx=e.clientX;ly=e.clientY; });
 ['pointerup','pointercancel'].forEach(t=>canvas.addEventListener(t,()=>dragging=false));
@@ -876,10 +887,10 @@ if(window.ResizeObserver) new ResizeObserver(()=>resize()).observe(canvas.parent
   const bar=$('vbar'), vb=[...bar.querySelectorAll('[data-v]')], ab=$('vauto'), ob=[...bar.querySelectorAll('[data-a]')], stage=canvas.parentElement;
   const V={ front:{p:.1,m:1,l:.9,t:0}, persp:{p:.5,m:1,l:.9,t:.9}, top:{p:1.5,m:1,l:.9,t:null}, liner:{p:1.12,m:.62,l:.55,t:null} };
   autoRot=!reduce; ab.setAttribute('aria-pressed',autoRot);
-  function setView(k){ const v=V[k]; phiT=v.p; viewMulT=v.m; lookYT=v.l; thetaT=v.t; autoRot=false; ab.setAttribute('aria-pressed','false');
+  function setView(k){ window.focusCancel&&window.focusCancel(); const v=V[k]; phiT=v.p; viewMulT=v.m; lookYT=v.l; thetaT=v.t; autoRot=false; ab.setAttribute('aria-pressed','false');
     vb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===k))); }
   vb.forEach(b=>b.onclick=()=>setView(b.dataset.v));
-  ab.onclick=()=>{ autoRot=!autoRot; ab.setAttribute('aria-pressed',String(autoRot));
+  ab.onclick=()=>{ window.focusCancel&&window.focusCancel(); autoRot=!autoRot; ab.setAttribute('aria-pressed',String(autoRot));
     if(autoRot){ phiT=V.persp.p; viewMulT=1; lookYT=.9; thetaT=null; vb.forEach(b=>b.setAttribute('aria-pressed','false')); } };
   function setAmb(k){ nightT=k==='night'?1:0; stage.classList.toggle('night',nightT===1);
     ob.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.a===k))); }
@@ -1256,6 +1267,67 @@ document.getElementById('lux').onclick=()=>{
  press($('oModel'),st.m);press($('oShape'),st.s);pressWood();pressMat();
  setJets(12);setAir(3);setLed(1);setCover(0);setShelf(1);setTh(3);setFilter(2);
  syncUI();if(window.stvReset)window.stvReset();showTab(0);readout();if(rqs.open)showSum();};
+</script>
+<script>
+/* Menu click -> camera turns to that item (angles in the tub frame: stove 0, shelf pi/2, steps pi, sound -pi/2, filter 2.35, thermometer see below) */
+(function(){
+ const nm=()=>({[S.ui.stoveType]:'stove',[S.ui.stovePos]:'stove',[S.ui.steps]:'ladder'});
+ const ang=()=>({stove:0,guard:0,ladder:Math.PI,shelf:Math.PI/2,sound:-Math.PI/2,filter:2.35,thermo:(st.th===0?Math.PI+.78:2.4)});
+ function itemOf(btn){
+  if(btn.closest('#oStove,#oPos')) return 'stove';
+  if(btn.closest('#oSteps')) return 'ladder';
+  const box=btn.closest('.acc,#chips'); if(!box) return null;
+  let el=btn; while(el.parentElement&&el.parentElement!==box) el=el.parentElement;
+  const chips=Object.entries(chipEls), names=nm();
+  for(; el; el=el.previousElementSibling){
+   const hit=chips.find(([,c])=>c===el); if(hit) return hit[0];
+   const t=el.firstChild&&el.firstChild.textContent; if(t&&names[t]) return names[t];
+  }
+  return null;
+ }
+ document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b||!b.closest('#pane1,#pane2')||b.disabled) return;
+  const id=itemOf(b); if(!id) return;
+  const inOption=!!b.closest('.sub,.subfly,#oStove,#oPos,#oSteps')&&!b.classList.contains('chg');   // a real option inside an opened sub-menu
+  const noMenu=id==='sound'&&b===chipEls.sound;   // sound system has no sub-menu: its own button is the choice
+  if(!inOption&&!noMenu) return;   // clicking the menu header (Steps, Chimney, Stove position...) does nothing
+  setTimeout(()=>{ const a=ang()[id]; if(a===undefined) return;
+   if(noMenu&&!st.acc.sound) return;   // switched off: no turn
+   if(id==='filter'&&st.filter!==0) return;   // only the filter box is visible on the tub
+   if(window.focusAngle) window.focusAngle(a); },0);
+ });
+})();
+</script>
+<script>
+/* "Start configurator": if anything was chosen before, the configurator starts again from its defaults (page state is rebuilt), then scrolls to it */
+(function(){
+ var dirty=false, pn=document.querySelector('.panel');
+ if(pn) pn.addEventListener('click',function(e){ if(e.target.closest('button')) dirty=true; },true);
+ document.querySelectorAll('.hero a.b[href="#m"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+   if(!dirty) return;                                  // nothing chosen yet: normal scroll
+   e.preventDefault();
+   try{ sessionStorage.setItem('cfgReset','1'); }catch(x){}
+   location.reload();
+  });
+ });
+ try{ if(sessionStorage.getItem('cfgReset')){ sessionStorage.removeItem('cfgReset');
+   var go=function(){ var m=document.getElementById('m'); if(m) m.scrollIntoView(); };
+   if('scrollRestoration' in history) history.scrollRestoration='manual';
+   go(); addEventListener('load',function(){ go(); setTimeout(go,150); }); } }catch(x){}
+})();
+</script>
+<script>
+/* Setup buttons: every option setter used to rebuild the whole 3D scene (about 10 rebuilds per click = frozen view). Rebuild once at the end instead. */
+['std','prem','lux'].forEach(function(id){
+ var el=document.getElementById(id), h=el&&el.onclick; if(!h) return;
+ el.onclick=function(ev){
+  var real=window.build; window.build=function(){};
+  try{ h.call(this,ev); } finally{ window.build=real; }
+  real();
+  if(typeof readout==='function') readout();
+ };
+});
 </script>
 <script>
 /* Customer reviews. Only publish genuine reviews that you have the customers' permission to use. */
