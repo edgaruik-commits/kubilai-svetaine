@@ -271,7 +271,7 @@ footer nav{gap:10px 16px}
             <div class="acc" id="chips"></div>
           </div>
           <button class="b" id="rq" type="button">Send request</button>
-          <div class="sets"><button class="b o" id="std" type="button">Standard setup</button><button class="b o" id="prem" type="button">Premium setup</button></div>
+          <div class="sets"><button class="b" id="lux" type="button">Luxury setup</button><button class="b o" id="std" type="button">Standard setup</button><button class="b o" id="prem" type="button">Premium setup</button></div>
         </div>
         <div class="hint" id="hint"></div>
 <div class="vbar" id="vbar" role="toolbar" aria-label="Camera view and ambiance"><span class="vl">VIEW:</span><button type="button" data-v="front" aria-pressed="false">Front</button><button type="button" data-v="persp" aria-pressed="false">Perspective</button><button type="button" data-v="top" aria-pressed="false">Top Down</button><button type="button" data-v="liner" aria-pressed="false">Liner View</button><button type="button" id="vauto" aria-pressed="true">Auto rotate</button><span class="vs" aria-hidden="true"></span><span class="vl">AMBIANCE:</span><button type="button" data-a="day" aria-pressed="true">Day</button><button type="button" data-a="night" aria-pressed="false">Night</button></div>
@@ -1194,6 +1194,13 @@ syncUI();readout();
 .panel .sets #std:hover{background:#10282f;border-color:#10282f;color:#fff}
 .panel .sets #prem{margin:0;background:#10282f;border-color:#10282f;color:#fff}
 .panel .sets #prem:hover{background:#1c4350;border-color:#1c4350;color:#fff}
+/* Luxury setup: full-width top row, dark teal gradient with amber accent (distinct from the orange Send request button) */
+.sets{flex-wrap:wrap}
+.panel .sets #lux{flex:1 1 100%;margin:4px 0 0;width:100%;font:700 .9rem Georgia,serif;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid #d98a1c;border-radius:12px;padding:10px 12px;color:#f6d9a0;background:linear-gradient(135deg,#10282f 0%,#1c4350 100%);box-shadow:inset 0 0 0 1px rgba(217,138,28,.25);transition:background .15s,color .15s,border-color .15s,box-shadow .15s}
+.panel .sets #lux::before,.panel .sets #lux::after{content:"\2726";font-size:.7em;margin:0 .6em;color:#d98a1c;vertical-align:middle}
+.panel .sets #lux:hover{background:#d98a1c;border-color:#d98a1c;color:#10282f;box-shadow:0 4px 14px rgba(217,138,28,.35)}
+.panel .sets #lux:hover::before,.panel .sets #lux:hover::after{color:#10282f}
+.panel .sets #lux:focus-visible{outline:2px solid #d98a1c;outline-offset:2px}
 #oStove{gap:4px!important;padding:1px 0 3px 10px!important}#oStove .rw{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:4px}#oStove .sl{flex:0 0 100%;font-size:.66rem;font-weight:600;color:#4d6169;margin-top:3px}#oStove button{font-size:.74rem!important;padding:2px 9px!important}
 /* mobile: Equipment + Accessories menus vertical, slimmer (shorter) buttons */
 @media(max-width:900px){
@@ -1238,6 +1245,16 @@ document.getElementById('prem').onclick=()=>{
  st.acc={stove:true,guard:true,ladder:true,hydro:true,air:true,led:true,cover:true,thermo:true,shelf:true,sound:true,filter:true,wifi:true};
  press($('oModel'),st.m);press($('oShape'),st.s);pressWood();pressMat();
  setJets(12);setAir(3);setLed(1);setCover(0);setShelf(1);setTh(0);setFilter(1);
+ syncUI();if(window.stvReset)window.stvReset();showTab(0);readout();if(rqs.open)showSum();};
+</script>
+<script>
+/* Luxury setup: King L, walnut thermowood, graphite acrylic, 316 stove 2 mm with glass, every accessory at its top option. Edit the choices here. */
+document.getElementById('lux').onclick=()=>{
+ if(window.eqStd)window.eqStd();
+ st.m=1;st.s=0;st.w=5;st.wpc=0;st.plain=0;st.a=2;st.fib=0;st.p=0;st.t=0;st.sv={o:0,g:1,m:1,h:1};st.stepOpen=0;st.chim={g:true,e:false};
+ st.acc={stove:true,guard:true,ladder:true,hydro:true,air:true,led:true,cover:true,thermo:true,shelf:true,sound:true,filter:true,wifi:true};
+ press($('oModel'),st.m);press($('oShape'),st.s);pressWood();pressMat();
+ setJets(12);setAir(3);setLed(1);setCover(0);setShelf(1);setTh(3);setFilter(2);
  syncUI();if(window.stvReset)window.stvReset();showTab(0);readout();if(rqs.open)showSum();};
 </script>
 <script>
