@@ -1005,24 +1005,24 @@ function readout(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.fin
 readout();
 </script>
 <script>
-const HY=S.accessories.find(x=>x.id==='hydro'),HB=HY.price,JT=[[8,120],[12,360]];
+const HY=S.accessories.find(x=>x.id==='hydro'),HB=HY.price,JT=[[8,0],[12,360],[16,400],[24,450]],JK={8:'1.1 kW',12:'1.5 kW',16:'2 x 1.5 kW',24:'3 x 1.5 kW'};
 st.jets=8;
 const sub=document.createElement('div');sub.className='sub';
-JT.forEach(([n,e])=>{const b=document.createElement('button');b.type='button';b.textContent=n+' jets'+(e?' '+plus(e):'');b.title=n+' hydro jets';b.dataset.n=n;b.onclick=()=>setJets(n);sub.appendChild(b);});
+JT.forEach(([n,e])=>{const b=document.createElement('button');b.type='button';b.textContent=n+' jets \u00b7 '+JK[n]+(e?' '+plus(e):'');b.title=n+' hydro jets';b.dataset.n=n;b.onclick=()=>setJets(n);sub.appendChild(b);});
 [...sub.children].sort((a,b)=>JT.find(j=>j[0]===+a.dataset.n)[1]-JT.find(j=>j[0]===+b.dataset.n)[1]).forEach(b=>sub.appendChild(b));   // cheapest first
 chipEls.hydro.after(sub);
-function setJets(n){st.jets=n;const e=JT.find(j=>j[0]===n)[1];HY.price=HB+e;HY.name='Hydro massage system · '+n+' jets';
+function setJets(n){st.jets=n;const e=JT.find(j=>j[0]===n)[1];HY.price=HB+e;HY.name='Hydro massage system · '+n+' jets \u00b7 '+JK[n];
  chipEls.hydro.querySelector('small').textContent=plus(HY.price);
  [...sub.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===n));build();readout();if(rqs.open)showSum();}
 const _sync=syncUI;syncUI=function(){_sync();sub.hidden=!st.acc.hydro;};
-[...sub.children].forEach(b=>b.setAttribute('aria-pressed',false));HY.name='Hydro massage system · 8 jets';
+[...sub.children].forEach(b=>b.setAttribute('aria-pressed',false));HY.name='Hydro massage system · 8 jets \u00b7 '+JK[8];
 syncUI();readout();
 </script>
 <script>
 let jOpen=true;
 const chg=document.createElement('button');chg.type='button';chg.className='chg';chg.onclick=()=>{jOpen=true;syncUI();};sub.after(chg);
-function jvis(){sub.hidden=!st.acc.hydro||!jOpen;chg.hidden=!st.acc.hydro||jOpen;chg.innerHTML=st.jets+' jets \u00b7 <b class="cw">change</b>';}
-const _s2=syncUI;syncUI=function(){if(!st.acc.hydro){jOpen=true;st.jets=8;HY.price=HB;HY.name='Hydro massage system \u00b7 8 jets';[...sub.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.hydro.querySelector('small').textContent=plus(HY.price);}_s2();jvis();};
+function jvis(){sub.hidden=!st.acc.hydro||!jOpen;chg.hidden=!st.acc.hydro||jOpen;chg.innerHTML=st.jets+' jets \u00b7 '+JK[st.jets]+' \u00b7 <b class="cw">change</b>';}
+const _s2=syncUI;syncUI=function(){if(!st.acc.hydro){jOpen=true;st.jets=8;HY.price=HB;HY.name='Hydro massage system \u00b7 8 jets \u00b7 '+JK[8];[...sub.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.hydro.querySelector('small').textContent=plus(HY.price);}_s2();jvis();};
 const _sj=setJets;setJets=function(n){jOpen=false;_sj(n);jvis();};
 syncUI();
 </script>
@@ -1067,7 +1067,7 @@ function setLed(i){st.led=i;LD.price=LO[i][1];LD.name=LO[i][0];chipEls.led.query
  [...sub3.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));lOpen=false;lvis();readout();if(rqs.open)showSum();}
 const _sL=syncUI;syncUI=function(){if(!st.acc.led){lOpen=true;st.led=0;LD.name=LO[0][0];LD.price=LO[0][1];[...sub3.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.led.querySelector('small').textContent=plus(LD.price);}_sL();lvis();};
 LD.name=LO[0][0];LD.price=LO[0][1];[...sub3.children].forEach(b=>b.setAttribute('aria-pressed',false));
-const AD=S.accessories.find(x=>x.id==='air'),AO=[['12 jets \u00b7 750 W',0],['24 jets',300]];
+const AD=S.accessories.find(x=>x.id==='air'),AO=[['12 jets \u00b7 750 W',0],['24 jets \u00b7 2 x 750 W',300]];
 let aOpen=true;st.air=0;
 const subZ=document.createElement('div');subZ.className='sub';
 AO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p?' '+plus(p):'');b.dataset.i=i;b.onclick=()=>setAir(i);subZ.appendChild(b);});
