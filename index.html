@@ -2359,6 +2359,6 @@ window.sandUnder=function(g,A){
 })();
 </script>
 <style>/* phone: night sky must stay behind the menu (the panel is in the normal flow there) */
-@media(max-width:700px){.stage .panel{position:relative!important;z-index:3;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important}.stage.night::before{bottom:auto;height:min(64vh,520px)}}
+@media(max-width:700px){.stage::before{bottom:auto!important;height:min(64vh,520px)}}   /* sky only over the 3D view, never over the menu below (the panel must stay position:static: the camera fit checks it) */
 </style>
 </body></html>
