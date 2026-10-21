@@ -702,7 +702,8 @@ function build(){
     const L=window.L2(), pts=(fo?window.L2prof(L)
       :[[0,.1],[w0-.03,.1],[w0,.13],[w0,.28],[w0+.03,.3],[rr,.3],[rr+.03,.33],[rr+.03,yl-.02],[rr+.06,yl],[rbn,yl],[R-.07,H+.04]]).map(([x,y])=>new THREE.Vector2(x,y));
     const lg=new THREE.LatheGeometry(pts,fo?128:64);
-    if(fo){ add(window.K2geo(),am,0,0,0); const k2=window.K2S(), fl=add(new THREE.CircleGeometry(.37*k2.s,64),am,0,.06*k2.ky+.001,0); fl.rotation.x=-Math.PI/2; }   // floor in liner colour   // Shape 2: Kubilas 3D liner
+    if(fo){ add(window.K2geo(),am,0,0,0); const k2=window.K2S(); const flm=am.clone(); flm.polygonOffset=true; flm.polygonOffsetFactor=-4; flm.polygonOffsetUnits=-4;   /* well floor drawn in front of the liner bottom: no flickering streaks (z-fighting) on phones */
+      const fl=add(new THREE.CircleGeometry(.36*k2.s,64),flm,0,.06*k2.ky+.004,0); fl.rotation.x=-Math.PI/2; fl.castShadow=fl.receiveShadow=false; }   // floor in liner colour   // Shape 2: Kubilas 3D liner
     else if(false){
       const P=lg.attributes.position, uv=lg.attributes.uv, Rp=R-.07; for(let q=0;q<P.count;q++) uv.setXY(q,.5+P.getZ(q)/(2*Rp),.5+P.getX(q)/(2*Rp)); uv.needsUpdate=true;
       const c=acr.clone().multiplyScalar(2.0); c.r=Math.min(c.r,1.7); c.g=Math.min(c.g,1.7); c.b=Math.min(c.b,1.7); window.LINER2.anisotropy=renderer.capabilities.getMaxAnisotropy();
@@ -731,7 +732,7 @@ function build(){
   const water=new THREE.Mesh(sq?new THREE.PlaneGeometry(2*(hix-.02),2*(hiz-.02)):new THREE.CircleGeometry(R-.085,48),wmat);
   water.rotation.x=-Math.PI/2; water.position.y=H-.12; water.visible=st.water!==false; tub.add(water);
   { /* water drain in the tub floor: chrome ring with a dark outlet, slightly off centre like the real tub */
-    const dg=new THREE.Group(); dg.visible=true; dg.position.set(sq?hix-.26-.08-.07:(st.lf===1?0:.27*R-.075),(!sq&&st.lf===1)?.06*window.K2S().ky+.002:.102,0); dg.scale.setScalar(1.5); tub.add(dg);
+    const dg=new THREE.Group(); dg.visible=true; dg.position.set(sq?hix-.26-.08-.07:(st.lf===1?0:.27*R-.075),(!sq&&st.lf===1)?.06*window.K2S().ky+.006:.102,0); dg.scale.setScalar(1.5); tub.add(dg);
     const cm=new THREE.MeshPhongMaterial({color:0xcfd6d9,specular:0xffffff,shininess:150});
     const rg=new THREE.Mesh(new THREE.TorusGeometry(.021,.006,12,36),cm); rg.rotation.x=Math.PI/2; rg.position.y=.003; dg.add(rg);
     const hole=new THREE.Mesh(new THREE.CircleGeometry(.016,28),new THREE.MeshBasicMaterial({color:0x0c0e0f})); hole.rotation.x=-Math.PI/2; hole.position.y=.0015; dg.add(hole);
