@@ -501,7 +501,7 @@ syncUI();
 function showTab(i){ [...$('tabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===i)); [0,1,2].forEach(j=>$('pane'+j).hidden=j!==i); }
 S.ui.tabs.forEach((t,i)=>{ const b=document.createElement('button'); b.textContent=t; b.setAttribute('role','tab'); b.onclick=()=>showTab(i); $('tabs').appendChild(b); });
 showTab(0);
-function readout(){ const m=S.models[st.m]; $('rName').textContent=m.name+' · '+S.shapes[st.s].n+(S.shapes[st.s].id==='round'?' · '+LFORMS[st.lf].n:''); }
+function readout(){ const m=S.models[st.m]; $('rName').textContent=m.name+' · '+S.shapes[st.s].n+' · '+(st.fib?'Gelcoat':'Acrylic'); }
 readout();
 
 /* ---------- 3D scene ---------- */
@@ -1198,7 +1198,7 @@ document.getElementById('std').onclick=()=>{if(window.eqStd)window.eqStd();st.m=
  setJets(8);setAir(0);setLed(0);st.coverT=0;setCover(0);syncUI();if(window.stvReset)window.stvReset();showTab(0);if(rqs.open)showSum();};
 </script>
 <script>
-function readout(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n+(sh.id==='round'?' · '+LFORMS[st.lf].n:'');
+function readout(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n+' · '+(st.fib?'Gelcoat':'Acrylic');
  const L=[[m.name,m.size,1],['Size: '+m.people,''],['Shape: '+sh.n,sh.extra?'+'+fmt(sh.extra):'included'],[(st.wpc?'WPC: ':st.plain?'Wood: ':'Thermowood: ')+S.woods[st.w].n,st.wpc?fmt(WPC_PRICE):(st.plain&&WOOD_PRICE?fmt(WOOD_PRICE):'included')],[(st.fib?S.ui.fib:S.ui.acr)+': '+S.acrylics[st.a].n,st.fib?'included':fmt(ACR_PRICE)],
   ];
  const ED=window.eqDone||[false,false,false];   // equipment rows appear only after the item was picked in the Equipment tab
@@ -1312,7 +1312,7 @@ const chgC=document.createElement('button');chgC.type='button';chgC.className='c
 function cvis(){swc.querySelectorAll('button[data-t]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.t===(st.coverT||0)));swc.hidden=!st.acc.cover||!cOpen;chgC.hidden=!st.acc.cover||cOpen;chgC.innerHTML=CVT[st.coverT||0]+' \u00b7 '+COVC[st.coverC||0][0]+' \u00b7 <b class="cw">change</b>';}
 function setCover(i){cOpen=false;st.coverC=i;CVA.name=covName(i);swc.querySelectorAll('button[data-i]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));cvis();lidAng=0;lidAnim=null;clearTimeout(lidTimer);build();readout();if(rqs.open)showSum();
  lidTimer=setTimeout(()=>{ if(!st.acc.cover) return; lidAnim={a:lidAng,b:Math.PI,t0:performance.now(),d:(typeof reduce!=='undefined'&&reduce)?1:1400}; },2000);}
-const _s5=syncUI;syncUI=function(){if(!st.acc.cover){cOpen=true;st.coverC=0;st.coverT=0;CVA.name=covName(0);lidAng=0;lidAnim=null;clearTimeout(lidTimer);}_s5();cvis();swc.querySelectorAll('button[data-i]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===st.coverC));};
+const _s5=syncUI;syncUI=function(){if(!st.acc.cover){cOpen=true;st.coverC=0;st.coverT=0;CVA.name=covName(0);lidAng=0;lidAnim=null;clearTimeout(lidTimer);}_s5();cvis();swc.querySelectorAll('button[data-i]').forEach(b=>b.setAttribute('aria-pressed',!st.pend.cover&&+b.dataset.i===st.coverC));};   // nothing looks picked until a colour is chosen
 syncUI();readout();
 </script>
 <script>
@@ -2110,4 +2110,20 @@ window.sandUnder=function(g,A){
  .tabs button{padding:9px 10px}
 }
 </style>
+<script>
+/* Only one pop-up at a time: clicking any other menu item closes the open pop-up (same as pressing its OK) */
+(function(){
+ const stoveBox=document.getElementById('oStove'), stepsBox=document.getElementById('oSteps');
+ const pops=()=>{ const L=[[sub,chipEls.hydro],[subZ,chipEls.air],[sub3,chipEls.led],[stoveBox.querySelector('.spop'),stoveBox.previousElementSibling]];
+  document.querySelectorAll('.clk.fclk').forEach(w=>{ const lab=(w.querySelector('svg')||{}).getAttribute?w.querySelector('svg').getAttribute('aria-label')||'':'';
+   L.push([w,/Steps/.test(lab)?stepsBox.previousElementSibling:chipEls.filter]); });
+  return L.filter(([p])=>p); };
+ const open=p=>!p.hidden&&p.getClientRects().length>0&&getComputedStyle(p).display!=='none';
+ document.addEventListener('click',e=>{
+  const t=e.target.closest('button'); if(!t||!t.closest('.panel')) return;
+  pops().forEach(([p,chip])=>{ if(!open(p)||p.contains(t)||t===chip) return;
+   const ok=p.querySelector('.spok,.clkok'); if(ok) ok.click(); });
+ },true);
+})();
+</script>
 </body></html>
