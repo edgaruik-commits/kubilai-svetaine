@@ -365,7 +365,7 @@ const SITE = {
   accessories: [
     {id:'hydro',  name:'Hydro massage system', price:0, desc:'Massage jets'},
     {id:'air',    name:'Air massage system',   price:0, desc:'Air bubbles'},
-    {id:'thermo', name:'Water thermometer',          price:25,  desc:'Floating thermometer'},
+    {id:'thermo', name:'Water thermometer',          price:0,  desc:'Integrated electronic thermometer, free'},
     {id:'shelf',  name:'Drink shelf',                price:80, desc:'Wooden or metal shelf on the rim'},
     {id:'stove',  name:'External stove',             price:0, desc:'Wood-fired stove with chimney'},
     {id:'guard',  name:'Chimney',                    price:0,   desc:'Chimney options: guard, extra section. Spark arrestor included (needs a stove)'},
@@ -1274,9 +1274,9 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
 });
 </script>
 <script>
-document.getElementById('std').onclick=()=>{if(window.eqStd)window.eqStd();st.m=0;st.s=0;st.lf=1;st.fo=0;st.w=5;st.wpc=0;st.plain=0;st.a=2;st.fib=1;st.p=0;st.t=0;st.sv={o:0,g:1,m:0,h:0};st.acc={stove:true,hydro:true,air:true,led:true,cover:true,ladder:true};st.stepOpen=0;st.stepInd=0;st.stepH=6;
+document.getElementById('std').onclick=()=>{if(window.eqStd)window.eqStd();st.m=0;st.s=0;st.lf=1;st.fo=0;st.w=5;st.wpc=0;st.plain=0;st.a=2;st.fib=1;st.p=0;st.t=0;st.sv={o:0,g:1,m:0,h:0};st.acc={stove:true,hydro:true,air:true,led:true,cover:true,ladder:true,thermo:true};st.stepOpen=0;st.stepInd=0;st.stepH=6;
  press($('oModel'),st.m);press($('oShape'),st.s);syncForm();pressWood();pressMat();
- setJets(8);setAir(0);setLed(0);st.coverT=0;setCover(0);syncUI();if(window.stvReset)window.stvReset();showTab(0);if(rqs.open)showSum();};
+ setJets(8);setAir(0);setLed(0);setTh(0);st.coverT=0;setCover(0);syncUI();if(window.stvReset)window.stvReset();showTab(0);if(rqs.open)showSum();};
 </script>
 <script>
 function readout(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n+' · '+(st.fib?'Gelcoat':'Acrylic');
@@ -1313,7 +1313,7 @@ const _sj=setJets;setJets=function(n){jOpen=false;_sj(n);jvis();};
 syncUI();
 </script>
 <script>
-const TH=S.accessories.find(x=>x.id==='thermo'),TO=[['Integrated electronic thermometer',90]];
+const TH=S.accessories.find(x=>x.id==='thermo'),TO=[['Integrated electronic thermometer',0]];   // free, part of the Standard setup
 let tOpen=true;st.th=0;
 const sub2=document.createElement('div');sub2.className='sub';
 TO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p?' '+plus(p):'');b.dataset.i=i;b.onclick=()=>setTh(i);sub2.appendChild(b);});
