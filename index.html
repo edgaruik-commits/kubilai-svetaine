@@ -416,6 +416,7 @@ S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
 const plus = n => n ? '+'+fmt(n) : '';   // price shown in the option menus, e.g. +€120
 /* accessories shown in the 3D view: an option appears only after a variant button was clicked */
+window.LEDH={2:[4,10],3:[3,7,11],5:[2,4,7,9,11]};   // LED standard positions, o'clock (12 = stove). Edit here.
 const visAcc = () => { const a=Object.assign({},st.acc); for(const k in st.pend) if(st.pend[k]) a[k]=false; return a; };
 const mp = (m,si) => { const id=S.shapes[si].id; return id==='rect' ? (m.priceRect!=null?m.priceRect:(m.priceSquare!=null?m.priceSquare:m.price)) : (id==='square' && m.priceSquare!=null) ? m.priceSquare : m.price; };   // base price depends on the shape
 const total = () => mp(S.models[st.m],st.s) + S.shapes[st.s].extra + (st.wpc?WPC_PRICE:0) + (st.plain?WOOD_PRICE:0) + (st.fib?0:ACR_PRICE) + (st.acc.stove?(S.stoveTypes[st.t].electric?0:S.stovePlaces[st.p].extra)+S.stoveTypes[st.t].extra:0) + S.accessories.reduce((t,a)=>t+(st.acc[a.id]&&!st.pend[a.id]?a.price:0),0);
@@ -987,7 +988,7 @@ function build(){
           beamM=new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide});
     const bg=new THREE.ConeGeometry(.2,.62,28,1,true); bg.translate(0,-.31,0);   // apex at the lamp, opening into the tub
     { const pos=bg.attributes.position, col=[]; for(let q=0;q<pos.count;q++){ const t=Math.min(1,-pos.getY(q)/.62); col.push(.32*(1-t),.78*(1-t),.95*(1-t)); } bg.setAttribute('color',new THREE.Float32BufferAttribute(col,3)); }
-    for(let k=0;k<N;k++){ const a=.5+(k+.5)/N*Math.PI*2; let p,n;
+    for(let k=0;k<N;k++){ const a=(window.LEDH[N]||[])[k]!=null?window.LEDH[N][k]*Math.PI/6:.5+(k+.5)/N*Math.PI*2; let p,n;   /* standard lamp positions on the clock (see LEDH) */
       let tilt=0;
       if(!sq){ const yl=.52, rbn=(st.lf===1?.76:.74)*R, yT=H+.04, ly2=.74, rw=rbn+(R-.07-rbn)*(ly2-yl)/(yT-yl)-.002;   // on the sloped back wall surface (not buried behind it)
         tilt=Math.atan((R-.07-rbn)/(yT-yl)); p=new THREE.Vector3(Math.cos(a)*rw,ly2,Math.sin(a)*rw); n=new THREE.Vector3(Math.cos(a),0,Math.sin(a)); }
@@ -1336,16 +1337,23 @@ syncUI();readout();
  Object.defineProperty(GD,'price',{get:()=>GO.reduce((t,o)=>t+(st.chim[o[0]]?o[2]:0),0),configurable:true});
  Object.defineProperty(GD,'name',{get:()=>{const l=GO.filter(o=>st.chim[o[0]]).map(o=>o[1]);return 'Chimney'+(l.length?' \u00b7 '+l.join(', '):'');},configurable:true});
  chipEls.guard.querySelector('small').textContent='';
- const sub=document.createElement('div'); sub.className='sub';
+ const sub=document.createElement('div'); sub.className='sub lpop chim';
+ { const im=document.createElement('img'); im.className='spimg'; im.alt='Chimney guard'; im.dataset.k='g'; im.src='data:image/jpeg;base64,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'; const t=document.createElement('div'); t.className='lpt'; t.textContent='Chimney'; const pi=document.createElement('img'); pi.className='spimg'; pi.alt='Extra chimney pipe 1 m'; pi.dataset.k='e'; pi.src='data:image/jpeg;base64,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'; const ci=document.createElement('div'); ci.className='cimgs'; ci.append(im,pi); sub.append(ci,t); }
  GO.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.textContent=o[0]==='e'?'Extra 1 m '+plus(o[2]):o[1]+' '+plus(o[2]); b.dataset.k=o[0]; b.title=o[1];
-  b.onclick=()=>{ st.chim[o[0]]=!st.chim[o[0]]; gOpen=true; clearTimeout(gT); if(GO.some(x=>st.chim[x[0]])) gT=setTimeout(()=>{ gOpen=false; gvis(); },3000); gvis(); build(); readout(); if(rqs.open) showSum(); }; sub.appendChild(b); });
+  b.onclick=e=>{ e.stopPropagation(); st.chim[o[0]]=!st.chim[o[0]]; gOpen=true; clearTimeout(gT); gvis(); build(); readout(); if(rqs.open) showSum(); }; sub.appendChild(b); });
+ { const ok=document.createElement('button'); ok.type='button'; ok.className='spok'; ok.textContent='OK'; ok.onclick=e=>{ e.stopPropagation(); gOpen=false; gvis(); }; sub.appendChild(ok); }
+ sub.addEventListener('click',e=>e.stopPropagation());
  chipEls.guard.after(sub);
+ function gpos(){ if(sub.hidden) return; const br=chipEls.guard.getBoundingClientRect(); if(!br.width){ sub.style.visibility='hidden'; return; } sub.style.visibility='';
+  const w=sub.offsetWidth||176, h=sub.offsetHeight||330; sub.style.left=Math.max(8,Math.min(br.right-84,innerWidth-w-8))+'px'; sub.style.top=Math.max(8,Math.min(br.top-6,innerHeight-h-8))+'px'; }
+ addEventListener('scroll',gpos,true); addEventListener('resize',gpos); $('tabs').addEventListener('click',()=>setTimeout(()=>{ gvis(); },0));
  /* after a choice, the sub-menu closes by itself in 3 s and turns into "<choice> · change" like the other menus */
  let gOpen=true,gT=0; const gchg=document.createElement('button'); gchg.type='button'; gchg.className='chg'; gchg.hidden=true; sub.after(gchg); window.guardChg=gchg;
  gchg.onclick=()=>{ gOpen=true; clearTimeout(gT); gvis(); };
  function gvis(){ const any=GO.some(o=>st.chim[o[0]]); sub.hidden=!st.acc.guard||!gOpen; gchg.hidden=!st.acc.guard||gOpen||!any;
   gchg.innerHTML=GO.filter(o=>st.chim[o[0]]).map(o=>o[0]==='e'?'Extra 1 m':o[1]).join(', ')+' \u00b7 <b class="cw">change</b>';
-  [...sub.children].forEach(b=>b.setAttribute('aria-pressed',!!st.chim[b.dataset.k])); }
+  [...sub.querySelectorAll('button[data-k]')].forEach(b=>b.setAttribute('aria-pressed',!!st.chim[b.dataset.k]));
+  sub.querySelectorAll('.cimgs img').forEach(i=>i.hidden=i.dataset.k==='e'?!st.chim.e:(st.chim.e&&!st.chim.g)); /* photo of the guard and/or the extra pipe */ if(!chipEls.guard.offsetParent) sub.hidden=true; setTimeout(gpos,0); }
  const _o=syncUI; syncUI=function(){ if(!st.acc.guard){ st.chim=none(); gOpen=true; clearTimeout(gT); } _o.apply(this,arguments); gvis(); };
  syncUI(); readout(); build();
 })();
@@ -2002,6 +2010,8 @@ window.sandUnder=function(g,A){
 .sub.lpop{position:fixed;z-index:60;width:176px;display:flex;flex-direction:column;gap:5px;padding:8px;background:#fff;border:1px solid #cfd6d6;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 .sub.lpop[hidden]{display:none!important}
 .sub.lpop .spimg{display:block;width:110px;height:auto;margin:0 auto;border-radius:8px}
+.sub.lpop.chim .spimg{width:auto!important;height:130px!important;margin:0}
+.sub.lpop.chim .cimgs{display:flex;justify-content:center;gap:14px}
 .sub.lpop .lpt{font-size:.72rem;color:#4a5a5e;margin-top:2px}
 .sub.lpop button[data-i]{white-space:nowrap;width:100%;text-align:left;font:inherit;font-size:.7rem;padding:4px 8px;border-radius:999px;border:1.5px solid #b9c6c2;background:#fff;color:#10282f;cursor:pointer}
 .sub.lpop button[data-i][aria-pressed=true]{background:#d7dcdc;border-color:#9aa6a5;font-weight:600}
@@ -2027,8 +2037,8 @@ window.sandUnder=function(g,A){
  jvis();
 })();
 </script>
-<style>.sub.lpop button[data-n]{white-space:nowrap;width:100%;text-align:left;font:inherit;font-size:.7rem;padding:4px 8px;border-radius:999px;border:1.5px solid #b9c6c2;background:#fff;color:#10282f;cursor:pointer}
-.sub.lpop button[data-n][aria-pressed=true]{background:#d7dcdc;border-color:#9aa6a5;font-weight:600}</style>
+<style>.sub.lpop button[data-k],.sub.lpop button[data-n]{white-space:nowrap;width:100%;text-align:left;font:inherit;font-size:.7rem;padding:4px 8px;border-radius:999px;border:1.5px solid #b9c6c2;background:#fff;color:#10282f;cursor:pointer}
+.sub.lpop button[data-k][aria-pressed=true],.sub.lpop button[data-n][aria-pressed=true]{background:#d7dcdc;border-color:#9aa6a5;font-weight:600}</style>
 <script>
 /* Air massage: popup like the LED one, photo + choices + OK */
 (function(){
@@ -2056,12 +2066,15 @@ window.sandUnder=function(g,A){
  const fl=document.createElement('div'); fl.className='lfly';
  fl.innerHTML='<div class="lpt">LED placement</div>';
  [['Standard',0],['Individual',1]].forEach(([n,i])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=n; b.dataset.p=i;
-  b.onclick=e=>{ e.stopPropagation(); st.ledPos=i; name(); upd(); readout(); if(rqs.open) showSum(); }; fl.appendChild(b); });
+  b.onclick=e=>{ e.stopPropagation(); st.ledPos=i; fo=false; pkd=true; name(); upd(); readout(); if(rqs.open) showSum(); }; fl.appendChild(b); });   /* picking a placement closes this flyout; OK closes the rest */
+ let fo=false, pkd=false;   /* nothing looks chosen until Standard / Individual is clicked */
  sub3.appendChild(fl);
- function name(){ LD.name=LO[st.led][0]+(st.ledPos?' \u00b7 individual placement':' \u00b7 standard placement'); }
- function upd(){ fl.hidden=!!st.pend.led; [...fl.querySelectorAll('button')].forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.p===st.ledPos))); }
- const _sl=setLed; setLed=function(){ const r=_sl.apply(this,arguments); name(); upd(); return r; };
- const _lv=lvis; lvis=function(){ const r=_lv.apply(this,arguments); if(!st.acc.led) st.ledPos=0; upd(); return r; };
+ const hrs=()=>{ const n=[2,3,5][st.led]||2, h=window.LEDH[n]; return h.slice(0,-1).join(', ')+' and '+h[h.length-1]+' o\u2019clock'; };
+ const hl=document.createElement('div'); hl.className='lhrs'; fl.appendChild(hl);
+ function name(){ LD.name=LO[st.led][0]+(st.ledPos?' \u00b7 individual placement':' \u00b7 standard placement ('+hrs()+')'); readout(); if(rqs.open) showSum(); }
+ function upd(){ hl.hidden=!!st.ledPos; hl.textContent='Lamps at '+hrs(); fl.hidden=!!st.pend.led||!fo; [...fl.querySelectorAll('button')].forEach(b=>b.setAttribute('aria-pressed',String(pkd&&+b.dataset.p===st.ledPos))); }
+ const _sl=setLed; setLed=function(){ const r=_sl.apply(this,arguments); fo=true; pkd=false; name(); upd(); return r; };
+ const _lv=lvis; lvis=function(){ const r=_lv.apply(this,arguments); if(!st.acc.led) st.ledPos=0; if(!lOpen) fo=false; upd(); return r; };
  upd();
 })();
 </script>
@@ -2069,6 +2082,7 @@ window.sandUnder=function(g,A){
 .sub.lpop .lfly{position:absolute;z-index:2;left:calc(100% - 34px);top:var(--lflyT,120px);width:130px;display:flex;flex-direction:column;gap:5px;padding:8px;background:#fff;border:1px solid #cfd6d6;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 .sub.lpop .lfly[hidden]{display:none!important}
 .sub.lpop .lfly .lpt{white-space:nowrap}
+.sub.lpop .lfly .lhrs{font-size:.68rem;color:#4a5a5e;line-height:1.3;margin-top:2px}
 .sub.lpop .lfly button{white-space:nowrap;width:100%;text-align:left;font:inherit;font-size:.7rem;padding:4px 8px;border-radius:999px;border:1.5px solid #b9c6c2;background:#fff;color:#10282f;cursor:pointer}
 .sub.lpop .lfly button[aria-pressed=true]{background:#d7dcdc;border-color:#9aa6a5;font-weight:600}
 </style>
@@ -2078,13 +2092,13 @@ window.sandUnder=function(g,A){
  function mkPlace(box,key,label,getName,setName,pendKey,accKey,setFn,visFn){
   st[key]=st[key]||0;
   const fl=document.createElement('div'); fl.className='lfly'; fl.innerHTML='<div class="lpt">'+label+'</div>';
-  const nm=()=>{ setName(getName().replace(/ \u00b7 (standard|individual) placement$/,'')+(st[key]?' \u00b7 individual placement':' \u00b7 standard placement')); };
-  const upd=()=>{ fl.hidden=!!st.pend[pendKey]; [...fl.querySelectorAll('button')].forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.p===st[key]))); };
+  const nm=()=>{ setName(getName().replace(/ \u00b7 (standard|individual) placement$/,'')+(st[key]?' \u00b7 individual placement':' \u00b7 standard placement')); readout(); if(rqs.open) showSum(); };
+  let fo=false, pkd=false; const upd=()=>{ fl.hidden=!!st.pend[pendKey]||!fo; [...fl.querySelectorAll('button')].forEach(b=>b.setAttribute('aria-pressed',String(pkd&&+b.dataset.p===st[key]))); };
   [['Standard',0],['Individual',1]].forEach(([n,i])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=n; b.dataset.p=i;
-   b.onclick=e=>{ e.stopPropagation(); st[key]=i; nm(); upd(); readout(); if(rqs.open) showSum(); }; fl.appendChild(b); });
+   b.onclick=e=>{ e.stopPropagation(); st[key]=i; fo=false; pkd=true; nm(); upd(); readout(); if(rqs.open) showSum(); }; fl.appendChild(b); });
   box.appendChild(fl);
-  const os=window[setFn]; window[setFn]=function(){ const r=os.apply(this,arguments); nm(); upd(); return r; };
-  const ov=window[visFn]; window[visFn]=function(){ const r=ov.apply(this,arguments); if(!st.acc[accKey]) st[key]=0; upd(); return r; };
+  const os=window[setFn]; window[setFn]=function(){ const r=os.apply(this,arguments); fo=true; pkd=false; nm(); upd(); return r; };
+  const ov=window[visFn]; window[visFn]=function(){ const r=ov.apply(this,arguments); if(!st.acc[accKey]) st[key]=0; if(box.hidden) fo=false; upd(); return r; };
   upd(); }
  mkPlace(sub,'jetPos','Jet placement',()=>HY.name,v=>HY.name=v,'hydro','hydro','setJets','jvis');
  mkPlace(subZ,'airPos','Nozzle placement',()=>AD.name,v=>AD.name=v,'air','air','setAir','avis');
@@ -2114,7 +2128,7 @@ window.sandUnder=function(g,A){
 /* Only one pop-up at a time: clicking any other menu item closes the open pop-up (same as pressing its OK) */
 (function(){
  const stoveBox=document.getElementById('oStove'), stepsBox=document.getElementById('oSteps');
- const pops=()=>{ const L=[[sub,chipEls.hydro],[subZ,chipEls.air],[sub3,chipEls.led],[stoveBox.querySelector('.spop'),stoveBox.previousElementSibling]];
+ const pops=()=>{ const L=[[document.querySelector('.sub.lpop.chim'),chipEls.guard],[sub,chipEls.hydro],[subZ,chipEls.air],[sub3,chipEls.led],[stoveBox.querySelector('.spop'),stoveBox.previousElementSibling]];
   document.querySelectorAll('.clk.fclk').forEach(w=>{ const lab=(w.querySelector('svg')||{}).getAttribute?w.querySelector('svg').getAttribute('aria-label')||'':'';
    L.push([w,/Steps/.test(lab)?stepsBox.previousElementSibling:chipEls.filter]); });
   return L.filter(([p])=>p); };
