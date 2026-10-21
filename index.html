@@ -2341,4 +2341,18 @@ window.sandUnder=function(g,A){
  .clk.fclk .cbx>button{grid-column:auto;min-width:0;white-space:normal!important}
 }
 </style>
+<script>
+/* phone: when a clock pop-up opens as a bottom sheet, scroll the page so the 3D view sits right above the sheet
+   (bottom of the Shape & finish / Equipment / Accessories tabs lines up with the top of the sheet) */
+(function(){
+ const mq=matchMedia('(max-width:700px)'), tabs=document.getElementById('tabs'); if(!tabs) return;
+ const isOpen=el=>!el.hidden&&el.getClientRects().length>0&&getComputedStyle(el).display!=='none';
+ const was=new WeakMap();
+ function fit(el){ if(!mq.matches||!isOpen(el)) return; const top=el.getBoundingClientRect().top, tb=tabs.getBoundingClientRect().bottom, d=tb-top+4;
+  if(Math.abs(d)>8) window.scrollBy({top:d,behavior:'smooth'}); }
+ function check(){ document.querySelectorAll('.clk.fclk').forEach(el=>{ const o=isOpen(el); if(o&&!was.get(el)) setTimeout(()=>fit(el),80); was.set(el,o); }); }
+ new MutationObserver(check).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden','style','class']});
+ check();
+})();
+</script>
 </body></html>
