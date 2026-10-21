@@ -2358,4 +2358,7 @@ window.sandUnder=function(g,A){
  check();
 })();
 </script>
+<style>/* phone: night sky must stay behind the menu (the panel is in the normal flow there) */
+@media(max-width:700px){.stage .panel{position:relative!important;z-index:3;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important}.stage.night::before{bottom:auto;height:min(64vh,520px)}}
+</style>
 </body></html>
