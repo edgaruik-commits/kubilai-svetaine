@@ -2324,4 +2324,21 @@ window.sandUnder=function(g,A){
 <style>.panel .vnote{margin:2px 2px 0;font-size:.72rem;line-height:1.35;color:#5d6a6e;text-align:center}</style>
 <script>(function(){ const pn=document.querySelector('.stage .panel'); if(!pn) return; const n=document.createElement('p'); n.className='vnote';
  n.textContent='This is a visualization only. The actual hot tub and accessories may differ in colour, shape and details.'; pn.appendChild(n); })();</script>
+<style>/* phone: pop-up menus two options per row (narrow buttons), labels / pictures / OK over the full width */
+@media(max-width:700px){
+ .sub.lpop:not([hidden]){display:grid!important;grid-template-columns:1fr 1fr;gap:6px!important;align-items:start}
+ .sub.lpop>*{grid-column:1/-1}
+ .sub.lpop>button[data-i],.sub.lpop>button[data-n],.sub.lpop>button[data-k]{grid-column:auto;width:100%!important;min-width:0;white-space:normal!important}
+ .sub.lpop>.spok{justify-self:center}
+ .sub.lpop .lfly:not([hidden]){display:grid!important;grid-template-columns:1fr 1fr;gap:6px}
+ .sub.lpop .lfly>*{grid-column:1/-1}
+ .sub.lpop .lfly>button{grid-column:auto;min-width:0;white-space:normal!important}
+ #oStove .spop .rw:not([hidden]){display:grid!important;grid-template-columns:1fr 1fr;gap:6px!important}
+ #oStove .spop .rw>*{grid-column:1/-1}
+ #oStove .spop .rw>button{grid-column:auto;min-width:0;white-space:normal!important}
+ .clk.fclk .cbx:not([hidden]){display:grid!important;grid-template-columns:1fr 1fr;gap:6px}
+ .clk.fclk .cbx>*{grid-column:1/-1}
+ .clk.fclk .cbx>button{grid-column:auto;min-width:0;white-space:normal!important}
+}
+</style>
 </body></html>
