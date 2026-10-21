@@ -334,7 +334,7 @@ window.hourBlocked=function(who,h){
 <script>
 /* ============ EDIT HERE: all content of the page ============ */
 /* Stove type options: [label, surcharge EUR]. Edit prices here. */
-const STV={ power:[['Stove 20 kW',0],['Stove 30 kW',150]], orient:[['Vertical',0]], glass:[['Without glass',0],['With glass',0]], metal:[['AISI 304',0],['AISI 316',150]], thick:[['1.5 mm',0],['2 mm',200]], elbow:[['Without elbow',0],['90\u00b0 elbow',60]] };
+const STV={ power:[['Stove 20 kW',0],['Stove 30 kW',150]], orient:[['Vertical',0]], glass:[['Without glass',0],['With glass',25]], metal:[['AISI 304',0],['AISI 316',150]], thick:[['1.5 mm',0],['2 mm',200]], elbow:[['Without elbow',0],['90\u00b0 elbow',60]] };
 const SITE = {
   brand: 'Fjord|fire',               // "|" splits the coloured part
   email: 'edgaruik@gmail.com',   // placeholder
@@ -374,6 +374,7 @@ const SITE = {
     {id:'ladder', name:'Wooden steps',              price:160, desc:'Wooden steps outside plus a step inside the tub'},
     {id:'filter', name:'Filtration system',          price:0, desc:'Water filtration'}
     ,{id:'wifi',   name:'Hot tub control (Wi-Fi)',    price:150, desc:'Control your hot tub via Wi-Fi'}
+    ,{id:'headrest', name:'Headrests', price:25, desc:'Soft head pillows for the tub seats, 25 € each'}   /* price per pillow: edit UNIT in the Headrests script at the end of the page too */
   ],
   defaultAccessories: ['stove'],
   features: {
@@ -1013,14 +1014,29 @@ function build(){
       box(x1,x1+.40,z0,z1,.27);                                                                   // lower step: plain straight box in front
       if(window.sandUnder) window.sandUnder(g,A); place(g,stepAng()); } }
   if(A.filter&&st.filter===1&&!A.ladder&&window.sandFilter){ const g=new THREE.Group(); window.sandFilter(g); place(g,stepAng()); }   // no steps: sand filter stands on its own
-  if(A.air){   // air massage: small nozzles spread over the tub floor (12 / 18 / 24 / 36), bubbles rise from each
-    const N=[12,24][st.air||0]||12, fy=.17, rx=sq?hix-.4:R-.62, rz=sq?hiz-.4:R-.62, am=new THREE.MeshPhongMaterial({color:0xdfe6e8,specular:0xffffff,shininess:100}), dm=new THREE.MeshBasicMaterial({color:0x20282b});
-    const colG=new THREE.CylinderGeometry(.03,.06,H-.12-fy,12,1,true), colM=new THREE.MeshBasicMaterial({map:fadeTex(false),transparent:true,depthWrite:false,side:THREE.DoubleSide,opacity:.55,visible:st.water!==false});   // faint rising air column above each nozzle
-    for(let i=0;i<N;i++){ const r=Math.sqrt((i+.5)/N), a=i*2.399963, x=Math.cos(a)*r*rx, z=Math.sin(a)*r*rz; airSrc.push({x,y:fy,z});
-      const d=new THREE.Mesh(new THREE.CylinderGeometry(.022,.022,.012,16),am); d.position.set(x,fy,z); tub.add(d);
-      { const col=new THREE.Mesh(colG,colM); col.position.set(x,fy+(H-.12-fy)/2,z); tub.add(col); }
-      const h=new THREE.Mesh(new THREE.CylinderGeometry(.009,.009,.014,10),dm); h.position.set(x,fy+.001,z); tub.add(h); }
-    popRings=new THREE.InstancedMesh(new THREE.RingGeometry(.03,.05,28).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0x1f86a8,transparent:true,opacity:.9,depthWrite:false,side:THREE.DoubleSide}),Math.max(1,N*5)); popRings.frustumCulled=false; popRings.count=N*5; popRings.visible=st.water!==false; tub.add(popRings); }
+  if(A.air){   // air massage: 12 nozzles in the seat (where you sit); 24 = those 12 + 12 in the back rest above them
+    const N=[12,24][st.air||0]||12, am=new THREE.MeshPhongMaterial({color:0xdfe6e8,specular:0xffffff,shininess:100}), dm=new THREE.MeshBasicMaterial({color:0x20282b});
+    const colM=new THREE.MeshBasicMaterial({map:fadeTex(false),transparent:true,depthWrite:false,side:THREE.DoubleSide,opacity:.55,visible:st.water!==false}), SURF=H-.12;   // faint rising air column above each nozzle
+    const seatP=[], backP=[];   // {x,y,z, n:[nx,ny,nz] = direction the nozzle faces}
+    if(!sq){ const fo=st.lf===1, k2=window.K2S(), yl=.52, rbn=.74*R, A0=.45;   // keep clear of the stove side (angle 0)
+      const ang=[...Array(12)].map((_,i)=>A0+i*(2*Math.PI-2*A0)/11);
+      ang.forEach(a=>{ const c=Math.cos(a), s=Math.sin(a);
+        if(fo){ const rs=.63*k2.s, ys=.53*k2.ky+.003; seatP.push({x:c*rs,y:ys,z:s*rs,n:[0,1,0]});
+          const yb=ys+.12, w=window.K2at(yb,false), rb=w?w.r-.004:rs+.1, tl=w?w.tilt:.3; backP.push({x:c*rb,y:yb,z:s*rb,n:[-c*Math.cos(tl),Math.sin(tl),-s*Math.cos(tl)]}); }
+        else { const rs=.63*R, xs=c*rs, zs=s*rs, lng=xs<-.52*R&&Math.abs(zs)<.42*R, ys=(lng?yl+.1:yl)+.003; seatP.push({x:xs,y:ys,z:zs,n:[0,1,0]});
+          const yb=ys+.12, tl=Math.atan((R-.07-rbn)/(H+.04-yl)), rb=rbn+(R-.07-rbn)*(yb-yl)/(H+.04-yl)-.004; backP.push({x:c*rb,y:yb,z:s*rb,n:[-c*Math.cos(tl),Math.sin(tl),-s*Math.cos(tl)]}); } }); }
+    else { const yl=.52, t=.42, mx=(hix+(hix-.26))/2, mz=(hiz+(hiz-.26))/2;
+      [[-1,0,[-.75,-.25,.25,.75]],[0,1,[-1,0,1]],[0,-1,[-1,0,1]],[1,0,[-1,1]]].forEach(([x,z,os])=>os.forEach(o=>{   // 4 on the lounger side, 3 + 3 on the long sides, 2 on the stove side
+        const lng=x===-1, ys=(lng?yl+.13:yl)+.003, ox=x?0:o*t*HX, oz=z?0:o*t*HZ;
+        seatP.push({x:x?x*mx:ox,y:ys,z:z?z*mz:oz,n:[0,1,0]});
+        backP.push({x:x?x*(hix-.004):ox,y:ys+.12,z:z?z*(hiz-.004):oz,n:[-x,0,-z]}); })); }
+    const pts=N>12?seatP.concat(backP):seatP, up=new THREE.Vector3(0,1,0);
+    pts.forEach(p=>{ airSrc.push({x:p.x,y:p.y,z:p.z});
+      const q=new THREE.Quaternion().setFromUnitVectors(up,new THREE.Vector3(...p.n).normalize());
+      const d=new THREE.Mesh(new THREE.CylinderGeometry(.022,.022,.012,16),am); d.position.set(p.x,p.y,p.z); d.quaternion.copy(q); tub.add(d);
+      const h=new THREE.Mesh(new THREE.CylinderGeometry(.009,.009,.014,10),dm); h.position.set(p.x+p.n[0]*.001,p.y+p.n[1]*.001,p.z+p.n[2]*.001); h.quaternion.copy(q); tub.add(h);
+      const ch=Math.max(.05,SURF-p.y), col=new THREE.Mesh(new THREE.CylinderGeometry(.03,.06,ch,12,1,true),colM); col.position.set(p.x,p.y+ch/2,p.z); tub.add(col); });
+    popRings=new THREE.InstancedMesh(new THREE.RingGeometry(.03,.05,28).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0x1f86a8,transparent:true,opacity:.9,depthWrite:false,side:THREE.DoubleSide}),Math.max(1,pts.length*5)); popRings.frustumCulled=false; popRings.count=pts.length*5; popRings.visible=st.water!==false; tub.add(popRings); }
   if(A.led){   // individual LED lamps set into the inner wall (2 / 3 pcs, or 4 mini lamps), same size as the jet nozzles, each throwing a cone of light into the water
     const N=[2,3,5][st.led]||2, lr=.03, ly=.62;
     const gc=document.createElement('canvas'); gc.width=gc.height=128; const gx=gc.getContext('2d'), gg=gx.createRadialGradient(64,64,0,64,64,64);
@@ -1577,7 +1593,7 @@ syncUI();readout();
 document.getElementById('prem').onclick=()=>{
  if(window.eqStd)window.eqStd();
  st.m=1;st.s=0;st.w=1;st.wpc=0;st.plain=0;st.a=2;st.fib=0;st.p=0;st.t=0;st.sv={o:0,g:1,m:1,h:1};st.stepOpen=0;st.stepInd=0;st.stepH=6;st.chim={g:true,e:false};
- st.acc={stove:true,guard:true,ladder:true,hydro:true,air:true,led:true,cover:true,thermo:true,shelf:true,filter:true,wifi:true};
+ st.acc={stove:true,guard:true,ladder:true,hydro:true,air:true,led:true,cover:true,thermo:true,shelf:true,filter:true,wifi:true,headrest:true};
  press($('oModel'),st.m);press($('oShape'),st.s);syncForm();pressWood();pressMat();
  setJets(12);setAir(1);setLed(1);setCover(0);setShelf(1);setTh(0);setFilter(1);
  syncUI();if(window.stvReset)window.stvReset();showTab(0);readout();if(rqs.open)showSum();};
@@ -1587,7 +1603,7 @@ document.getElementById('prem').onclick=()=>{
 document.getElementById('lux').onclick=()=>{
  if(window.eqStd)window.eqStd();
  st.m=1;st.s=0;st.w=5;st.wpc=0;st.plain=0;st.a=2;st.fib=0;st.p=0;st.t=0;st.sv={o:0,g:1,m:1,h:1};st.stepOpen=0;st.stepInd=0;st.stepH=6;st.chim={g:true,e:false};
- st.acc={stove:true,guard:true,ladder:true,hydro:true,air:true,led:true,cover:true,thermo:true,shelf:true,filter:true,wifi:true};
+ st.acc={stove:true,guard:true,ladder:true,hydro:true,air:true,led:true,cover:true,thermo:true,shelf:true,filter:true,wifi:true,headrest:true};
  press($('oModel'),st.m);press($('oShape'),st.s);syncForm();pressWood();pressMat();
  setJets(12);setAir(1);setLed(1);setCover(0);setShelf(1);setTh(0);setFilter(1);
  syncUI();if(window.stvReset)window.stvReset();showTab(0);readout();if(rqs.open)showSum();};
@@ -1948,7 +1964,7 @@ async function sendMail(data,subject,attach){
   if(wrap.hidden) return; const b0=subF.children[0], br=b0.getBoundingClientRect(), pr=wrap.closest?document.querySelector('.panel').getBoundingClientRect():br;
   if(!br.width){ wrap.style.visibility='hidden'; return; } wrap.style.visibility='';
   const sz=170, w=sz+12, left=Math.min(br.right+10, innerWidth-w-8);
-  wrap.style.left=left+'px'; wrap.style.top=Math.max(8,Math.min(br.top-6, innerHeight-sz-70))+'px'; svg.style.width=svg.style.height=sz+'px'; }
+  wrap.style.left=left+'px'; const RAISE=105;   /* clock pop-up is raised by this many px (to the red line); change the number to move it up/down */ wrap.style.top=Math.max(8,Math.min(br.top-6-RAISE, innerHeight-sz-70))+'px'; svg.style.width=svg.style.height=sz+'px'; }
  document.body.appendChild(wrap); addEventListener('scroll',pos,true); addEventListener('resize',pos); $('tabs').addEventListener('click',()=>setTimeout(pos,0)); document.addEventListener('click',()=>setTimeout(pos,0));
  function hourAt(e){ const r=svg.getBoundingClientRect(), x=(e.clientX-r.left)/r.width*160-80, y=(e.clientY-r.top)/r.height*160-80;
   if(Math.hypot(x,y)<8) return null; let hh=Math.round(((Math.atan2(y,x)*180/Math.PI+90+360)%360)/30)%12; if(hh===0) hh=12; return (hh===12||window.hourBlocked('filter',hh))?null:hh; }
@@ -2186,6 +2202,54 @@ window.sandUnder=function(g,A){
   pops().forEach(([p,chip])=>{ if(!open(p)||p.contains(t)||t===chip) return;
    const ok=p.querySelector('.spok,.clkok'); if(ok) ok.click(); });
  },true);
+})();
+</script>
+
+<style>
+.acc .hrs{align-self:stretch;width:100%;flex-direction:column;align-items:stretch;gap:2px;padding:44px 22px 8px 22px;box-sizing:border-box}
+.hrs[hidden]{display:none!important}
+.hrs .hrw{position:relative;width:100%;height:30px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;outline:0}
+.hrs .hrk{position:absolute;left:0;right:0;top:12px;height:6px;border-radius:3px;background:#6f8fc4}
+.hrs .hrd{position:absolute;top:5px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:#7f98c8;border:2px solid #fff;box-shadow:0 0 0 1px #6f8fc4,0 1px 4px rgba(0,0,0,.3);cursor:grab;box-sizing:border-box}
+.hrs .hrw:active .hrd{cursor:grabbing}
+.hrs .hrw:focus-visible .hrd{box-shadow:0 0 0 3px rgba(47,90,168,.45)}
+.hrs .hrb{position:absolute;left:50%;bottom:24px;width:28px;height:28px;margin-left:-14px;background:#2f5aa8;border-radius:50% 50% 50% 0;transform:rotate(-45deg);pointer-events:none}
+.hrs .hrb i{display:block;width:28px;height:28px;font:700 13px/28px system-ui,sans-serif;font-style:normal;color:#fff;text-align:center;transform:rotate(45deg)}
+.hrs .hrl{text-align:center;font-size:.85rem;font-weight:600;color:#10282f;margin-top:6px}
+.hrs .hrt{text-align:center;font-size:.95rem;font-weight:600;color:#2f5aa8}
+</style>
+<script>
+/* Headrests: click the chip, then drag the dot (or click the line / use arrow keys) to choose 1-8 pillows. UNIT = price of one pillow */
+(function(){
+ const UNIT=25, MIN=1, MAX=8, DEF=2;
+ const HR=S.accessories.find(x=>x.id==='headrest'); st.hr=0;
+ const sub=document.createElement('div'); sub.className='sub hrs'; sub.hidden=true;
+ sub.innerHTML='<div class="hrw" tabindex="0" role="slider" aria-label="Number of headrests" aria-valuemin="'+MIN+'" aria-valuemax="'+MAX+'"><div class="hrk"></div><div class="hrd"><span class="hrb"><i></i></span></div></div><div class="hrl"></div><div class="hrt"></div>';
+ chipEls.headrest.after(sub);
+ const w=sub.querySelector('.hrw'), dot=sub.querySelector('.hrd'), bub=sub.querySelector('.hrb i'), lab=sub.querySelector('.hrl'), tot=sub.querySelector('.hrt');
+ const eur=n=>n.toFixed(2)+' \u20ac';
+ function paint(){ const n=st.hr||DEF; dot.style.left=((n-MIN)/(MAX-MIN)*100)+'%'; bub.textContent=n; w.setAttribute('aria-valuenow',n); lab.textContent='1 pc = '+eur(UNIT); tot.textContent=eur(UNIT*n); }
+ function apply(){ HR.price=UNIT*st.hr; HR.name='Headrests \u00b7 '+st.hr+' pcs'; }
+ function set(n){ n=Math.max(MIN,Math.min(MAX,n)); if(n===st.hr) return; st.hr=n; apply(); paint(); readout(); if(rqs.open) showSum(); }
+ function fromX(e){ const r=w.getBoundingClientRect(); set(MIN+Math.round(Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*(MAX-MIN))); }
+ let drag=false;
+ w.addEventListener('click',e=>e.stopPropagation());
+ w.addEventListener('pointerdown',e=>{ drag=true; w.setPointerCapture(e.pointerId); w.focus(); fromX(e); e.preventDefault(); e.stopPropagation(); });
+ w.addEventListener('pointermove',e=>{ if(drag) fromX(e); });
+ const end=()=>{ drag=false; }; w.addEventListener('pointerup',end); w.addEventListener('pointercancel',end);
+ w.addEventListener('keydown',e=>{ const k=e.key; if(k==='ArrowRight'||k==='ArrowUp') set(st.hr+1); else if(k==='ArrowLeft'||k==='ArrowDown') set(st.hr-1); else if(k==='Home') set(MIN); else if(k==='End') set(MAX); else return; e.preventDefault(); });
+ function reveal(){   // scroll the menu so the whole slider is visible
+  let c=sub.parentElement; while(c&&!(c.scrollHeight>c.clientHeight+2&&/(auto|scroll)/.test(getComputedStyle(c).overflowY))) c=c.parentElement;
+  if(!c) return; const cr=c.getBoundingClientRect(), sr=sub.getBoundingClientRect(), pad=12;
+  if(sr.bottom>cr.bottom-pad) c.scrollTo({top:c.scrollTop+(sr.bottom-cr.bottom)+pad,behavior:'smooth'});
+  else if(sr.top<cr.top+pad) c.scrollTo({top:c.scrollTop-(cr.top-sr.top)-pad,behavior:'smooth'}); }
+ const _s=syncUI; syncUI=function(){
+  if(st.acc.headrest){ if(!st.hr) st.hr=DEF; apply(); } else { st.hr=0; HR.price=UNIT; HR.name='Headrests'; }
+  const r=_s.apply(this,arguments);
+  chipEls.headrest.querySelector('small').textContent='';   // price is shown under the slider
+  const opening=st.acc.headrest&&sub.hidden;
+  sub.hidden=!st.acc.headrest; paint(); if(opening) setTimeout(reveal,60); return r; };
+ syncUI(); readout();
 })();
 </script>
 </body></html>
