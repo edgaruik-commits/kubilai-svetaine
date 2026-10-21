@@ -2301,4 +2301,24 @@ window.sandUnder=function(g,A){
 <style>/* inner shape cards: always white, selected one only gets the dark border */
 #oForm button,#oForm button[aria-pressed=true]{background:#fff!important}
 </style>
+<script>
+/* LED Mini lighting: pick 10 or 20 pcs (sub-menu like the thermometer); price counts only after a choice. Set the real prices in MO */
+(function(){
+ const LM=S.accessories.find(x=>x.id==='ledmini'); if(!LM||!chipEls.ledmini) return;
+ const MO=[['LED Mini lighting, 10 pcs',0],['LED Mini lighting, 20 pcs',0]], sh=n=>n.replace('LED Mini lighting, ','');
+ let open=true; st.lm=0; st.pend.ledmini=true;
+ const sub=document.createElement('div'); sub.className='sub';
+ MO.forEach(([n,p],i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=sh(n)+(p?' '+plus(p):''); b.dataset.i=i; b.onclick=e=>{ e.stopPropagation(); set(i); }; sub.appendChild(b); });
+ const chg=document.createElement('button'); chg.type='button'; chg.className='chg'; chg.onclick=e=>{ e.stopPropagation(); open=true; syncUI(); };
+ chipEls.ledmini.after(sub); sub.after(chg);
+ const small=()=>chipEls.ledmini.querySelector('small');
+ function vis(){ sub.hidden=!st.acc.ledmini||!open; chg.hidden=!st.acc.ledmini||open; chg.innerHTML=sh(MO[st.lm][0])+' · <b class="cw">change</b>'; }
+ function set(i){ st.lm=i; st.pend.ledmini=false; LM.price=MO[i][1]; LM.name=MO[i][0]; small().textContent=LM.price?plus(LM.price):'';
+  [...sub.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i)); open=false; vis(); readout(); if(rqs.open) showSum(); }
+ const _s=syncUI; syncUI=function(){
+  if(!st.acc.ledmini){ open=true; st.lm=0; st.pend.ledmini=true; LM.name='LED Mini lighting'; LM.price=0; [...sub.children].forEach(b=>b.setAttribute('aria-pressed',false)); }
+  const r=_s.apply(this,arguments); if(st.pend.ledmini) small().textContent=''; vis(); return r; };
+ LM.price=0; syncUI(); readout();
+})();
+</script>
 </body></html>
