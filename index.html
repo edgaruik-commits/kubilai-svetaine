@@ -374,6 +374,7 @@ const SITE = {
     {id:'ladder', name:'Wooden steps',              price:160, desc:'Wooden steps outside plus a step inside the tub'},
     {id:'filter', name:'Filtration system',          price:0, desc:'Water filtration'}
     ,{id:'wifi',   name:'Hot tub control (Wi-Fi)',    price:150, desc:'Control your hot tub via Wi-Fi'}
+    ,{id:'eheat',  name:'Electric heating system 3 kW', price:200, desc:'3 kW electric heater that keeps the water warm'}   /* set the real price here */
     ,{id:'headrest', name:'Headrests', price:25, desc:'Soft head pillows for the tub seats, 25 € each'}   /* price per pillow: edit UNIT in the Headrests script at the end of the page too */
   ],
   defaultAccessories: ['stove'],
@@ -1065,6 +1066,20 @@ function build(){
         }   // small local light just in front of the lamp
       g.scale.setScalar(.75);   // lamp set into the wall like on the real tub: chrome ring + frosted lens
       } }
+  if(A.headrest&&st.hr>0){   // headrests: soft dark pillows draped over the acrylic rim (part on the inner wall, part lying over the rim top), spread round the tub away from the stove
+    const n=Math.min(8,st.hr), PT=.05, W=.30, LS=.13, RR=.075+.004, TH=2.3, cy=H+.06;   // rim = tube of radius .075 at height H+.06
+    const pm=window.__pilM2||(window.__pilM2=new THREE.MeshPhongMaterial({color:0x1d2326,specular:0x3a4246,shininess:22,side:THREE.DoubleSide}));   // solid, not see-through
+    const geoFor=cx=>{ const C=window.__pilC||(window.__pilC={}), key=cx.toFixed(4); if(C[key]) return C[key];
+      const g=new THREE.BoxGeometry(1,1,W,4,24,16), P=g.attributes.position, L=LS+RR*TH;
+      for(let v=0;v<P.count;v++){ const u=P.getX(v)+.5, t=P.getY(v)+.5, z=P.getZ(v), e=Math.max(Math.abs(2*t-1),Math.abs(2*z/W)), k=1-.8*Math.pow(e,5);
+        const off=RR+u*PT*k, sl=t*L; let x,y;
+        if(sl<LS){ x=cx-off; y=cy-(LS-sl); } else { const f=Math.PI-(sl-LS)/RR; x=cx+off*Math.cos(f); y=cy+off*Math.sin(f); }
+        P.setXYZ(v,x,y,-z*(1-.07*Math.pow(Math.abs(2*t-1),6))); }   // -z keeps the faces pointing outward after bending
+      g.computeVertexNormals(); return C[key]=g; };
+    const put=(px,pz,ang,cx)=>{ const m=new THREE.Mesh(geoFor(cx),pm); m.position.set(px,0,pz); m.rotation.y=-ang; m.castShadow=true; tub.add(m); };
+    if(!sq){ const A0=.7; for(let i=0;i<n;i++) put(0,0,A0+(i+.5)*(2*Math.PI-2*A0)/n,R-.02); }
+    else { const SL=[[-1,0,-.45],[-1,0,.45],[0,1,-.35],[0,-1,-.35],[0,1,.35],[0,-1,.35],[1,0,-.55],[1,0,.55]];
+      SL.slice(0,n).forEach(([x,z,o])=>put(x?0:o*HX,z?0:o*HZ,Math.atan2(z,x),(x?HX:HZ)-.02)); } }
   if(A.cover){ const lm=new THREE.MeshStandardMaterial({color:new THREE.Color(COVC[st.coverC||0][1]),roughness:st.coverT?.3:.7});
     const um=lm, TH=.09, LY=H+.17;   // underside is the same chosen colour; lid folds in half along the middle
     const mk=(side)=>{   // side=+1 -> half over +x (stove side, stays fixed), side=-1 -> half over -x (folds up and over onto the stove side)
@@ -2139,12 +2154,16 @@ window.sandUnder=function(g,A){
  function upd(){ hl.hidden=!!st.ledPos; hl.textContent='Lamps at '+hrs(); fl.hidden=!!st.pend.led||!fo; [...fl.querySelectorAll('button')].forEach(b=>b.setAttribute('aria-pressed',String(pkd&&+b.dataset.p===st.ledPos))); }
  const _sl=setLed; setLed=function(){ const r=_sl.apply(this,arguments); fo=true; pkd=false; name(); upd(); return r; };
  const _lv=lvis; lvis=function(){ const r=_lv.apply(this,arguments); if(!st.acc.led) st.ledPos=0; if(!lOpen) fo=false; upd(); return r; };
+ const okB=sub3.querySelector('.spok'), ok0=okB&&okB.onclick;   /* OK does not close the menu until Standard / Individual is picked */
+ if(okB) okB.onclick=e=>{ if(fo&&!pkd&&!fl.hidden){ e.stopPropagation(); fl.classList.remove('need'); void fl.offsetWidth; fl.classList.add('need'); return; } fl.classList.remove('need'); ok0.call(okB,e); };
  upd();
 })();
 </script>
 <style>
 .sub.lpop .lfly{position:absolute;z-index:2;left:calc(100% - 34px);top:var(--lflyT,120px);width:130px;display:flex;flex-direction:column;gap:5px;padding:8px;background:#fff;border:1px solid #cfd6d6;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 .sub.lpop .lfly[hidden]{display:none!important}
+.sub.lpop .lfly.need{border-color:#c0152a;box-shadow:0 0 0 2px rgba(192,21,42,.35),0 4px 14px rgba(0,0,0,.15);animation:lflyNeed .35s}
+@keyframes lflyNeed{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .sub.lpop .lfly .lpt{white-space:nowrap}
 .sub.lpop .lfly .lhrs{font-size:.68rem;color:#4a5a5e;line-height:1.3;margin-top:2px}
 .sub.lpop .lfly button{white-space:nowrap;width:100%;text-align:left;font:inherit;font-size:.7rem;padding:4px 8px;border-radius:999px;border:1.5px solid #b9c6c2;background:#fff;color:#10282f;cursor:pointer}
@@ -2163,6 +2182,8 @@ window.sandUnder=function(g,A){
   box.appendChild(fl);
   const os=window[setFn]; window[setFn]=function(){ const r=os.apply(this,arguments); fo=true; pkd=false; nm(); upd(); return r; };
   const ov=window[visFn]; window[visFn]=function(){ const r=ov.apply(this,arguments); if(!st.acc[accKey]) st[key]=0; if(box.hidden) fo=false; upd(); return r; };
+  const okB=box.querySelector('.spok'), ok0=okB&&okB.onclick;   /* OK does not close the menu until Standard / Individual is picked */
+  if(okB) okB.onclick=e=>{ if(fo&&!pkd&&!fl.hidden){ e.stopPropagation(); fl.classList.remove('need'); void fl.offsetWidth; fl.classList.add('need'); return; } fl.classList.remove('need'); ok0.call(okB,e); };
   upd(); }
  mkPlace(sub,'jetPos','Jet placement',()=>HY.name,v=>HY.name=v,'hydro','hydro','setJets','jvis');
  mkPlace(subZ,'airPos','Nozzle placement',()=>AD.name,v=>AD.name=v,'air','air','setAir','avis');
@@ -2208,6 +2229,10 @@ window.sandUnder=function(g,A){
 <style>
 .acc .hrs{align-self:stretch;width:100%;flex-direction:column;align-items:stretch;gap:2px;padding:44px 22px 8px 22px;box-sizing:border-box}
 .hrs[hidden]{display:none!important}
+.acc .sub.hrs{display:flex;flex-direction:column!important;flex-wrap:nowrap!important;align-items:stretch!important}
+.acc .sub.hrs .hrf{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:6px}
+.acc .sub.hrs .hrf .hrl{width:auto;margin:0}
+.acc .sub.hrs .hrok{display:inline-block!important;margin:0!important;padding:4px 14px!important}
 .hrs .hrw{position:relative;width:100%;height:30px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;outline:0}
 .hrs .hrk{position:absolute;left:0;right:0;top:12px;height:6px;border-radius:3px;background:#6f8fc4}
 .hrs .hrd{position:absolute;top:5px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:#7f98c8;border:2px solid #fff;box-shadow:0 0 0 1px #6f8fc4,0 1px 4px rgba(0,0,0,.3);cursor:grab;box-sizing:border-box}
@@ -2216,7 +2241,7 @@ window.sandUnder=function(g,A){
 .hrs .hrb{position:absolute;left:50%;bottom:24px;width:28px;height:28px;margin-left:-14px;background:#2f5aa8;border-radius:50% 50% 50% 0;transform:rotate(-45deg);pointer-events:none}
 .hrs .hrb i{display:block;width:28px;height:28px;font:700 13px/28px system-ui,sans-serif;font-style:normal;color:#fff;text-align:center;transform:rotate(45deg)}
 .hrs .hrl{text-align:center;font-size:.85rem;font-weight:600;color:#10282f;margin-top:6px}
-.hrs .hrt{text-align:center;font-size:.95rem;font-weight:600;color:#2f5aa8}
+.hrs .hrok{align-self:center!important;width:auto!important;margin-top:8px;padding:4px 18px;border-radius:999px;font-weight:700;border:1.5px solid #10282f;background:#10282f;color:#fff;cursor:pointer;font-size:.8rem;text-align:center!important}
 </style>
 <script>
 /* Headrests: click the chip, then drag the dot (or click the line / use arrow keys) to choose 1-8 pillows. UNIT = price of one pillow */
@@ -2224,13 +2249,19 @@ window.sandUnder=function(g,A){
  const UNIT=25, MIN=1, MAX=8, DEF=2;
  const HR=S.accessories.find(x=>x.id==='headrest'); st.hr=0;
  const sub=document.createElement('div'); sub.className='sub hrs'; sub.hidden=true;
- sub.innerHTML='<div class="hrw" tabindex="0" role="slider" aria-label="Number of headrests" aria-valuemin="'+MIN+'" aria-valuemax="'+MAX+'"><div class="hrk"></div><div class="hrd"><span class="hrb"><i></i></span></div></div><div class="hrl"></div><div class="hrt"></div>';
+ sub.innerHTML='<div class="hrw" tabindex="0" role="slider" aria-label="Number of headrests" aria-valuemin="'+MIN+'" aria-valuemax="'+MAX+'"><div class="hrk"></div><div class="hrd"><span class="hrb"><i></i></span></div></div><div class="hrf"><div class="hrl"></div><button type="button" class="hrok">OK</button></div>';
  chipEls.headrest.after(sub);
- const w=sub.querySelector('.hrw'), dot=sub.querySelector('.hrd'), bub=sub.querySelector('.hrb i'), lab=sub.querySelector('.hrl'), tot=sub.querySelector('.hrt');
+ const chg=document.createElement('button'); chg.type='button'; chg.className='chg'; chg.hidden=true; sub.after(chg);
+ let hOpen=true;
+ const w=sub.querySelector('.hrw'), dot=sub.querySelector('.hrd'), bub=sub.querySelector('.hrb i'), lab=sub.querySelector('.hrl');
+ const chip=()=>{ chipEls.headrest.querySelector('small').textContent=st.acc.headrest&&st.hr?plus(UNIT*st.hr):''; };
+ function vis(){ sub.hidden=!st.acc.headrest||!hOpen; chg.hidden=!st.acc.headrest||hOpen; chg.innerHTML=st.hr+' pcs \u00b7 <b class="cw">change</b>'; }
+ sub.querySelector('.hrok').onclick=e=>{ e.stopPropagation(); hOpen=false; vis(); };
+ chg.onclick=e=>{ e.stopPropagation(); hOpen=true; vis(); setTimeout(reveal,60); };
  const eur=n=>n.toFixed(2)+' \u20ac';
- function paint(){ const n=st.hr||DEF; dot.style.left=((n-MIN)/(MAX-MIN)*100)+'%'; bub.textContent=n; w.setAttribute('aria-valuenow',n); lab.textContent='1 pc = '+eur(UNIT); tot.textContent=eur(UNIT*n); }
+ function paint(){ const n=st.hr||DEF; dot.style.left=((n-MIN)/(MAX-MIN)*100)+'%'; bub.textContent=n; w.setAttribute('aria-valuenow',n); lab.textContent='1 pc = '+eur(UNIT); }
  function apply(){ HR.price=UNIT*st.hr; HR.name='Headrests \u00b7 '+st.hr+' pcs'; }
- function set(n){ n=Math.max(MIN,Math.min(MAX,n)); if(n===st.hr) return; st.hr=n; apply(); paint(); readout(); if(rqs.open) showSum(); }
+ function set(n){ n=Math.max(MIN,Math.min(MAX,n)); if(n===st.hr) return; st.hr=n; apply(); paint(); chip(); build(); readout(); if(rqs.open) showSum(); }
  function fromX(e){ const r=w.getBoundingClientRect(); set(MIN+Math.round(Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*(MAX-MIN))); }
  let drag=false;
  w.addEventListener('click',e=>e.stopPropagation());
@@ -2244,12 +2275,22 @@ window.sandUnder=function(g,A){
   if(sr.bottom>cr.bottom-pad) c.scrollTo({top:c.scrollTop+(sr.bottom-cr.bottom)+pad,behavior:'smooth'});
   else if(sr.top<cr.top+pad) c.scrollTo({top:c.scrollTop-(cr.top-sr.top)-pad,behavior:'smooth'}); }
  const _s=syncUI; syncUI=function(){
-  if(st.acc.headrest){ if(!st.hr) st.hr=DEF; apply(); } else { st.hr=0; HR.price=UNIT; HR.name='Headrests'; }
+  if(st.acc.headrest){ if(!st.hr){ st.hr=DEF; hOpen=true; } apply(); } else { st.hr=0; hOpen=true; HR.price=UNIT; HR.name='Headrests'; }
   const r=_s.apply(this,arguments);
-  chipEls.headrest.querySelector('small').textContent='';   // price is shown under the slider
-  const opening=st.acc.headrest&&sub.hidden;
-  sub.hidden=!st.acc.headrest; paint(); if(opening) setTimeout(reveal,60); return r; };
+  chip();   // price is shown on the menu item
+  const opening=st.acc.headrest&&hOpen&&sub.hidden;
+  vis(); paint(); if(opening) setTimeout(reveal,60); return r; };
  syncUI(); readout();
 })();
 </script>
+<style>/* request dialog: summary table fits its column (long rows wrap, prices never cut off) */
+@media(min-width:821px){#rqf .rqg{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)!important;gap:28px!important}}
+#rqf .rqg>*{min-width:0}
+#rqf #sum{width:100%;max-width:100%}
+#rqf #sum td.wide,#rqf #sum td.val,#rqf #sum td.dsc{white-space:normal!important;overflow-wrap:break-word}
+#rqf #sum td.pr{white-space:nowrap!important;padding-left:10px}
+#rqf #sum tr.tt .tl{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+#rqf #sum td{padding-top:3px!important;padding-bottom:3px!important;line-height:1.25!important}
+#rqf #sum tr.tt td{padding-top:8px!important}
+</style>
 </body></html>
