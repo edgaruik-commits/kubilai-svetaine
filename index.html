@@ -822,7 +822,7 @@ function build(){
       const P=lg.attributes.position, uv=lg.attributes.uv, Rp=R-.07; for(let q=0;q<P.count;q++) uv.setXY(q,.5+P.getZ(q)/(2*Rp),.5+P.getX(q)/(2*Rp)); uv.needsUpdate=true;
       const c=acr.clone().multiplyScalar(2.0); c.r=Math.min(c.r,1.7); c.g=Math.min(c.g,1.7); c.b=Math.min(c.b,1.7); window.LINER2.anisotropy=renderer.capabilities.getMaxAnisotropy();
       add(lg,new THREE.MeshLambertMaterial({map:window.LINER2,color:c,side:THREE.DoubleSide,name:'liner2'}),0,0,0); }   /* matte: the photo already carries its own light */
-    else { lg.dispose(); const v=window.RTUB(); tub.add(v.root); mkRay(v);   // UI "Shape 2": the Apvalus kubilas liner 1:1
+    else { lg.dispose(); const v=window.RTUB(); v.mat.color.copy(acr); tub.add(v.root); mkRay(v);   // liner colour = chosen gelcoat / acrylic   // UI "Shape 2": the Apvalus kubilas liner 1:1
       if(R-.095>1.0){ const fr=new THREE.Mesh(new THREE.RingGeometry(.995,R-.02,128),v.mat); fr.rotation.x=-Math.PI/2; fr.position.y=.99; tub.add(fr); } }   // bigger tub: flat acrylic ring closes the gap to the rim
     const base=.12, top=yl+.1, d=top-base, sh=new THREE.Shape();
     if(!fo){   // shape 1: large rounded lounger at the back, curved front edge reaching toward the central well
@@ -831,7 +831,7 @@ function build(){
       sh.moveTo(-.84*k,-.40*k); sh.lineTo(-.23*k,-.27*k); sh.lineTo(-.23*k,.27*k); sh.lineTo(-.84*k,.40*k); sh.lineTo(-.84*k,-.40*k);
     }
   } else {   // square: the V2 tub 1:1
-    const v=window.V2TUB(wm); tub.add(v.root); v2water=v.water; mkRay(v);
+    const v=window.V2TUB(wm); window.V2M.shell.color.copy(acr); tub.add(v.root); v2water=v.water; mkRay(v);   // liner colour = chosen gelcoat / acrylic
     sqK={sx:1,sz:1,ky:1};
   }
   tub.traverse(o=>{ if(o.isMesh&&(o.material===am||o.material.name==='liner2')){ o.receiveShadow=false; o.castShadow=false; } });   /* no shadows inside the tub */
