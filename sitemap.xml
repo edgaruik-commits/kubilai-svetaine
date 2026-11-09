@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://forestkings.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://forestkings.com/forest-king-tub-about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://forestkings.com/forest-king-tub-gallery.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://forestkings.com/become-an-expert.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>https://forestkings.com/</loc><lastmod>2026-11-09</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://forestkings.com/forest-king-tub-about.html</loc><lastmod>2026-11-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://forestkings.com/forest-king-tub-gallery.html</loc><lastmod>2026-11-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/hot-tub-built-into-a-wpc-deck-with-steps-and-led-strip-lighting.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/wood-fired-hot-tub-with-integrated-stove-and-decorative-chimney-guard.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/dark-hot-tub-with-led-jets-under-a-pergola-with-string-lights.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/hot-tub-with-stainless-stove-panel-and-grey-acrylic-liner.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/thermowood-hot-tub-with-blue-liner-and-wooden-steps-in-summer.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/hot-tub-with-white-liner-and-drink-shelf-on-a-snowy-terrace.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/anthracite-hot-tub-with-external-stove-and-steps-in-a-garden.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/hot-tub-with-integrated-stove-wpc-cladding-and-steps.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/brown-thermowood-hot-tub-with-blue-liner-and-control-buttons.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/hot-tub-stove-with-glass-door-and-patterned-chimney-guard.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/dark-hot-tub-with-jets-led-lights-steps-and-handrail.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/hot-tub-with-integrated-stove-next-to-a-modern-house.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/thermowood-hot-tub-with-blue-liner-and-external-stove.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/snow-covered-hot-tub-at-night-with-lanterns.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/thermowood-hot-tub-on-a-deck-by-the-lake.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/hot-tub-stainless-steel-chimney-guard-with-flame-pattern.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/wood-fired-hot-tub-by-the-lake.jpg</image:loc></image:image>
+    <image:image><image:loc>https://forestkings.com/assets/img/gallery/wood-fired-hot-tub-with-dark-cover-on-a-wooden-deck.jpg</image:loc></image:image>
+  </url>
+  <url><loc>https://forestkings.com/become-an-expert.html</loc><lastmod>2026-11-09</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
