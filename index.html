@@ -94,7 +94,7 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 .rv{background:#f1f1f1;padding:48px 0;margin:30px 0 0}
 .rvh{text-align:center;font-family:Georgia,serif;font-size:30px;color:#1f3a34;margin:0 0 28px;text-transform:uppercase;letter-spacing:.5px}
 .rvwrap{display:flex;align-items:center;gap:12px}
-.rvtrack{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;flex:1;scrollbar-width:none;padding:4px}
+.rvtrack{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 4px;scroll-behavior:smooth;flex:1;scrollbar-width:none;padding:4px}
 .rvtrack::-webkit-scrollbar{display:none}
 .rvc{background:#fff;border-radius:16px;padding:20px;flex:0 0 calc((100% - 32px)/3);scroll-snap-align:start;box-sizing:border-box;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .rvhd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -160,7 +160,7 @@ footer{background:#2a2420;color:#d8d0c2;padding:36px 0;font-size:14px;margin-top
 #trust .tcc p{grid-column:1/-1;font-size:.85rem;line-height:1.5;align-self:start}
 @media(min-width:561px){.rv .rvb{display:block}}
 #trust .tcw{gap:12px}
-#trust .tc{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;flex:1;min-width:0;scrollbar-width:none;padding:4px;-webkit-overflow-scrolling:touch}
+#trust .tc{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 4px;scroll-behavior:smooth;flex:1;min-width:0;scrollbar-width:none;padding:4px;-webkit-overflow-scrolling:touch}
 #trust .tc::-webkit-scrollbar{display:none}
 #trust .tcc{flex:0 0 calc((100% - 28px)/3);scroll-snap-align:start;box-sizing:border-box}
 #trust .tcw .rvb{display:block}
@@ -268,7 +268,7 @@ footer nav{gap:10px 16px}
 .vbar button{font-size:.66rem;padding:3px 8px;border-width:1px}
 }
 .wF:not(:has(> :not([hidden]))){display:none}
-</style><style>#oFib,#oAcr,#oWood,#oWpc{display:flex!important;flex-wrap:nowrap!important;gap:8px!important;padding:2px;overflow-x:auto;scrollbar-width:none;max-width:182px;scroll-snap-type:x mandatory}   /* 3 colours visible, the rest scroll */
+</style><style>#oFib,#oAcr,#oWood,#oWpc{display:flex!important;flex-wrap:nowrap!important;gap:8px!important;padding:2px;overflow-x:auto;scrollbar-width:none;max-width:182px;scroll-snap-type:x mandatory;scroll-padding:0 2px}   /* 3 colours visible, the rest scroll */
 #oFib button,#oAcr button,#oWood button,#oWpc button{scroll-snap-align:start}
 #oFib button,#oAcr button,#oWood button,#oWpc button{flex:none}
 #oWood::-webkit-scrollbar,#oWpc::-webkit-scrollbar{display:none;height:0}
@@ -725,8 +725,8 @@ function posForm(){ const o=$('oForm'); if(!o.classList.contains('on'))return; c
   else { o.style.left='14px'; o.style.bottom=(sr.bottom-pr.top+8)+'px'; } }   // mobile: above the menu
 function syncForm(){ const id=S.shapes[st.s].id, r=(id==='round'||id==='square')&&!!st.fo; $('oForm').classList.toggle('on',r);
   [...$('oForm').querySelectorAll('button')].forEach(b=>{ const sqb=b.dataset.k==='s'; b.hidden=sqb!==(id==='square'); b.setAttribute('aria-pressed',String(+b.dataset.i===(sqb?st.sf:st.lf))); }); const ft=$('oForm').querySelector('.ft'); if(r) posForm(); }
-LFORMS.forEach((f,i)=>{ const b=document.createElement('button'); b.type='button'; b.title=b.ariaLabel='Inner '+f.n.toLowerCase(); b.innerHTML='<img alt="" src="'+f.i+'"><span>'+f.n+'</span>'; b.style.order=(i===1?1:2);   /* Shape 2 shown first */ b.dataset.k='r'; b.dataset.i=i; b.onclick=()=>{st.lf=i;st.fo=false;syncForm();build();readout();}; $('oForm').appendChild(b); });
-SQFORMS.forEach((f,i)=>{ const b=document.createElement('button'); b.type='button'; b.title=b.ariaLabel='Inner '+f.n.toLowerCase(); b.innerHTML='<img alt="" src="'+f.i+'"><span>'+f.n+'</span>'; b.dataset.k='s'; b.dataset.i=i; b.style.order=3+i; b.onclick=()=>{st.sf=i;st.fo=false;syncForm();build();readout();}; $('oForm').appendChild(b); });
+LFORMS.forEach((f,i)=>{ const b=document.createElement('button'); b.type='button'; b.title=b.ariaLabel='Inner '+f.n.toLowerCase(); b.innerHTML='<img alt="" src="'+f.i+'" width="900" height="900"><span>'+f.n+'</span>'; b.style.order=(i===1?1:2);   /* Shape 2 shown first */ b.dataset.k='r'; b.dataset.i=i; b.onclick=()=>{st.lf=i;st.fo=false;syncForm();build();readout();}; $('oForm').appendChild(b); });
+SQFORMS.forEach((f,i)=>{ const b=document.createElement('button'); b.type='button'; b.title=b.ariaLabel='Inner '+f.n.toLowerCase(); b.innerHTML='<img alt="" src="'+f.i+'" width="900" height="900"><span>'+f.n+'</span>'; b.dataset.k='s'; b.dataset.i=i; b.style.order=3+i; b.onclick=()=>{st.sf=i;st.fo=false;syncForm();build();readout();}; $('oForm').appendChild(b); });
 (function(){ const o=$('oForm'); const t=document.createElement('div'); t.className='ft'; t.textContent='Inner shape'; o.insertBefore(t,o.firstChild); (o.closest('.stage')||$('c').parentNode).appendChild(o); })();
 /* press() styles every child, so skip the title: keep buttons only */
 addEventListener('resize',()=>posForm()); document.querySelector('.panel').addEventListener('scroll',()=>posForm());
@@ -3096,7 +3096,7 @@ window.sandUnder=function(g,A){
  const ref=o.querySelector('button img');
  const b=document.createElement('button'); b.type='button'; b.className='icat'; b.dataset.k='c'; b.style.order=99;
  b.title=b.ariaLabel='Inner shape from our catalogue: send us your details';
- b.innerHTML='<img alt="" src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20160%20120%27%3E%3Crect%20width%3D%27160%27%20height%3D%27120%27%20fill%3D%27%23f4efe6%27/%3E%3Cg%20transform%3D%27translate%2848%2022%29%27%3E%3Crect%20x%3D%276%27%20y%3D%274%27%20width%3D%2758%27%20height%3D%2776%27%20rx%3D%274%27%20fill%3D%27%232a4540%27/%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2758%27%20height%3D%2776%27%20rx%3D%274%27%20fill%3D%27%233d5a54%27/%3E%3Crect%20x%3D%279%27%20y%3D%2712%27%20width%3D%2740%27%20height%3D%2726%27%20rx%3D%273%27%20fill%3D%27%23d9a85c%27/%3E%3Crect%20x%3D%279%27%20y%3D%2746%27%20width%3D%2740%27%20height%3D%274%27%20rx%3D%272%27%20fill%3D%27%23f4efe6%27/%3E%3Crect%20x%3D%279%27%20y%3D%2755%27%20width%3D%2728%27%20height%3D%274%27%20rx%3D%272%27%20fill%3D%27%23f4efe6%27%20opacity%3D%27.7%27/%3E%3C/g%3E%3Ccircle%20cx%3D%27122%27%20cy%3D%2788%27%20r%3D%2715%27%20fill%3D%27%23d9a85c%27/%3E%3Cpath%20d%3D%27M115%2088h14M122%2081v14%27%20stroke%3D%27%23fff%27%20stroke-width%3D%273.5%27%20stroke-linecap%3D%27round%27/%3E%3C/svg%3E"><span>Catalogue</span>';
+ b.innerHTML='<img alt="" src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20160%20120%27%3E%3Crect%20width%3D%27160%27%20height%3D%27120%27%20fill%3D%27%23f4efe6%27/%3E%3Cg%20transform%3D%27translate%2848%2022%29%27%3E%3Crect%20x%3D%276%27%20y%3D%274%27%20width%3D%2758%27%20height%3D%2776%27%20rx%3D%274%27%20fill%3D%27%232a4540%27/%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2758%27%20height%3D%2776%27%20rx%3D%274%27%20fill%3D%27%233d5a54%27/%3E%3Crect%20x%3D%279%27%20y%3D%2712%27%20width%3D%2740%27%20height%3D%2726%27%20rx%3D%273%27%20fill%3D%27%23d9a85c%27/%3E%3Crect%20x%3D%279%27%20y%3D%2746%27%20width%3D%2740%27%20height%3D%274%27%20rx%3D%272%27%20fill%3D%27%23f4efe6%27/%3E%3Crect%20x%3D%279%27%20y%3D%2755%27%20width%3D%2728%27%20height%3D%274%27%20rx%3D%272%27%20fill%3D%27%23f4efe6%27%20opacity%3D%27.7%27/%3E%3C/g%3E%3Ccircle%20cx%3D%27122%27%20cy%3D%2788%27%20r%3D%2715%27%20fill%3D%27%23d9a85c%27/%3E%3Cpath%20d%3D%27M115%2088h14M122%2081v14%27%20stroke%3D%27%23fff%27%20stroke-width%3D%273.5%27%20stroke-linecap%3D%27round%27/%3E%3C/svg%3E" width="900" height="900" style="object-fit:cover"><span>Catalogue</span>';
  o.appendChild(b);
  const fit=()=>{ const r=o.querySelector('button:not(.icat) img'), i=b.querySelector('img'); if(r&&r.naturalWidth){ i.style.aspectRatio=r.naturalWidth+'/'+r.naturalHeight; i.style.objectFit='cover'; } };
  if(ref){ ref.complete?fit():ref.addEventListener('load',fit); }
@@ -3391,5 +3391,12 @@ window.sandUnder=function(g,A){
   if(sess) token().then(start).catch(()=>{ clearSess(); login(); }); else login();
 })();
 
+</script>
+<script type="text/fk">
+/* Images built by the scripts above (pop-up photos) get width / height = their own size, so the browser can reserve their space.
+   The size on screen is still set by CSS, so nothing looks different. */
+(function(){ document.querySelectorAll("img:not([width])").forEach(function(i){
+  var set=function(){ if(i.naturalWidth&&!i.getAttribute("width")){ i.setAttribute("width",i.naturalWidth); i.setAttribute("height",i.naturalHeight); } };
+  if(i.complete) set(); else i.addEventListener("load",set,{once:true}); }); })();
 </script>
 </body></html>
