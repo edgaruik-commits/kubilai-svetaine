@@ -1,6 +1,9 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hot Tub with Wood-Fired Stove | Forest Kings Tub</title>
 <meta name="description" content="Wood-fired hot tubs made in Lithuania: thermowood, acrylic or gelcoat inner, stainless steel stove. Configure your hot tub in 3D and get a quote. Delivery across Europe, the UK and the USA.">
 <link rel="canonical" href="https://forestkings.com/">
+<link rel="preconnect" href="https://lyxjkfoypxglufvyavfd.supabase.co" crossorigin>
+<link rel="preload" href="assets/fk-data.js?v=20261108" as="script">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" as="script">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Forest Kings Tub">
 <meta property="og:title" content="Forest Kings – wood-fired hot tubs from Lithuania">
 <meta property="og:description" content="Wood-fired hot tubs made in Lithuania: thermowood, acrylic or gelcoat inner, stainless steel stove. Configure your hot tub in 3D and get a quote. Delivery across Europe, the UK and the USA.">
@@ -358,11 +361,10 @@ footer nav{gap:10px 16px}
 <div class="ckc"><div><b>Marketing</b><span>Used to show relevant offers and measure advertising.</span></div><label class="sw2t"><input type="checkbox" id="ckMkt"><i></i><em>Off</em></label></div>
 <div class="ckb ckf"><button type="button" class="b" data-ck="reject">Reject all</button><button type="button" class="b o" data-ck="save">Save selection</button><button type="button" class="b" data-ck="accept">Accept all</button></div></dialog>
 <div hidden><span id="brand"></span><span id="nav"></span><span id="h1"></span><span id="lead"></span><span id="cta"></span><span id="fTitle"></span><span id="feat"></span><span id="mTitle"></span><table id="mTable"></table><span id="dTitle"></span><span id="markets"></span><span id="cTitle"></span><span id="cText"></span><span id="fName"></span><span id="fMail"></span><span id="fLand"></span><span id="fMsg"></span><span id="fSend"></span><select id="selLand"></select><span id="foot"></span><form id="form"></form></div>
-<script src="assets/fk-data.js?v=20261108"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* Forest Kings: prices and configurator settings come from the database (Supabase table kv: prices_v1 = price list, site_cfg_v1 = presets / default / hidden options).
-   The page scripts below are type="text/fk" and run only after these settings arrived (max. 3 s; without an answer the built-in prices are used). */
+   The page scripts below are type="text/fk" and run only after these settings arrived (max. 3 s; without an answer the built-in prices are used)
+   and after the 3D data (assets/fk-data.js) and three.js have loaded. All three are fetched at the same time, not one after the other. */
 (function(){
   var SB='https://lyxjkfoypxglufvyavfd.supabase.co', KEY='sb_publishable_OPiaZ6q25j5fWZ-0lkBtJA_yNBkyLim';
   window.FK_SB={url:SB,key:KEY};
@@ -382,7 +384,16 @@ footer nav{gap:10px 16px}
         var n=document.createElement('script'); n.text=o.text; o.parentNode.replaceChild(n,o); });
     } finally { window.addEventListener=wa; document.addEventListener=da; }
   }
-  function ready(){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run(); }
+  function start(){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run(); }
+  /* waiting for: settings, 3D data, three.js */
+  var waiting=3, settingsDone=false;
+  function settle(){ if(--waiting===0) start(); }
+  function ready(){ if(settingsDone) return; settingsDone=true; settle(); }
+  ['assets/fk-data.js?v=20261108','https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'].forEach(function(src){
+    var s=document.createElement('script'); s.src=src; s.async=false;   /* run in this order, without holding up the page */
+    s.onload=settle; s.onerror=function(){ console.error('Could not load '+src); settle(); };
+    document.head.appendChild(s);
+  });
   var ac=window.AbortController?new AbortController():null, tmo=setTimeout(function(){ if(ac) ac.abort(); ready(); },3000);
   fetch(SB+'/rest/v1/kv?select=key,value&key=in.(prices_v1,site_cfg_v1)',{headers:{apikey:KEY},cache:'no-store',signal:ac?ac.signal:undefined})
     .then(function(r){ return r.ok?r.json():[]; })
