@@ -347,7 +347,7 @@ footer nav{gap:10px 16px}
 <div class="ckc"><div><b>Marketing</b><span>Used to show relevant offers and measure advertising.</span></div><label class="sw2t"><input type="checkbox" id="ckMkt"><i></i><em>Off</em></label></div>
 <div class="ckb ckf"><button type="button" class="b" data-ck="reject">Reject all</button><button type="button" class="b o" data-ck="save">Save selection</button><button type="button" class="b" data-ck="accept">Accept all</button></div></dialog>
 <div hidden><span id="brand"></span><span id="nav"></span><span id="h1"></span><span id="lead"></span><span id="cta"></span><span id="fTitle"></span><span id="feat"></span><span id="mTitle"></span><table id="mTable"></table><span id="dTitle"></span><span id="markets"></span><span id="cTitle"></span><span id="cText"></span><span id="fName"></span><span id="fMail"></span><span id="fLand"></span><span id="fMsg"></span><span id="fSend"></span><select id="selLand"></select><span id="foot"></span><form id="form"></form></div>
-<script src="assets/fk-data.js?v=1"></script>
+<script src="assets/fk-data.js?v=20261108"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* Forest Kings: prices and configurator settings come from the database (Supabase table kv: prices_v1 = price list, site_cfg_v1 = presets / default / hidden options).
@@ -2193,7 +2193,14 @@ function saveRequest(data,subject){
 function trackLead(subject,data){
   try{ if(typeof window.gtag==='function') gtag('event','generate_lead',{form_name:String(subject).replace(/ - .*$/,''),country:(data&&(data.delivery_country||data.country))||''}); }catch(e){}
 }
+/* Spam guard: every form gets a field people never see (bots fill it in), and nothing is sent within 3 s of opening the page.
+   A bot is shown the normal "sent" result, but nothing is e-mailed or saved. */
+document.querySelectorAll('form').forEach(f=>{ const i=document.createElement('input');
+  i.type='text'; i.name='fk_website'; i.tabIndex=-1; i.autocomplete='off'; i.setAttribute('aria-hidden','true');
+  i.style.cssText='position:absolute;left:-9999px;width:1px;height:1px;opacity:0'; f.appendChild(i); });
+const looksLikeBot=()=>performance.now()<3000||[...document.querySelectorAll('input[name="fk_website"]')].some(i=>i.value);
 async function sendMail(data,subject,attach){
+  if(looksLikeBot()) return true;
   saveRequest(data,subject);
   const r=await sendMail0(data,subject,attach);
   if(r===true) trackLead(subject,data);
