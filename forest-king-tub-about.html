@@ -28,6 +28,10 @@ h2{font:700 30px Georgia,serif;margin:56px 0 24px;color:#1f3a34}
 .loc h3{font:700 19px Georgia,serif;color:#1f3a34;margin-bottom:6px}
 .loc address{font-style:normal;line-height:1.6;margin-bottom:14px}
 .loc iframe{display:block;width:100%;height:260px;border:0;border-radius:8px;background:#efeadf}
+.mapph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;height:260px;padding:16px;border-radius:8px;background:#efeadf;text-align:center;font-size:14px;color:#5d544b}
+.mapph a{color:inherit}
+.mapbtn{font:600 15px system-ui,sans-serif;padding:10px 20px;border:0;border-radius:8px;background:#d98a1c;color:#1a1410;cursor:pointer}
+.mapbtn:hover{background:#c47a12}
 .loc .ml{display:inline-block;margin-top:12px;font-weight:600;color:#1f3a34}
 .tc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
 .tcc{background:#fff;border:1px solid #e6e0d3;border-radius:18px;padding:22px}
@@ -71,7 +75,7 @@ footer nav{gap:10px 16px}
 }
 @media(max-width:700px){
 .hero{padding:22px 0}.hero h1{font-size:24px}.hero p{font-size:16px}
-.intro{gap:20px}.facts{padding:4px 16px}.loc{padding:16px}.loc iframe{height:220px}
+.intro{gap:20px}.facts{padding:4px 16px}.loc{padding:16px}.loc iframe{height:220px}.loc .mapph{height:220px}
 .tc{grid-template-columns:1fr}.tcc{padding:18px}
 .mk{grid-template-columns:1fr}
 .ct .b{display:block;text-align:center;margin:0 0 10px}
@@ -97,7 +101,7 @@ footer nav{gap:10px 16px}
 <div class="loc">
 <h3>Our workshop</h3>
 <address>Vytauto g. 9, Meškučių k.,<br>LT-68129 Marijampolė, Lithuania</address>
-<iframe title="Forest Kings Tub on Google Maps" src="https://www.google.com/maps?q=Vytauto%20g.%209%2C%20Me%C5%A1ku%C4%8Di%C5%B3%20k.%2C%20LT-68129%20Marijampol%C4%97%2C%20Lithuania&amp;z=19&amp;output=embed" width="600" height="300" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div class="mapph" data-src="https://www.google.com/maps?q=Vytauto%20g.%209%2C%20Me%C5%A1ku%C4%8Di%C5%B3%20k.%2C%20LT-68129%20Marijampol%C4%97%2C%20Lithuania&amp;z=19&amp;output=embed"><p>The map is provided by Google Maps. When you show it, your IP address is sent to Google (<a href="Privacy_Policy_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">privacy policy</a>).</p><button type="button" class="mapbtn">Show map</button></div>
 <a class="ml" href="https://www.google.com/maps?q=Vytauto%20g.%209%2C%20Me%C5%A1ku%C4%8Di%C5%B3%20k.%2C%20LT-68129%20Marijampol%C4%97%2C%20Lithuania&amp;z=19" target="_blank" rel="noopener">Open in Google Maps</a>
 </div>
 </div>
@@ -126,11 +130,21 @@ footer nav{gap:10px 16px}
 /* Map: put the exact coordinates here (Google Maps: right-click the building > first line "54.xxxxx, 23.xxxxx").
    With coordinates the map opens exactly there at zoom 19 (about 50 m scale). Without them it falls back to the address. */
 var MAP={lat:54.51749512045698,lng:23.3033435702284,zoom:17};
+/* The map is loaded from Google only after the visitor clicks "Show map" (until then nothing is sent to Google). */
 (function(){
- if(MAP.lat===null||MAP.lng===null) return;
- var ll=MAP.lat+','+MAP.lng;
- document.querySelector('.loc iframe').src='https://www.google.com/maps?q='+ll+'&ll='+ll+'&z='+MAP.zoom+'&output=embed';
- document.querySelector('.loc .ml').href='https://www.google.com/maps?q='+ll+'&z='+MAP.zoom;
+ var ph=document.querySelector('.loc .mapph'); if(!ph) return;
+ var src=ph.getAttribute('data-src');
+ if(MAP.lat!==null&&MAP.lng!==null){
+  var ll=MAP.lat+','+MAP.lng;
+  src='https://www.google.com/maps?q='+ll+'&ll='+ll+'&z='+MAP.zoom+'&output=embed';
+  document.querySelector('.loc .ml').href='https://www.google.com/maps?q='+ll+'&z='+MAP.zoom;
+ }
+ ph.querySelector('.mapbtn').addEventListener('click',function(){
+  var f=document.createElement('iframe');
+  f.title='Forest Kings Tub on Google Maps'; f.src=src; f.allowFullscreen=true;
+  f.referrerPolicy='no-referrer-when-downgrade';
+  ph.replaceWith(f); f.focus();
+ });
 })();
 </script>
 </body></html>
