@@ -4,8 +4,8 @@
 ### SEO
 EN: About us | Forest Kings Tub
 DE: Über uns – Badefass-Hersteller aus Litauen | Forest Kings Tub
-EN: content="Forest Kings Tub builds wood-fired hot tubs in Lithuania. Own production, CE-marked electrics, 2-year warranty, delivery to Germany, Austria, Switzerland and France.">
-DE: content="Forest Kings Tub baut Badefässer mit Holzofen in Litauen. Eigene Fertigung, CE-gekennzeichnete Elektrik, 2 Jahre Gewährleistung, Lieferung nach Deutschland, Österreich, in die Schweiz und nach Frankreich.">
+EN: content="Forest Kings Tub builds wood-fired hot tubs in Lithuania. Own production, CE-marked electrics, 2-year statutory warranty, delivery to Germany, Austria, Switzerland and France.">
+DE: content="Forest Kings Tub baut Badefässer mit Holzofen in Litauen. Eigene Fertigung, CE-gekennzeichnete Elektrik, 2 Jahre gesetzliche Gewährleistung, Lieferung nach Deutschland, Österreich, in die Schweiz und nach Frankreich.">
 
 ### hero, who we are
 EN: <h1>We build wood-fired hot tubs in Lithuania</h1><p>Forest Kings Tub is a manufacturer with its own production. Every tub is made to order from thermo wood, acrylic or gelcoat and a stainless steel stove, then delivered to your door.</p>
@@ -40,16 +40,16 @@ EN: <h3>Own production</h3><p>We are the manufacturer, not a reseller. That mean
 DE: <h3>Eigene Fertigung</h3><p>Wir sind Hersteller, kein Händler. Das heißt: direkte Antworten zu Materialien, Optionen und Lieferzeiten.</p>
 EN: <h3>CE-marked electrics</h3><p>All electrical parts are CE-marked. The declaration of conformity is available as a PDF.</p>
 DE: <h3>CE-gekennzeichnete Elektrik</h3><p>Alle elektrischen Teile sind CE-gekennzeichnet. Die Konformitätserklärung erhalten Sie als PDF.</p>
-EN: <h3>2-year warranty</h3><p>2-year statutory warranty.</p>
-DE: <h3>2 Jahre Gewährleistung</h3><p>2 Jahre gesetzliche Gewährleistung.</p>
+EN: <h3>Statutory warranty</h3><p>2-year statutory warranty.</p>
+DE: <h3>Gesetzliche Gewährleistung</h3><p>2 Jahre gesetzliche Gewährleistung.</p>
 EN: <h3>Clear price and delivery</h3><p>You get the final price including VAT and transport costs to your country before you decide.</p>
 DE: <h3>Klarer Preis, klare Lieferung</h3><p>Sie erhalten den Endpreis inkl. MwSt. und die Transportkosten in Ihr Land, bevor Sie sich entscheiden.</p>
 
 ### what we make
 EN: <h2>What we make</h2>
 DE: <h2>Was wir herstellen</h2>
-EN: <div><h3>Shapes</h3><p>Round, square or rectangular tubs in two sizes.</p></div>
-DE: <div><h3>Formen</h3><p>Runde, eckige oder rechteckige Badefässer in zwei Größen.</p></div>
+EN: <div><h3>Shapes</h3><p>Round or square tubs in two sizes.</p></div>
+DE: <div><h3>Formen</h3><p>Runde oder eckige Badefässer in zwei Größen.</p></div>
 EN: <div><h3>Materials</h3><p>Thermo wood cladding with an acrylic or gelcoat liner.</p></div>
 DE: <div><h3>Materialien</h3><p>Verkleidung aus Thermoholz mit Innenwanne aus Acryl oder Gelcoat.</p></div>
 EN: <div><h3>Heating</h3><p>Stainless steel wood-fired stove, inside or outside the tub. An electric 9 kW heater is also available.</p></div>
@@ -76,8 +76,8 @@ EN: <span>Customer reviews</span>
 DE: <span>Kundenbewertungen</span>
 EN: >Fast delivery</span>
 DE: >Schnelle Lieferung</span>
-EN: <span>24-month warranty</span><span>14-day right of withdrawal</span>
-DE: <span>24 Monate Garantie</span><span>14 Tage Widerrufsrecht</span>
+EN: <span>2-year statutory warranty</span><span>14-day right of withdrawal</span>
+DE: <span>2 Jahre gesetzliche Gewährleistung</span><span>14 Tage Widerrufsrecht</span>
 EN: Forest Kings – Hot Tubs Factory
 DE: Forest Kings – Badefass-Manufaktur
 EN: >About us</a>
@@ -102,7 +102,7 @@ DE: >Widerrufsbelehrung</a>
 EN: download="Privacy_Policy_Forest_Kings_Tub.pdf">Privacy policy</a>
 DE: download="Privacy_Policy_Forest_Kings_Tub.pdf">Datenschutzerklärung</a>
 EN: download="Warranty_Forest_Kings_Tub.pdf">Warranty</a>
-DE: download="Warranty_Forest_Kings_Tub.pdf">Garantie</a>
+DE: download="Warranty_Forest_Kings_Tub.pdf">Gewährleistung</a>
 EN: >Shipping & payment</a>
 DE: >Versand & Zahlung</a>
 EN: >User manual</a>

@@ -72,8 +72,8 @@ EN: <span>Customer reviews</span>
 DE: <span>Kundenbewertungen</span>
 EN: >Fast delivery</span>
 DE: >Schnelle Lieferung</span>
-EN: <span>24-month warranty</span><span>14-day right of withdrawal</span>
-DE: <span>24 Monate Garantie</span><span>14 Tage Widerrufsrecht</span>
+EN: <span>2-year statutory warranty</span><span>14-day right of withdrawal</span>
+DE: <span>2 Jahre gesetzliche Gewährleistung</span><span>14 Tage Widerrufsrecht</span>
 EN: Forest Kings – Hot Tubs Factory
 DE: Forest Kings – Badefass-Manufaktur
 EN: >About us</a>
@@ -98,7 +98,7 @@ DE: >Widerrufsbelehrung</a>
 EN: download="Privacy_Policy_Forest_Kings_Tub.pdf">Privacy policy</a>
 DE: download="Privacy_Policy_Forest_Kings_Tub.pdf">Datenschutzerklärung</a>
 EN: download="Warranty_Forest_Kings_Tub.pdf">Warranty</a>
-DE: download="Warranty_Forest_Kings_Tub.pdf">Garantie</a>
+DE: download="Warranty_Forest_Kings_Tub.pdf">Gewährleistung</a>
 EN: >Shipping & payment</a>
 DE: >Versand & Zahlung</a>
 EN: >User manual</a>

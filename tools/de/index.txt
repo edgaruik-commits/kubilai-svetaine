@@ -22,8 +22,8 @@ EN: "description":"Manufacturer of wood-fired hot tubs in Lithuania: thermowood,
 DE: "description":"Hersteller von Badefässern mit Holzofen in Litauen: Thermoholz, Acryl- oder Gelcoat-Innenwanne, Edelstahlofen, Lieferung in ganz Europa und in die USA."
 
 ### top bar, header, language switch
-EN: <span>Customer reviews</span><span id="dl">Fast delivery</span><span>24-month warranty</span><span>14-day right of withdrawal</span>
-DE: <span>Kundenbewertungen</span><span id="dl">Schnelle Lieferung</span><span>24 Monate Garantie</span><span>14 Tage Widerrufsrecht</span>
+EN: <span>Customer reviews</span><span id="dl">Fast delivery</span><span>2-year statutory warranty</span><span>14-day right of withdrawal</span>
+DE: <span>Kundenbewertungen</span><span id="dl">Schnelle Lieferung</span><span>2 Jahre gesetzliche Gewährleistung</span><span>14 Tage Widerrufsrecht</span>
 EN: Forest Kings – Hot Tubs Factory
 DE: Forest Kings – Badefass-Manufaktur
 EN: <a href="forest-king-tub-about.html">About us</a><a href="become-an-expert.html">Become an expert</a><a href="forest-king-tub-gallery.html">Gallery</a><a href="#" id="navContact">Contact</a>
@@ -53,8 +53,8 @@ EN: <h3>Own Production in Lithuania</h3><p>Manufacturer with our own production 
 DE: <h3>Eigene Fertigung in Litauen</h3><p>Hersteller mit eigener Produktion und 7 Jahren Fertigungserfahrung. Produktionszeit 1–3 Wochen</p>
 EN: <h3>CE-Marked Electrics</h3><p>All electrical parts CE-marked, declaration of conformity available as PDF</p>
 DE: <h3>CE-gekennzeichnete Elektrik</h3><p>Alle elektrischen Teile mit CE-Kennzeichnung, Konformitätserklärung als PDF erhältlich</p>
-EN: <h3>2-Year Warranty</h3><p>2-year manufacturer warranty</p>
-DE: <h3>2 Jahre Garantie</h3><p>2 Jahre Herstellergarantie</p>
+EN: <h3>2-Year Statutory Warranty</h3><p>2-year statutory warranty under consumer law</p>
+DE: <h3>2 Jahre gesetzliche Gewährleistung</h3><p>2 Jahre gesetzliche Gewährleistung nach Verbraucherrecht</p>
 EN: <h3>Price &amp; Delivery</h3><p>Get more information about final price incl. VAT and transport costs to your country</p>
 DE: <h3>Preis &amp; Lieferung</h3><p>Erfahren Sie den Endpreis inkl. MwSt. und die Transportkosten in Ihr Land</p>
 EN: <h3>14-Day Right of Withdrawal</h3><p>Order with confidence: 14-day right of withdrawal for consumers, with clear support from our team if you have any questions</p>
@@ -143,8 +143,8 @@ EN: <details><summary>Does the wood stove meet local emission rules?</summary><p
 DE: <details><summary>Erfüllt der Holzofen die örtlichen Emissionsvorschriften?</summary><p>Die Vorschriften für Holzöfen unterscheiden sich je nach Land und Region. Auf Anfrage senden wir Ihnen die technischen Unterlagen des Ofens. Lassen Sie Ofen und Schornstein vor der ersten Nutzung nach den örtlichen Vorschriften prüfen (in Deutschland z. B. durch den Schornsteinfeger).</p></details>
 EN: <details><summary>How does delivery work?</summary><p>Production takes 1–3 weeks, freight 5–10 working days. Delivery on a pallet to the kerb. Delivery terms: DAP, FOB or EXW. For countries outside the EU (e.g. Switzerland, United Kingdom, USA) import duties and customs clearance are paid by the buyer; we help with the documents.</p></details>
 DE: <details><summary>Wie läuft die Lieferung ab?</summary><p>Die Fertigung dauert 1–3 Wochen, der Transport 5–10 Werktage. Geliefert wird auf einer Palette bis zur Bordsteinkante. Lieferbedingungen: DAP, FOB oder EXW. Bei Ländern außerhalb der EU (z. B. Schweiz, Vereinigtes Königreich, USA) trägt der Käufer Einfuhrabgaben und Verzollung; wir helfen Ihnen bei den Dokumenten.</p></details>
-EN: <details><summary>What about warranty and service?</summary><p>You get a 2-year manufacturer warranty from MB Europaletes. Your statutory rights as a consumer are not affected. Details: <a href="Warranty_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">Warranty (PDF)</a>.</p></details></main>
-DE: <details><summary>Wie sieht es mit Garantie und Service aus?</summary><p>Sie erhalten 2 Jahre Herstellergarantie von MB Europaletes. Ihre gesetzlichen Gewährleistungsrechte als Verbraucher bleiben davon unberührt. Details: <a href="Warranty_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">Garantie (PDF)</a>.</p></details><details><summary>Badefass, Badezuber oder Hot Tub – was ist der Unterschied?</summary><p>Gemeint ist im Grunde dasselbe: ein großes Holzbadefass für draußen, das mit Wasser gefüllt und beheizt wird. &bdquo;Badezuber&ldquo; ist der traditionelle Begriff, &bdquo;Hot Tub mit Holzofen&ldquo; die moderne Bezeichnung. Unsere Badefässer haben eine hygienische Innenwanne aus Acryl oder Gelcoat, eine Verkleidung aus Thermoholz oder WPC und einen Holzofen aus Edelstahl – innen integriert oder außen angebaut.</p></details></main>
+EN: <details><summary>What about warranty and service?</summary><p>You get the 2-year statutory warranty under consumer law from MB Europaletes. Details: <a href="Warranty_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">Warranty (PDF)</a>.</p></details></main>
+DE: <details><summary>Wie sieht es mit Gewährleistung und Service aus?</summary><p>Sie haben gegenüber MB Europaletes die gesetzliche Gewährleistung von 2 Jahren nach Verbraucherrecht. Details: <a href="Warranty_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">Gewährleistung (PDF)</a>.</p></details><details><summary>Badefass, Badezuber oder Hot Tub – was ist der Unterschied?</summary><p>Gemeint ist im Grunde dasselbe: ein großes Holzbadefass für draußen, das mit Wasser gefüllt und beheizt wird. &bdquo;Badezuber&ldquo; ist der traditionelle Begriff, &bdquo;Hot Tub mit Holzofen&ldquo; die moderne Bezeichnung. Unsere Badefässer haben eine hygienische Innenwanne aus Acryl oder Gelcoat, eine Verkleidung aus Thermoholz oder WPC und einen Holzofen aus Edelstahl – innen integriert oder außen angebaut.</p></details></main>
 
 ### footer (links still point to the English PDFs until the German PDFs exist) [?]
 EN: download="Legal_Notice_Forest_Kings_Tub.pdf">Legal notice</a>
@@ -156,7 +156,7 @@ DE: >Widerrufsbelehrung</a>
 EN: download="Privacy_Policy_Forest_Kings_Tub.pdf">Privacy policy</a>
 DE: download="Privacy_Policy_Forest_Kings_Tub.pdf">Datenschutzerklärung</a>
 EN: download="Warranty_Forest_Kings_Tub.pdf">Warranty</a>
-DE: download="Warranty_Forest_Kings_Tub.pdf">Garantie</a>
+DE: download="Warranty_Forest_Kings_Tub.pdf">Gewährleistung</a>
 EN: download="Shipping_and_Payment_Forest_Kings_Tub.pdf">Shipping & payment</a>
 DE: download="Shipping_and_Payment_Forest_Kings_Tub.pdf">Versand & Zahlung</a>
 EN: download="Hot_Tub_User_Manual_Forest_King_Tub.pdf">User manual</a>
