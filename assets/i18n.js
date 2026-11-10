@@ -12,7 +12,7 @@
  'use strict';
  var DE={
   /* tabs, labels */
-  'Shape & finish':'Modell','Equipment':'Ausstattung','Accessories':'Zubehör',
+  'Shape & finish':'Form & Material','Equipment':'Ausstattung','Accessories':'Zubehör',
   'Tube size':'Größe','Inner shape':'Innenform','Size':'Größe','Shape':'Form','Model':'Modell',
   'Tube cladding Thermowood':'Verkleidung Thermoholz','Tube cladding WPC':'Verkleidung WPC',
   'Thermowood':'Thermoholz','Wood':'Holz','WPC finish':'WPC-Verkleidung','Wood cladding':'Holzverkleidung',

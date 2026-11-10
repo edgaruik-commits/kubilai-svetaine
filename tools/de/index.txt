@@ -53,9 +53,8 @@ EN: <h3>Own Production in Lithuania</h3><p>Manufacturer with our own production 
 DE: <h3>Eigene Fertigung in Litauen</h3><p>Hersteller mit eigener Produktion und 7 Jahren Fertigungserfahrung. Produktionszeit 1–3 Wochen</p>
 EN: <h3>CE-Marked Electrics</h3><p>All electrical parts CE-marked, declaration of conformity available as PDF</p>
 DE: <h3>CE-gekennzeichnete Elektrik</h3><p>Alle elektrischen Teile mit CE-Kennzeichnung, Konformitätserklärung als PDF erhältlich</p>
-# [?] are there service partners in DE / AT / CH?
-EN: <h3>2-Year Warranty</h3><p>2-year manufacturer warranty; service and spare parts via partners in your country</p>
-DE: <h3>2 Jahre Garantie</h3><p>2 Jahre Herstellergarantie; Service und Ersatzteile über Partner in Ihrem Land</p>
+EN: <h3>2-Year Warranty</h3><p>2-year manufacturer warranty</p>
+DE: <h3>2 Jahre Garantie</h3><p>2 Jahre Herstellergarantie</p>
 EN: <h3>Price &amp; Delivery</h3><p>Get more information about final price incl. VAT and transport costs to your country</p>
 DE: <h3>Preis &amp; Lieferung</h3><p>Erfahren Sie den Endpreis inkl. MwSt. und die Transportkosten in Ihr Land</p>
 EN: <h3>14-Day Right of Withdrawal</h3><p>Order with confidence: 14-day right of withdrawal for consumers, with clear support from our team if you have any questions</p>
@@ -82,7 +81,7 @@ EN: '<span>The 3D view could not be loaded. <button type="button" class="b o" on
 DE: '<span>Die 3D-Ansicht konnte nicht geladen werden. <button type="button" class="b o" onclick="location.reload()">Neu laden</button></span>'
 # the configurator texts are translated by assets/i18n.js, loaded together with the 3D data
 EN: DEPS=['
-DE: DEPS=['assets/i18n.js?v=20261110','
+DE: DEPS=['assets/i18n.js?v=20261110b','
 
 ### request dialog
 EN: aria-label="Close"
@@ -117,7 +116,9 @@ EN: <label>Leave empty<input
 DE: <label>Leer lassen<input
 
 ### reviews
-# [?] reviews translated from English: confirm that this is fine for the customers (or use their original German wording)
+# the reviews were written in English: German translation with a note under each one
+EN: var RVNOTE='';
+DE: var RVNOTE='(aus dem Englischen übersetzt)';
 EN: <h2 class="rvh">Customer reviews</h2>
 DE: <h2 class="rvh">Kundenbewertungen</h2>
 EN: {name:"Markus B.",loc:"Munich, Germany",date:"August 2025",text:"Outstanding build quality and craftsmanship. The wood-fired stove heats up the water in just over two hours. Delivery on a pallet right to our driveway was smooth and on time."},
@@ -208,7 +209,6 @@ EN: >Send message</button>
 DE: >Nachricht senden</button>
 
 ### withdrawal dialog (Muster-Widerrufsformular, Anlage 2 zu Art. 246a § 1 Abs. 2 EGBGB)
-# [?] the German model form also asks for the consumer's address; the English form has no address field
 EN: <h3 id="wdt">Withdrawal form</h3>
 DE: <h3 id="wdt">Widerrufsformular</h3>
 EN: To: MB Europaletes (Forest Kings Tub), LT-68129 Marijampolė, Lithuania
@@ -221,6 +221,8 @@ EN: <label>Ordered on<input
 DE: <label>Bestellt am<input
 EN: <label>Received on<input
 DE: <label>Erhalten am<input
+EN: <label>Address of consumer(s) (optional)<input
+DE: <label>Anschrift des/der Verbraucher(s) (optional)<input
 EN: <label>Name of consumer(s)<input
 DE: <label>Name des/der Verbraucher(s)<input
 EN: <label>Reason (optional)<textarea name="reason" rows="1" placeholder="You do not have to give a reason."></textarea>
@@ -287,17 +289,15 @@ DE: 'Bitte geben Sie einen gültigen Wert ein.'
 EN: 'Please match the requested format.'
 DE: 'Bitte halten Sie sich an das vorgegebene Format.'
 
-### country list (German names; DE / AT / CH on top) [?] the country is sent in German from this page
-EN: const COUNTRIES=['Albania','Andorra','Austria','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Cyprus','Czech Republic','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Iceland','Ireland','Italy','Kosovo','Latvia','Liechtenstein','Lithuania','Luxembourg','Malta','Moldova','Monaco','Montenegro','Netherlands','North Macedonia','Norway','Poland','Portugal','Romania','San Marino','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Ukraine','United Kingdom','United States','Vatican City'];
-DE: const COUNTRIES=['Albanien','Andorra','Belgien','Bosnien und Herzegowina','Bulgarien','Dänemark','Deutschland','Estland','Finnland','Frankreich','Griechenland','Irland','Island','Italien','Kosovo','Kroatien','Lettland','Liechtenstein','Litauen','Luxemburg','Malta','Moldau','Monaco','Montenegro','Niederlande','Nordmazedonien','Norwegen','Österreich','Polen','Portugal','Rumänien','San Marino','Schweden','Schweiz','Serbien','Slowakei','Slowenien','Spanien','Tschechien','Ukraine','Ungarn','Vatikanstadt','Vereinigte Staaten','Vereinigtes Königreich','Zypern'];
+### country list: German names in the list and the field, the form sends the English name (database, e-mails); DE / AT / CH on top
+EN:  const LABEL={}, lbl=c=>LABEL[c]||c;
+DE:  const LABEL={'Albania':'Albanien','Austria':'Österreich','Belgium':'Belgien','Bosnia and Herzegovina':'Bosnien und Herzegowina','Bulgaria':'Bulgarien','Croatia':'Kroatien','Cyprus':'Zypern','Czech Republic':'Tschechien','Denmark':'Dänemark','Estonia':'Estland','Finland':'Finnland','France':'Frankreich','Germany':'Deutschland','Greece':'Griechenland','Hungary':'Ungarn','Iceland':'Island','Ireland':'Irland','Italy':'Italien','Latvia':'Lettland','Lithuania':'Litauen','Luxembourg':'Luxemburg','Moldova':'Moldau','Netherlands':'Niederlande','North Macedonia':'Nordmazedonien','Norway':'Norwegen','Poland':'Polen','Romania':'Rumänien','Serbia':'Serbien','Slovakia':'Slowakei','Slovenia':'Slowenien','Spain':'Spanien','Sweden':'Schweden','Switzerland':'Schweiz','United Kingdom':'Vereinigtes Königreich','United States':'Vereinigte Staaten','Vatican City':'Vatikanstadt'}, lbl=c=>LABEL[c]||c;
 EN: const TOP=['Germany','Lithuania','United Kingdom','United States'], SEP='-', MSG='Please choose a country from the list';
-DE: const TOP=['Deutschland','Österreich','Schweiz'], SEP='-', MSG='Bitte wählen Sie ein Land aus der Liste';
+DE: const TOP=['Germany','Austria','Switzerland'], SEP='-', MSG='Bitte wählen Sie ein Land aus der Liste';
 EN: box.setAttribute('aria-label','Countries');
 DE: box.setAttribute('aria-label','Länder');
 EN: li.textContent='No matching country';
 DE: li.textContent='Kein passendes Land';
-EN: const CODES={'Albania':'+355','Andorra':'+376','Austria':'+43','Belgium':'+32','Bosnia and Herzegovina':'+387','Bulgaria':'+359','Croatia':'+385','Cyprus':'+357','Czech Republic':'+420','Denmark':'+45','Estonia':'+372','Finland':'+358','France':'+33','Germany':'+49','Greece':'+30','Hungary':'+36','Iceland':'+354','Ireland':'+353','Italy':'+39','Kosovo':'+383','Latvia':'+371','Liechtenstein':'+423','Lithuania':'+370','Luxembourg':'+352','Malta':'+356','Moldova':'+373','Monaco':'+377','Montenegro':'+382','Netherlands':'+31','North Macedonia':'+389','Norway':'+47','Poland':'+48','Portugal':'+351','Romania':'+40','San Marino':'+378','Serbia':'+381','Slovakia':'+421','Slovenia':'+386','Spain':'+34','Sweden':'+46','Switzerland':'+41','Ukraine':'+380','United Kingdom':'+44','United States':'+1','Vatican City':'+39'};
-DE: const CODES={'Albanien':'+355','Andorra':'+376','Österreich':'+43','Belgien':'+32','Bosnien und Herzegowina':'+387','Bulgarien':'+359','Kroatien':'+385','Zypern':'+357','Tschechien':'+420','Dänemark':'+45','Estland':'+372','Finnland':'+358','Frankreich':'+33','Deutschland':'+49','Griechenland':'+30','Ungarn':'+36','Island':'+354','Irland':'+353','Italien':'+39','Kosovo':'+383','Lettland':'+371','Liechtenstein':'+423','Litauen':'+370','Luxemburg':'+352','Malta':'+356','Moldau':'+373','Monaco':'+377','Montenegro':'+382','Niederlande':'+31','Nordmazedonien':'+389','Norwegen':'+47','Polen':'+48','Portugal':'+351','Rumänien':'+40','San Marino':'+378','Serbien':'+381','Slowakei':'+421','Slowenien':'+386','Spanien':'+34','Schweden':'+46','Schweiz':'+41','Ukraine':'+380','Vereinigtes Königreich':'+44','Vereinigte Staaten':'+1','Vatikanstadt':'+39'};
 
 ### note in the English page that does not belong in the German one
 EN: <!-- German version (de/index.html) is built from this file: after editing texts here run tools/build-de.ps1 -->
