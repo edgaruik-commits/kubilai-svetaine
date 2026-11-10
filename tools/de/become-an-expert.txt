@@ -96,7 +96,7 @@ EN: <span class="lng" aria-label="Language"><a href="become-an-expert.html" lang
 DE: <span class="lng" aria-label="Sprache"><a href="/become-an-expert.html" lang="en" hreflang="en">EN</a><span aria-hidden="true">|</span><a href="/de/become-an-expert.html" lang="de" hreflang="de" aria-current="page">DE</a></span>
 EN: aria-label="Social media"
 DE: aria-label="Soziale Medien"
-# footer: the links still point to the English PDFs until the German PDFs exist (stage 4)
+# footer link texts (the German PDF file names are set at the end of this file)
 EN: >Legal notice</a>
 DE: >Impressum</a>
 EN: >Terms &amp; conditions</a>
@@ -113,3 +113,15 @@ EN: >User manual</a>
 DE: >Bedienungsanleitung</a>
 EN: Marijampolė, Lithuania · Company code: 304924983 · VAT no.: LT100012395710<br>
 DE: Marijampolė, Litauen · Firmencode: 304924983 · USt-IdNr.: LT100012395710<br>
+
+### German legal PDFs (de/*.pdf, built from tools/de/legal/*.html by tools/build-de-pdf.ps1); must stay at the end of this file
+EN: Legal_Notice_Forest_Kings_Tub.pdf
+DE: Impressum_Forest_Kings_Tub.pdf
+EN: Terms_and_Conditions_Forest_Kings_Tub.pdf
+DE: AGB_Forest_Kings_Tub.pdf
+EN: Right_of_Withdrawal_Forest_Kings_Tub.pdf
+DE: Widerrufsbelehrung_Forest_Kings_Tub.pdf
+EN: Privacy_Policy_Forest_Kings_Tub.pdf
+DE: Datenschutzerklaerung_Forest_Kings_Tub.pdf
+EN: Warranty_Forest_Kings_Tub.pdf
+DE: Gewaehrleistung_Forest_Kings_Tub.pdf

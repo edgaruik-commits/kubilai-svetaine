@@ -146,7 +146,7 @@ DE: <details><summary>Wie läuft die Lieferung ab?</summary><p>Die Fertigung dau
 EN: <details><summary>What about warranty and service?</summary><p>You get the 2-year statutory warranty under consumer law from MB Europaletes. Details: <a href="Warranty_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">Warranty (PDF)</a>.</p></details></main>
 DE: <details><summary>Wie sieht es mit Gewährleistung und Service aus?</summary><p>Sie haben gegenüber MB Europaletes die gesetzliche Gewährleistung von 2 Jahren nach Verbraucherrecht. Details: <a href="Warranty_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">Gewährleistung (PDF)</a>.</p></details><details><summary>Badefass, Badezuber oder Hot Tub – was ist der Unterschied?</summary><p>Gemeint ist im Grunde dasselbe: ein großes Holzbadefass für draußen, das mit Wasser gefüllt und beheizt wird. &bdquo;Badezuber&ldquo; ist der traditionelle Begriff, &bdquo;Hot Tub mit Holzofen&ldquo; die moderne Bezeichnung. Unsere Badefässer haben eine hygienische Innenwanne aus Acryl oder Gelcoat, eine Verkleidung aus Thermoholz oder WPC und einen Holzofen aus Edelstahl – innen integriert oder außen angebaut.</p></details></main>
 
-### footer (links still point to the English PDFs until the German PDFs exist) [?]
+### footer link texts (the German PDF file names are set at the end of this file)
 EN: download="Legal_Notice_Forest_Kings_Tub.pdf">Legal notice</a>
 DE: download="Legal_Notice_Forest_Kings_Tub.pdf">Impressum</a>
 EN: download="Terms_and_Conditions_Forest_Kings_Tub.pdf">Terms & conditions</a>
@@ -302,3 +302,15 @@ DE: li.textContent='Kein passendes Land';
 ### note in the English page that does not belong in the German one
 EN: <!-- German version (de/index.html) is built from this file: after editing texts here run tools/build-de.ps1 -->
 DE: 
+
+### German legal PDFs (de/*.pdf, built from tools/de/legal/*.html by tools/build-de-pdf.ps1); must stay at the end of this file
+EN: Legal_Notice_Forest_Kings_Tub.pdf
+DE: Impressum_Forest_Kings_Tub.pdf
+EN: Terms_and_Conditions_Forest_Kings_Tub.pdf
+DE: AGB_Forest_Kings_Tub.pdf
+EN: Right_of_Withdrawal_Forest_Kings_Tub.pdf
+DE: Widerrufsbelehrung_Forest_Kings_Tub.pdf
+EN: Privacy_Policy_Forest_Kings_Tub.pdf
+DE: Datenschutzerklaerung_Forest_Kings_Tub.pdf
+EN: Warranty_Forest_Kings_Tub.pdf
+DE: Gewaehrleistung_Forest_Kings_Tub.pdf

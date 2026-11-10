@@ -20,7 +20,8 @@ $pages = @(
   @{ src = 'forest-king-tub-gallery.html'; dst = 'de/forest-king-tub-gallery.html'; pairs = 'tools/de/forest-king-tub-gallery.txt' },
   @{ src = 'become-an-expert.html'; dst = 'de/become-an-expert.html'; pairs = 'tools/de/become-an-expert.txt' }
 )
-# pages that have a German version: links to them stay inside /de/, every other relative link gets "../"
+# pages that have a German version and files that exist in /de/ (German PDFs): links to them stay inside /de/,
+# every other relative link gets "../"
 $german = @($pages | ForEach-Object { $_.src })
 $failed = $false
 foreach ($pg in $pages) {
@@ -49,7 +50,7 @@ foreach ($pg in $pages) {
   $html = [regex]::Replace($html, '(\s(?:href|src))="(?!https?:|#|data:|mailto:|tel:|/|\.\./)([^"]*)"', {
     param($m)
     $file = ($m.Groups[2].Value -split '[#?]')[0]
-    if ($german -contains $file) { $m.Value } else { $m.Groups[1].Value + '="../' + $m.Groups[2].Value + '"' }
+    if ($german -contains $file -or ($file -and (Test-Path (Join-Path $root "de\$file")))) { $m.Value } else { $m.Groups[1].Value + '="../' + $m.Groups[2].Value + '"' }
   })
   $html = [regex]::Replace($html, "(['""])assets/", '$1../assets/')
   $html = $html -replace '^<!DOCTYPE html>',"<!DOCTYPE html><!-- Generated from $($pg.src) by tools/build-de.ps1 - edit $($pg.src) or $($pg.pairs), not this file -->"
