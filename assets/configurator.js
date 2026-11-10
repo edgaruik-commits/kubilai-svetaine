@@ -501,7 +501,7 @@ function drawDial(base){
   // red HEATER tag at 12 o'clock (the stove side)
   const tl=.46*k, th=.17*k, tc=(base+1.48)*k; g.save(); g.translate(C+tc,C);
   g.fillStyle=RED; g.beginPath(); g.moveTo(-tl/2,-th/2); g.lineTo(tl/2,-th/2); g.lineTo(tl/2,th/2); g.lineTo(-tl/2,th/2); g.closePath(); g.fill();
-  g.fillStyle='#fff'; g.font='800 '+(.105*k)+'px system-ui,Segoe UI,Arial,sans-serif'; g.fillText('HEATER',0,0); g.restore();
+  g.fillStyle='#fff'; g.font='800 '+(.105*k)+'px system-ui,Segoe UI,Arial,sans-serif'; g.fillText(window.FK_I18N?FK_I18N.t('HEATER'):'HEATER',0,0);   /* canvas text: translated here, not in the page */ g.restore();
   return cv; }
 let tub, fireDoor, R=1, HW=1, HX=1, HZ=1, sq=false, H=.95, bound=.8, bx=.8, bz=.8;
 function build(){
@@ -1194,8 +1194,11 @@ document.getElementById('rqForm').addEventListener('submit',async e=>{e.preventD
   },
   line_items:rows().slice(0,-1).map(x=>({item:x[0],option:x[1]||null,price:x[2]||null})),
   total_indicative_eur:total(),
-  currency:'EUR'
+  currency:'EUR',
+  lang:document.documentElement.lang||'en'
  };
+ /* German page: the same lines as the visitor saw them (for the confirmation e-mail); the order itself stays in English */
+ if(window.FK_I18N) order.line_items_local=rows().slice(0,-1).map(x=>({item:FK_I18N.t(x[0]),option:x[1]?FK_I18N.t(x[1]):null,price:x[2]?FK_I18N.t(x[2]):null}));
  const attach={filename:'order-'+oid+'.json',content:JSON.stringify(order,null,2)};
  btn.disabled=true;ok.hidden=true;
  const sent=await sendMail({name:f.get('n'),email:f.get('e'),phone:f.get('p')||'-',delivery_country:f.get('l'),postcode:f.get('z')||'-',city:f.get('c')||'-',message:body,order_json:attach.content},'Hot tub request',attach);

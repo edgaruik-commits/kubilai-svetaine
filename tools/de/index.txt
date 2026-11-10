@@ -1,0 +1,304 @@
+# German texts for de/index.html (built from index.html by tools/build-de.ps1).
+# EN: exact text from index.html, DE: German text. Order matters: longer texts before shorter ones that are part of them.
+# Configurator texts (menus, prices, summary table) are not here: they are in assets/i18n.js.
+# [?] in a comment = translation / content to be checked.
+
+### head, SEO
+EN: <html lang="en">
+DE: <html lang="de">
+EN: <title>Hot Tub with Wood-Fired Stove | Forest Kings Tub</title>
+DE: <title>Badefass mit Holzofen – Holzbadefass aus Litauen | Forest Kings Tub</title>
+EN: content="Wood-fired hot tubs made in Lithuania: thermowood, acrylic or gelcoat inner, stainless steel stove. Configure your hot tub in 3D and get a quote. Delivery across Europe, the UK and the USA.">
+DE: content="Badefass mit Holzofen aus Litauen: Holzbadefass mit Thermoholz, Acryl- oder Gelcoat-Wanne und Edelstahlofen. Im 3D-Konfigurator gestalten und Angebot anfordern. Lieferung nach Deutschland, Österreich und in die Schweiz.">
+EN: <link rel="canonical" href="https://forestkings.com/">
+DE: <link rel="canonical" href="https://forestkings.com/de/">
+EN: <meta property="og:type" content="website">
+DE: <meta property="og:type" content="website"><meta property="og:locale" content="de_DE">
+EN: <meta property="og:title" content="Forest Kings – wood-fired hot tubs from Lithuania">
+DE: <meta property="og:title" content="Forest Kings – Badefass mit Holzofen aus Litauen">
+EN: <meta property="og:url" content="https://forestkings.com/">
+DE: <meta property="og:url" content="https://forestkings.com/de/">
+EN: "description":"Manufacturer of wood-fired hot tubs in Lithuania: thermowood, acrylic or gelcoat inner, stainless steel stove, delivery across Europe and to the USA."
+DE: "description":"Hersteller von Badefässern mit Holzofen in Litauen: Thermoholz, Acryl- oder Gelcoat-Innenwanne, Edelstahlofen, Lieferung in ganz Europa und in die USA."
+
+### top bar, header, language switch
+EN: <span>Customer reviews</span><span id="dl">Fast delivery</span><span>24-month warranty</span><span>14-day right of withdrawal</span>
+DE: <span>Kundenbewertungen</span><span id="dl">Schnelle Lieferung</span><span>24 Monate Garantie</span><span>14 Tage Widerrufsrecht</span>
+EN: Forest Kings – Hot Tubs Factory
+DE: Forest Kings – Badefass-Manufaktur
+EN: <a href="forest-king-tub-about.html">About us</a><a href="become-an-expert.html">Become an expert</a><a href="forest-king-tub-gallery.html">Gallery</a><a href="#" id="navContact">Contact</a>
+DE: <a href="forest-king-tub-about.html">Über uns</a><a href="become-an-expert.html">Experte werden</a><a href="forest-king-tub-gallery.html">Galerie</a><a href="#" id="navContact">Kontakt</a>
+# [?] label of the EU withdrawal button (§ 356a BGB / Art. 11a Directive 2011/83/EU): "Vertrag hier widerrufen"
+EN: <a href="#" id="navWithdrawal">Withdraw from contract here</a>
+DE: <a href="#" id="navWithdrawal">Vertrag hier widerrufen</a>
+EN: <span class="lng" aria-label="Language"><a href="./" lang="en" hreflang="en" aria-current="page">EN</a><span aria-hidden="true">|</span><a href="de/" lang="de" hreflang="de">DE</a></span>
+DE: <span class="lng" aria-label="Sprache"><a href="/" lang="en" hreflang="en">EN</a><span aria-hidden="true">|</span><a href="/de/" lang="de" hreflang="de" aria-current="page">DE</a></span>
+EN: aria-label="Social media"
+DE: aria-label="Soziale Medien"
+
+### hero
+EN: <h1>Hot tub with wood-fired stove. Built in Lithuania forest, delivered to your door</h1><p>Choose thermowood, acrylic or gelcoat, add a stainless steel stove, massage jets and LED lights – and see your hot tub take shape in 3D before you order.</p><a class="b" href="#m">Start configurator</a>
+DE: <h1>Badefass mit Holzofen – gebaut im litauischen Wald, geliefert bis vor Ihre Tür</h1><p>Wählen Sie Thermoholz, Acryl oder Gelcoat, ergänzen Sie einen Edelstahlofen, Massagedüsen und LED-Beleuchtung – und sehen Sie in 3D, wie Ihr Hot Tub mit Holzofen Gestalt annimmt, bevor Sie bestellen.</p><a class="b" href="#m">Konfigurator starten</a>
+EN: id="bookBtn">Become an expert</a>
+DE: id="bookBtn">Experte werden</a>
+
+### why trust us
+EN: <h2>Why you can trust us</h2>
+DE: <h2>Warum Sie uns vertrauen können</h2>
+EN: aria-label="Previous"
+DE: aria-label="Zurück"
+EN: aria-label="Next"
+DE: aria-label="Weiter"
+EN: <h3>Own Production in Lithuania</h3><p>Manufacturer with our own production and 7 years of manufacturing experience. Lead time 1–3 weeks</p>
+DE: <h3>Eigene Fertigung in Litauen</h3><p>Hersteller mit eigener Produktion und 7 Jahren Fertigungserfahrung. Produktionszeit 1–3 Wochen</p>
+EN: <h3>CE-Marked Electrics</h3><p>All electrical parts CE-marked, declaration of conformity available as PDF</p>
+DE: <h3>CE-gekennzeichnete Elektrik</h3><p>Alle elektrischen Teile mit CE-Kennzeichnung, Konformitätserklärung als PDF erhältlich</p>
+# [?] are there service partners in DE / AT / CH?
+EN: <h3>2-Year Warranty</h3><p>2-year manufacturer warranty; service and spare parts via partners in your country</p>
+DE: <h3>2 Jahre Garantie</h3><p>2 Jahre Herstellergarantie; Service und Ersatzteile über Partner in Ihrem Land</p>
+EN: <h3>Price &amp; Delivery</h3><p>Get more information about final price incl. VAT and transport costs to your country</p>
+DE: <h3>Preis &amp; Lieferung</h3><p>Erfahren Sie den Endpreis inkl. MwSt. und die Transportkosten in Ihr Land</p>
+EN: <h3>14-Day Right of Withdrawal</h3><p>Order with confidence: 14-day right of withdrawal for consumers, with clear support from our team if you have any questions</p>
+DE: <h3>14 Tage Widerrufsrecht</h3><p>Bestellen Sie mit gutem Gefühl: 14 Tage Widerrufsrecht für Verbraucher – und bei Fragen hilft Ihnen unser Team gerne weiter</p>
+
+### configurator (static part; menus come from assets/i18n.js)
+EN: <h2 id="m">Configure your hot tub</h2>
+DE: <h2 id="m">Konfigurieren Sie Ihr Badefass</h2>
+EN: aria-label="3D view of the hot tub. Drag to rotate."
+DE: aria-label="3D-Ansicht des Badefasses. Zum Drehen ziehen."
+EN: <span>Loading 3D&hellip;</span>
+DE: <span>3D wird geladen&hellip;</span>
+EN: role="group" aria-label="Inner shape"
+DE: role="group" aria-label="Innenform"
+EN: >Send request</button>
+DE: >Anfrage senden</button>
+EN: id="lux" type="button">Luxury setup</button><button class="b o" id="std" type="button">Standard setup</button><button class="b o" id="prem" type="button">Premium setup</button>
+DE: id="lux" type="button">Luxus-Ausstattung</button><button class="b o" id="std" type="button">Standard</button><button class="b o" id="prem" type="button">Premium</button>
+EN: aria-label="Camera view and ambiance"><span class="vl">VIEW:</span><button type="button" data-w="on" aria-pressed="false">Water on</button><button type="button" data-w="off" aria-pressed="true">Water off</button><button type="button" id="vauto" aria-pressed="true">Auto rotate</button>
+DE: aria-label="Kameraansicht und Stimmung"><span class="vl">ANSICHT:</span><button type="button" data-w="on" aria-pressed="false">Wasser an</button><button type="button" data-w="off" aria-pressed="true">Wasser aus</button><button type="button" id="vauto" aria-pressed="true">Drehen</button>
+EN: <span class="vl">AMBIANCE:</span><button type="button" data-a="day" aria-pressed="true">Day</button><button type="button" data-a="night" aria-pressed="false">Night</button>
+DE: <span class="vl">STIMMUNG:</span><button type="button" data-a="day" aria-pressed="true">Tag</button><button type="button" data-a="night" aria-pressed="false">Nacht</button>
+EN: '<span>The 3D view could not be loaded. <button type="button" class="b o" onclick="location.reload()">Reload</button></span>'
+DE: '<span>Die 3D-Ansicht konnte nicht geladen werden. <button type="button" class="b o" onclick="location.reload()">Neu laden</button></span>'
+# the configurator texts are translated by assets/i18n.js, loaded together with the 3D data
+EN: DEPS=['
+DE: DEPS=['assets/i18n.js?v=20261110','
+
+### request dialog
+EN: aria-label="Close"
+DE: aria-label="Schließen"
+EN: <h3 id="rqt">Your request</h3>
+DE: <h3 id="rqt">Ihre Anfrage</h3>
+EN: Prices are indicative. We confirm the final price, delivery cost and date by email. <a href="#m" id="rqe">Change configuration</a>
+DE: Alle Preise sind unverbindlich. Endpreis, Lieferkosten und Liefertermin bestätigen wir Ihnen per E-Mail. <a href="#m" id="rqe">Konfiguration ändern</a>
+EN: <label>Email<input
+DE: <label>E-Mail<input
+EN: <label>Phone (optional)<input
+DE: <label>Telefon (optional)<input
+EN: <label>Phone<input
+DE: <label>Telefon<input
+EN: <label>Delivery country<input
+DE: <label>Lieferland<input
+EN: placeholder="Start typing your country"
+DE: placeholder="Land eingeben"
+EN: <label>Postcode<input
+DE: <label>PLZ<input
+EN: <label>City<input
+DE: <label>Ort<input
+EN: <label>Message<textarea
+DE: <label>Nachricht<textarea
+EN: <label>Message (optional)<textarea
+DE: <label>Nachricht (optional)<textarea
+EN: I agree that Forest Kings Tub may use my data to answer this request (privacy policy).
+DE: Ich bin damit einverstanden, dass Forest Kings Tub meine Daten zur Beantwortung dieser Anfrage verwendet (Datenschutzerklärung).
+EN: Your email app should open with the request. If not, write to <b id="rqmail"></b> and paste the configuration.
+DE: Ihr E-Mail-Programm sollte sich mit der Anfrage öffnen. Falls nicht, schreiben Sie an <b id="rqmail"></b> und fügen Sie die Konfiguration ein.
+EN: <label>Leave empty<input
+DE: <label>Leer lassen<input
+
+### reviews
+# [?] reviews translated from English: confirm that this is fine for the customers (or use their original German wording)
+EN: <h2 class="rvh">Customer reviews</h2>
+DE: <h2 class="rvh">Kundenbewertungen</h2>
+EN: {name:"Markus B.",loc:"Munich, Germany",date:"August 2025",text:"Outstanding build quality and craftsmanship. The wood-fired stove heats up the water in just over two hours. Delivery on a pallet right to our driveway was smooth and on time."},
+DE: {name:"Markus B.",loc:"München, Deutschland",date:"August 2025",text:"Hervorragende Verarbeitung und echte Handwerkskunst. Der Holzofen bringt das Wasser in gut zwei Stunden auf Temperatur. Die Lieferung auf einer Palette bis in unsere Einfahrt lief reibungslos und pünktlich."},
+EN: {name:"Jean-Pierre M.",loc:"Strasbourg, France",date:"September 2025",text:"Extremely happy with our Forest Kings Tub hot tub. The acrylic interior is comfortable, durable, and easy to clean. The LED illumination creates an amazing atmosphere at night."},
+DE: {name:"Jean-Pierre M.",loc:"Straßburg, Frankreich",date:"September 2025",text:"Wir sind mit unserem Badefass von Forest Kings Tub rundum zufrieden. Die Acryl-Innenwanne ist bequem, robust und leicht zu reinigen. Die LED-Beleuchtung sorgt abends für eine traumhafte Atmosphäre."},
+EN: {name:"Stefan & Laura K.",loc:"Innsbruck, Austria",date:"November 2025",text:"Top communication beforehand and flawless freight delivery to Tyrol. The ThermoWood looks gorgeous and holds heat remarkably well even in freezing weather."},
+DE: {name:"Stefan & Laura K.",loc:"Innsbruck, Österreich",date:"November 2025",text:"Top Kommunikation im Vorfeld und eine einwandfreie Speditionslieferung nach Tirol. Das Thermoholz sieht wunderschön aus und hält die Wärme selbst bei Frost erstaunlich gut."},
+EN: {name:"Claudia W.",loc:"Zurich, Switzerland",date:"January 2026",text:"A fantastic wellness experience in our garden. The hydromassage system is powerful and the integrated wood stove is safe, reliable, and easy to operate. Highly recommended!"},
+DE: {name:"Claudia W.",loc:"Zürich, Schweiz",date:"Januar 2026",text:"Ein fantastisches Wellness-Erlebnis in unserem Garten. Die Hydromassage ist kraftvoll, und der integrierte Holzofen ist sicher, zuverlässig und einfach zu bedienen. Sehr empfehlenswert!"},
+EN: {name:"Thomas H.",loc:"Hamburg, Germany",date:"February 2026",text:"We ordered in autumn and the hot tub arrived within the promised four weeks. The wood-fired stove is easy to light, the water stays hot for hours, and our whole family now uses it every weekend. Great value for a handmade product."}
+DE: {name:"Thomas H.",loc:"Hamburg, Deutschland",date:"Februar 2026",text:"Wir haben im Herbst bestellt, und das Badefass kam innerhalb der zugesagten vier Wochen an. Der Holzofen lässt sich leicht anheizen, das Wasser bleibt stundenlang heiß, und die ganze Familie nutzt es jetzt jedes Wochenende. Ein sehr gutes Preis-Leistungs-Verhältnis für ein handgefertigtes Produkt."}
+EN: aria-label="5 out of 5 stars"
+DE: aria-label="5 von 5 Sternen"
+EN: 'Show less':'Read more'
+DE: 'Weniger anzeigen':'Mehr lesen'
+
+### FAQ (the last question exists only in German: Badezuber / Hot Tub keywords) [?]
+EN: <h2>Frequently asked questions</h2><details><summary>Do I need a building permit?</summary><p>It depends on your country, region and municipality. We send you a checklist for your country. Please check placement and chimney with your local authority before ordering.</p></details>
+DE: <h2>Häufige Fragen</h2><details><summary>Brauche ich eine Baugenehmigung?</summary><p>Das hängt von Ihrem Land, Ihrer Region und Ihrer Gemeinde ab. Wir senden Ihnen eine Checkliste für Ihr Land. Bitte klären Sie Aufstellort und Schornstein vor der Bestellung mit Ihrer örtlichen Behörde.</p></details>
+EN: <details><summary>Does the wood stove meet local emission rules?</summary><p>Rules for wood-fired stoves differ by country and region. On request we send you the technical documentation of the stove. Before use, have the stove and chimney checked according to your local rules (e.g. by a chimney sweep in Germany).</p></details>
+DE: <details><summary>Erfüllt der Holzofen die örtlichen Emissionsvorschriften?</summary><p>Die Vorschriften für Holzöfen unterscheiden sich je nach Land und Region. Auf Anfrage senden wir Ihnen die technischen Unterlagen des Ofens. Lassen Sie Ofen und Schornstein vor der ersten Nutzung nach den örtlichen Vorschriften prüfen (in Deutschland z. B. durch den Schornsteinfeger).</p></details>
+EN: <details><summary>How does delivery work?</summary><p>Production takes 1–3 weeks, freight 5–10 working days. Delivery on a pallet to the kerb. Delivery terms: DAP, FOB or EXW. For countries outside the EU (e.g. Switzerland, United Kingdom, USA) import duties and customs clearance are paid by the buyer; we help with the documents.</p></details>
+DE: <details><summary>Wie läuft die Lieferung ab?</summary><p>Die Fertigung dauert 1–3 Wochen, der Transport 5–10 Werktage. Geliefert wird auf einer Palette bis zur Bordsteinkante. Lieferbedingungen: DAP, FOB oder EXW. Bei Ländern außerhalb der EU (z. B. Schweiz, Vereinigtes Königreich, USA) trägt der Käufer Einfuhrabgaben und Verzollung; wir helfen Ihnen bei den Dokumenten.</p></details>
+EN: <details><summary>What about warranty and service?</summary><p>You get a 2-year manufacturer warranty from MB Europaletes. Your statutory rights as a consumer are not affected. Details: <a href="Warranty_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">Warranty (PDF)</a>.</p></details></main>
+DE: <details><summary>Wie sieht es mit Garantie und Service aus?</summary><p>Sie erhalten 2 Jahre Herstellergarantie von MB Europaletes. Ihre gesetzlichen Gewährleistungsrechte als Verbraucher bleiben davon unberührt. Details: <a href="Warranty_Forest_Kings_Tub.pdf" target="_blank" rel="noopener">Garantie (PDF)</a>.</p></details><details><summary>Badefass, Badezuber oder Hot Tub – was ist der Unterschied?</summary><p>Gemeint ist im Grunde dasselbe: ein großes Holzbadefass für draußen, das mit Wasser gefüllt und beheizt wird. &bdquo;Badezuber&ldquo; ist der traditionelle Begriff, &bdquo;Hot Tub mit Holzofen&ldquo; die moderne Bezeichnung. Unsere Badefässer haben eine hygienische Innenwanne aus Acryl oder Gelcoat, eine Verkleidung aus Thermoholz oder WPC und einen Holzofen aus Edelstahl – innen integriert oder außen angebaut.</p></details></main>
+
+### footer (links still point to the English PDFs until the German PDFs exist) [?]
+EN: download="Legal_Notice_Forest_Kings_Tub.pdf">Legal notice</a>
+DE: download="Legal_Notice_Forest_Kings_Tub.pdf">Impressum</a>
+EN: download="Terms_and_Conditions_Forest_Kings_Tub.pdf">Terms & conditions</a>
+DE: download="Terms_and_Conditions_Forest_Kings_Tub.pdf">AGB</a>
+EN: >Right of withdrawal</a>
+DE: >Widerrufsbelehrung</a>
+EN: download="Privacy_Policy_Forest_Kings_Tub.pdf">Privacy policy</a>
+DE: download="Privacy_Policy_Forest_Kings_Tub.pdf">Datenschutzerklärung</a>
+EN: download="Warranty_Forest_Kings_Tub.pdf">Warranty</a>
+DE: download="Warranty_Forest_Kings_Tub.pdf">Garantie</a>
+EN: download="Shipping_and_Payment_Forest_Kings_Tub.pdf">Shipping & payment</a>
+DE: download="Shipping_and_Payment_Forest_Kings_Tub.pdf">Versand & Zahlung</a>
+EN: download="Hot_Tub_User_Manual_Forest_King_Tub.pdf">User manual</a>
+DE: download="Hot_Tub_User_Manual_Forest_King_Tub.pdf">Bedienungsanleitung</a>
+EN: Marijampolė, Lithuania · Company code: 304924983 · VAT no.: LT100012395710<br>
+DE: Marijampolė, Litauen · Firmencode: 304924983 · USt-IdNr.: LT100012395710<br>
+
+### cookies
+EN: aria-label="Cookie consent"
+DE: aria-label="Cookie-Einwilligung"
+EN: <span>We use cookies. Necessary cookies are always active. Statistics, preference and marketing cookies are used only if you agree. You can change your choice at any time. See our <a
+DE: <span>Wir verwenden Cookies. Notwendige Cookies sind immer aktiv. Statistik-, Präferenz- und Marketing-Cookies setzen wir nur mit Ihrer Einwilligung. Sie können Ihre Auswahl jederzeit ändern. Mehr dazu in unserer <a
+EN: >privacy policy</a>
+DE: >Datenschutzerklärung</a>
+EN: data-ck="reject">Reject all</button>
+DE: data-ck="reject">Alle ablehnen</button>
+EN: data-ck="settings">Settings</button>
+DE: data-ck="settings">Einstellungen</button>
+EN: data-ck="accept">Accept all</button>
+DE: data-ck="accept">Alle akzeptieren</button>
+EN: data-ck="save">Save selection</button>
+DE: data-ck="save">Auswahl speichern</button>
+EN: Choose which cookies you allow. Apart from strictly necessary cookies, nothing is set unless you agree. You can change or withdraw your consent at any time via &ldquo;Cookie settings&rdquo; in the footer. Details:
+DE: Wählen Sie, welche Cookies Sie zulassen. Außer den unbedingt notwendigen Cookies wird nichts ohne Ihre Einwilligung gesetzt. Sie können Ihre Einwilligung jederzeit über &bdquo;Cookie-Einstellungen&ldquo; im Seitenfuß ändern oder widerrufen. Details:
+EN: >Cookie settings<
+DE: >Cookie-Einstellungen<
+EN: <b>Strictly necessary</b><span>Required for the site to work, e.g. remembering your cookie choice and securing the request form. Cannot be switched off.</span>
+DE: <b>Unbedingt notwendig</b><span>Für den Betrieb der Website erforderlich, z. B. um Ihre Cookie-Auswahl zu speichern und das Anfrageformular abzusichern. Kann nicht deaktiviert werden.</span>
+EN: <em>Always on</em>
+DE: <em>Immer aktiv</em>
+EN: <b>Preferences</b><span>Remember your contact details for our forms.</span>
+DE: <b>Präferenzen</b><span>Speichert Ihre Kontaktdaten für unsere Formulare.</span>
+EN: <b>Statistics</b><span>Google Analytics: statistics about how the site is used (pages visited, device, country), so we can improve it. Provider: Google Ireland Ltd.</span>
+DE: <b>Statistik</b><span>Google Analytics: Statistiken zur Nutzung der Website (besuchte Seiten, Gerät, Land), damit wir sie verbessern können. Anbieter: Google Ireland Ltd.</span>
+EN: <b>Marketing</b><span>Used to show relevant offers and measure advertising.</span>
+DE: <b>Marketing</b><span>Für passende Angebote und die Messung von Werbung.</span>
+EN: <em>Off</em>
+DE: <em>Aus</em>
+EN: b.checked?'On':'Off'
+DE: b.checked?'An':'Aus'
+
+### contact dialog
+EN: <h3 id="cdt">Contact us</h3>
+DE: <h3 id="cdt">Kontakt</h3>
+EN: Send us your question and we will reply by email within 24 hours.
+DE: Senden Sie uns Ihre Frage – wir antworten Ihnen innerhalb von 24 Stunden per E-Mail.
+EN: <label>Country<input
+DE: <label>Land<input
+EN: >Send message</button>
+DE: >Nachricht senden</button>
+
+### withdrawal dialog (Muster-Widerrufsformular, Anlage 2 zu Art. 246a § 1 Abs. 2 EGBGB)
+# [?] the German model form also asks for the consumer's address; the English form has no address field
+EN: <h3 id="wdt">Withdrawal form</h3>
+DE: <h3 id="wdt">Widerrufsformular</h3>
+EN: To: MB Europaletes (Forest Kings Tub), LT-68129 Marijampolė, Lithuania
+DE: An: MB Europaletes (Forest Kings Tub), Vytauto g. 9, Meškučių k., LT-68129 Marijampolė, Litauen
+EN: I/We hereby give notice that I/we withdraw from my/our contract of sale of the following goods.
+DE: Hiermit widerrufe(n) ich/wir den von mir/uns abgeschlossenen Vertrag über den Kauf der folgenden Waren.
+EN: <label>Order / offer number<input name="order_no" required placeholder="e.g. OF-2026-0012"></label>
+DE: <label>Bestell- / Angebotsnummer<input name="order_no" required placeholder="z. B. OF-2026-0012"></label>
+EN: <label>Ordered on<input
+DE: <label>Bestellt am<input
+EN: <label>Received on<input
+DE: <label>Erhalten am<input
+EN: <label>Name of consumer(s)<input
+DE: <label>Name des/der Verbraucher(s)<input
+EN: <label>Reason (optional)<textarea name="reason" rows="1" placeholder="You do not have to give a reason."></textarea>
+DE: <label>Grund (optional)<textarea name="reason" rows="1" placeholder="Sie müssen keinen Grund angeben."></textarea>
+EN: I agree that Forest Kings Tub may use my data to process this withdrawal (privacy policy).
+DE: Ich bin damit einverstanden, dass Forest Kings Tub meine Daten zur Bearbeitung dieses Widerrufs verwendet (Datenschutzerklärung).
+# [?] confirmation button of the EU withdrawal function: "Widerruf bestätigen"
+EN: >Confirm withdrawal</button>
+DE: >Widerruf bestätigen</button>
+EN: m.textContent='Your email app should open with the withdrawal notice. Press Send there to deliver it to '+MAIL_TO+'.';
+DE: m.textContent='Ihr E-Mail-Programm sollte sich mit dem Widerruf öffnen. Klicken Sie dort auf „Senden“, um ihn an '+MAIL_TO+' zu schicken.';
+EN: m.textContent='Sorry, sending failed. Please try again or email the notice to '+MAIL_TO+'. ['
+DE: m.textContent='Leider konnte der Widerruf nicht gesendet werden. Bitte versuchen Sie es erneut oder senden Sie ihn per E-Mail an '+MAIL_TO+'. ['
+EN: <p>We have received your withdrawal notice for order <b></b> dated '+today+'. We will confirm it by email and contact you about the return.</p>
+DE: <p>Wir haben Ihren Widerruf zur Bestellung <b></b> vom '+today+' erhalten. Wir bestätigen ihn per E-Mail und melden uns wegen der Rücksendung bei Ihnen.</p>
+
+### consultation dialog
+EN: <h3 id="bdt">Book a consultation</h3>
+DE: <h3 id="bdt">Beratungstermin vereinbaren</h3>
+EN: Tell us when suits you and we will confirm your free consultation by email within 24 hours.
+DE: Sagen Sie uns, wann es Ihnen passt – wir bestätigen Ihre kostenlose Beratung innerhalb von 24 Stunden per E-Mail.
+EN: <label class="third">Preferred date<input
+DE: <label class="third">Wunschtermin<input
+EN: <label class="third">Preferred time<select name="time" required><option>Morning (9-12)</option><option selected>Afternoon (12-17)</option><option>Evening (17-20)</option></select></label>
+DE: <label class="third">Uhrzeit<select name="time" required><option>Vormittags (9–12 Uhr)</option><option selected>Nachmittags (12–17 Uhr)</option><option>Abends (17–20 Uhr)</option></select></label>
+EN: <label class="third">Contact by<select name="channel"><option>Phone call</option><option>Video call</option><option>Email</option><option>WhatsApp</option></select></label>
+DE: <label class="third">Kontakt per<select name="channel"><option>Telefonanruf</option><option>Videoanruf</option><option>E-Mail</option><option>WhatsApp</option></select></label>
+EN: I agree that Forest Kings Tub may use my data to arrange this consultation (privacy policy).
+DE: Ich bin damit einverstanden, dass Forest Kings Tub meine Daten zur Vereinbarung dieser Beratung verwendet (Datenschutzerklärung).
+EN: >Book consultation</button>
+DE: >Beratung anfragen</button>
+EN: <p>Your consultation request has been received. We will confirm the appointment by email within 24 hours.</p>
+DE: <p>Ihre Terminanfrage ist bei uns eingegangen. Wir bestätigen den Termin innerhalb von 24 Stunden per E-Mail.</p>
+
+### messages of the forms (the e-mail subjects stay English: they go to Forest Kings)
+EN: m.textContent='Your email app should open with your request. Press Send there to deliver it to '+MAIL_TO+'. (Automatic sending works only on the published website.)';
+DE: m.textContent='Ihr E-Mail-Programm sollte sich mit Ihrer Anfrage öffnen. Klicken Sie dort auf „Senden“, um sie an '+MAIL_TO+' zu schicken. (Der automatische Versand funktioniert nur auf der veröffentlichten Website.)';
+EN: m.textContent='Your email app should open with your message. Press Send there to deliver it to '+MAIL_TO+'. (Automatic sending works only on the published website.)';
+DE: m.textContent='Ihr E-Mail-Programm sollte sich mit Ihrer Nachricht öffnen. Klicken Sie dort auf „Senden“, um sie an '+MAIL_TO+' zu schicken. (Der automatische Versand funktioniert nur auf der veröffentlichten Website.)';
+EN: m.textContent='Sorry, sending failed. Please try again or write to '+MAIL_TO+'. ['
+DE: m.textContent='Leider ist beim Senden ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie an '+MAIL_TO+'. ['
+EN: 'unknown error'
+DE: 'unbekannter Fehler'
+EN: 'no answer from the mail service (timeout)'
+DE: 'keine Antwort vom Mail-Dienst (Zeitüberschreitung)'
+EN: <p>Thank you for your message. We will contact you within 24 hours.</p>
+DE: <p>Vielen Dank für Ihre Nachricht. Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
+EN: textContent='Thank you, '+
+DE: textContent='Vielen Dank, '+
+EN: textContent='Delivery to '+
+DE: textContent='Lieferung nach '+
+
+### form checks (the browser would show its own language otherwise)
+EN: 'Please tick this box to continue.'
+DE: 'Bitte setzen Sie ein Häkchen, um fortzufahren.'
+EN: 'Please select an option.'
+DE: 'Bitte wählen Sie eine Option aus.'
+EN: 'Please fill in this field.'
+DE: 'Bitte füllen Sie dieses Feld aus.'
+EN: 'Please enter a valid email address.'
+DE: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'
+EN: 'Please enter a valid value.'
+DE: 'Bitte geben Sie einen gültigen Wert ein.'
+EN: 'Please match the requested format.'
+DE: 'Bitte halten Sie sich an das vorgegebene Format.'
+
+### country list (German names; DE / AT / CH on top) [?] the country is sent in German from this page
+EN: const COUNTRIES=['Albania','Andorra','Austria','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Cyprus','Czech Republic','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Iceland','Ireland','Italy','Kosovo','Latvia','Liechtenstein','Lithuania','Luxembourg','Malta','Moldova','Monaco','Montenegro','Netherlands','North Macedonia','Norway','Poland','Portugal','Romania','San Marino','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Ukraine','United Kingdom','United States','Vatican City'];
+DE: const COUNTRIES=['Albanien','Andorra','Belgien','Bosnien und Herzegowina','Bulgarien','Dänemark','Deutschland','Estland','Finnland','Frankreich','Griechenland','Irland','Island','Italien','Kosovo','Kroatien','Lettland','Liechtenstein','Litauen','Luxemburg','Malta','Moldau','Monaco','Montenegro','Niederlande','Nordmazedonien','Norwegen','Österreich','Polen','Portugal','Rumänien','San Marino','Schweden','Schweiz','Serbien','Slowakei','Slowenien','Spanien','Tschechien','Ukraine','Ungarn','Vatikanstadt','Vereinigte Staaten','Vereinigtes Königreich','Zypern'];
+EN: const TOP=['Germany','Lithuania','United Kingdom','United States'], SEP='-', MSG='Please choose a country from the list';
+DE: const TOP=['Deutschland','Österreich','Schweiz'], SEP='-', MSG='Bitte wählen Sie ein Land aus der Liste';
+EN: box.setAttribute('aria-label','Countries');
+DE: box.setAttribute('aria-label','Länder');
+EN: li.textContent='No matching country';
+DE: li.textContent='Kein passendes Land';
+EN: const CODES={'Albania':'+355','Andorra':'+376','Austria':'+43','Belgium':'+32','Bosnia and Herzegovina':'+387','Bulgaria':'+359','Croatia':'+385','Cyprus':'+357','Czech Republic':'+420','Denmark':'+45','Estonia':'+372','Finland':'+358','France':'+33','Germany':'+49','Greece':'+30','Hungary':'+36','Iceland':'+354','Ireland':'+353','Italy':'+39','Kosovo':'+383','Latvia':'+371','Liechtenstein':'+423','Lithuania':'+370','Luxembourg':'+352','Malta':'+356','Moldova':'+373','Monaco':'+377','Montenegro':'+382','Netherlands':'+31','North Macedonia':'+389','Norway':'+47','Poland':'+48','Portugal':'+351','Romania':'+40','San Marino':'+378','Serbia':'+381','Slovakia':'+421','Slovenia':'+386','Spain':'+34','Sweden':'+46','Switzerland':'+41','Ukraine':'+380','United Kingdom':'+44','United States':'+1','Vatican City':'+39'};
+DE: const CODES={'Albanien':'+355','Andorra':'+376','Österreich':'+43','Belgien':'+32','Bosnien und Herzegowina':'+387','Bulgarien':'+359','Kroatien':'+385','Zypern':'+357','Tschechien':'+420','Dänemark':'+45','Estland':'+372','Finnland':'+358','Frankreich':'+33','Deutschland':'+49','Griechenland':'+30','Ungarn':'+36','Island':'+354','Irland':'+353','Italien':'+39','Kosovo':'+383','Lettland':'+371','Liechtenstein':'+423','Litauen':'+370','Luxemburg':'+352','Malta':'+356','Moldau':'+373','Monaco':'+377','Montenegro':'+382','Niederlande':'+31','Nordmazedonien':'+389','Norwegen':'+47','Polen':'+48','Portugal':'+351','Rumänien':'+40','San Marino':'+378','Serbien':'+381','Slowakei':'+421','Slowenien':'+386','Spanien':'+34','Schweden':'+46','Schweiz':'+41','Ukraine':'+380','Vereinigtes Königreich':'+44','Vereinigte Staaten':'+1','Vatikanstadt':'+39'};
+
+### note in the English page that does not belong in the German one
+EN: <!-- German version (de/index.html) is built from this file: after editing texts here run tools/build-de.ps1 -->
+DE: 

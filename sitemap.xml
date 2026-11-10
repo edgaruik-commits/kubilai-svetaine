@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://forestkings.com/</loc><lastmod>2026-11-09</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://forestkings.com/</loc><lastmod>2026-11-10</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://forestkings.com/"/><xhtml:link rel="alternate" hreflang="de" href="https://forestkings.com/de/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://forestkings.com/"/></url>
+  <url><loc>https://forestkings.com/de/</loc><lastmod>2026-11-10</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://forestkings.com/"/><xhtml:link rel="alternate" hreflang="de" href="https://forestkings.com/de/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://forestkings.com/"/></url>
   <url><loc>https://forestkings.com/forest-king-tub-about.html</loc><lastmod>2026-11-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://forestkings.com/forest-king-tub-gallery.html</loc><lastmod>2026-11-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
     <image:image><image:loc>https://forestkings.com/assets/img/gallery/hot-tub-built-into-a-wpc-deck-with-steps-and-led-strip-lighting.jpg</image:loc></image:image>
