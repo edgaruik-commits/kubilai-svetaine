@@ -7,7 +7,7 @@
      3. split into parts at " · " and "Label: value", prices "1,234€" -> "1.234 €".
    The order JSON, the e-mail to Forest Kings and the database stay English (only line_items_local is German).
    New English text in configurator.js: add it to DE. Open the German page with ?i18n=debug and look at FK_I18N.miss in the console
-   to list texts that are still English. After editing this file raise its ?v= in tools/de/index.txt and run tools/build-de.ps1. */
+   to list texts that are still English. After editing this file raise its ?v= in de/index.txt of kubilai-svetaine-tools and run build-de.ps1 there. */
 (function(){
  'use strict';
  var DE={
