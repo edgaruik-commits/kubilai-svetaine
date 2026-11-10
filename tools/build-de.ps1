@@ -15,8 +15,13 @@ $root = Split-Path -Parent $PSScriptRoot
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 # English page -> German page (pairs file: tools/de/<German page>.txt)
 $pages = @(
-  @{ src = 'index.html'; dst = 'de/index.html'; pairs = 'tools/de/index.txt' }
+  @{ src = 'index.html'; dst = 'de/index.html'; pairs = 'tools/de/index.txt' },
+  @{ src = 'forest-king-tub-about.html'; dst = 'de/forest-king-tub-about.html'; pairs = 'tools/de/forest-king-tub-about.txt' },
+  @{ src = 'forest-king-tub-gallery.html'; dst = 'de/forest-king-tub-gallery.html'; pairs = 'tools/de/forest-king-tub-gallery.txt' },
+  @{ src = 'become-an-expert.html'; dst = 'de/become-an-expert.html'; pairs = 'tools/de/become-an-expert.txt' }
 )
+# pages that have a German version: links to them stay inside /de/, every other relative link gets "../"
+$german = @($pages | ForEach-Object { $_.src })
 $failed = $false
 foreach ($pg in $pages) {
   $html = [IO.File]::ReadAllText((Join-Path $root $pg.src), $utf8)
@@ -25,6 +30,7 @@ foreach ($pg in $pages) {
   for ($i = 0; $i -lt $lines.Length; $i++) {
     $l = $lines[$i]
     if ($l -match '^\s*(#|$)') { continue }
+    if ($l -eq 'DE:') { $l = 'DE: ' }   # empty German text: the English text is removed
     if ($l.StartsWith('EN: ')) { if ($en -ne $null) { throw "$($pg.pairs) line $($i+1): EN without DE before it" }; $en = $l.Substring(4); continue }
     if ($l.StartsWith('DE: ')) {
       if ($en -eq $null) { throw "$($pg.pairs) line $($i+1): DE without EN" }
@@ -40,9 +46,13 @@ foreach ($pg in $pages) {
     $failed = $true; continue
   }
   # relative links -> one folder up
-  $html = [regex]::Replace($html, '(\s(?:href|src))="(?!https?:|#|data:|mailto:|tel:|/|\.\./)([^"]*)"', '$1="../$2"')
+  $html = [regex]::Replace($html, '(\s(?:href|src))="(?!https?:|#|data:|mailto:|tel:|/|\.\./)([^"]*)"', {
+    param($m)
+    $file = ($m.Groups[2].Value -split '[#?]')[0]
+    if ($german -contains $file) { $m.Value } else { $m.Groups[1].Value + '="../' + $m.Groups[2].Value + '"' }
+  })
   $html = [regex]::Replace($html, "(['""])assets/", '$1../assets/')
-  $html = $html -replace '^<!DOCTYPE html>', "<!DOCTYPE html><!-- Generated from $($pg.src) by tools/build-de.ps1 - edit $($pg.src) or $($pg.pairs), not this file -->"
+  $html = $html -replace '^<!DOCTYPE html>',"<!DOCTYPE html><!-- Generated from $($pg.src) by tools/build-de.ps1 - edit $($pg.src) or $($pg.pairs), not this file -->"
   $out = Join-Path $root $pg.dst
   [IO.Directory]::CreateDirectory((Split-Path -Parent $out)) | Out-Null
   [IO.File]::WriteAllText($out, $html, $utf8)

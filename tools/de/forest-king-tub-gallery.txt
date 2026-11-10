@@ -1,0 +1,107 @@
+# German texts for de/forest-king-tub-gallery.html (built from forest-king-tub-gallery.html by tools/build-de.ps1).
+# EN: exact text from forest-king-tub-gallery.html, DE: German text. Order matters: longer texts before shorter ones that are part of them.
+
+### SEO
+EN: Gallery | Forest Kings Tub
+DE: Galerie – Badefässer mit Holzofen | Forest Kings Tub
+EN: content="Photos of Forest Kings Tub wood-fired hot tubs: thermowood, acrylic and gelcoat liners, stainless steel stoves, LED lighting and finished installations from customers in Europe.">
+DE: content="Fotos von Badefässern mit Holzofen von Forest Kings Tub: Thermoholz, Innenwannen aus Acryl und Gelcoat, Edelstahlöfen, LED-Beleuchtung und fertig aufgestellte Hot Tubs bei Kunden in Europa.">
+
+### page
+EN: <a class="back" href="index.html">&larr; Back to home</a>
+DE: <a class="back" href="index.html">&larr; Zur Startseite</a>
+EN: <h1>Gallery</h1>
+DE: <h1>Galerie</h1>
+EN: <p class="lead">Our production and finished wood-fired hot tubs.</p>
+DE: <p class="lead">Unsere Fertigung und fertige Badefässer mit Holzofen.</p>
+EN: aria-label="Photo viewer"><button class="x" aria-label="Close">&times;</button><button class="pv" aria-label="Previous">&lsaquo;</button><img alt=""><button class="nx" aria-label="Next">&rsaquo;</button>
+DE: aria-label="Fotoansicht"><button class="x" aria-label="Schließen">&times;</button><button class="pv" aria-label="Zurück">&lsaquo;</button><img alt=""><button class="nx" aria-label="Weiter">&rsaquo;</button>
+EN: b.setAttribute('aria-label','Open photo '+(i+1));
+DE: b.setAttribute('aria-label','Foto '+(i+1)+' öffnen');
+
+### photo descriptions (alt texts, important for Google image search)
+EN: alt:"Hot tub built into a WPC deck with steps and LED strip lighting"
+DE: alt:"Badefass in einer WPC-Terrasse mit Treppe und LED-Lichtleiste"
+EN: alt:"Wood-fired hot tub with integrated stove and decorative chimney guard"
+DE: alt:"Badefass mit Holzofen, integriertem Ofen und dekorativem Schornsteinschutz"
+EN: alt:"Dark hot tub with LED jets under a pergola with string lights"
+DE: alt:"Dunkles Badefass mit LED-Düsen unter einer Pergola mit Lichterkette"
+EN: alt:"Hot tub with stainless stove panel and grey acrylic liner"
+DE: alt:"Badefass mit Ofenblende aus Edelstahl und grauer Acryl-Innenwanne"
+EN: alt:"Thermowood hot tub with blue liner and wooden steps in summer"
+DE: alt:"Badefass aus Thermoholz mit blauer Innenwanne und Holztreppe im Sommer"
+EN: alt:"Hot tub with white liner and drink shelf on a snowy terrace"
+DE: alt:"Badefass mit weißer Innenwanne und Getränkeablage auf einer verschneiten Terrasse"
+EN: alt:"Anthracite hot tub with external stove and steps in a garden"
+DE: alt:"Anthrazitfarbenes Badefass mit Außenofen und Treppe im Garten"
+EN: alt:"Hot tub with integrated stove, WPC cladding and steps"
+DE: alt:"Badefass mit integriertem Ofen, WPC-Verkleidung und Treppe"
+EN: alt:"Brown thermowood hot tub with blue liner and control buttons"
+DE: alt:"Braunes Badefass aus Thermoholz mit blauer Innenwanne und Bedientasten"
+EN: alt:"Hot tub stove with glass door and patterned chimney guard"
+DE: alt:"Badefass-Ofen mit Sichtfenster und gemustertem Schornsteinschutz"
+EN: alt:"Dark hot tub with jets, LED lights, steps and handrail"
+DE: alt:"Dunkles Badefass mit Düsen, LED-Beleuchtung, Treppe und Handlauf"
+EN: alt:"Hot tub with integrated stove next to a modern house"
+DE: alt:"Badefass mit integriertem Ofen neben einem modernen Haus"
+EN: alt:"Thermowood hot tub with blue liner and external stove"
+DE: alt:"Badefass aus Thermoholz mit blauer Innenwanne und Außenofen"
+EN: alt:"Snow-covered hot tub at night with lanterns"
+DE: alt:"Verschneites Badefass bei Nacht mit Laternen"
+EN: alt:"Thermowood hot tub on a deck by the lake"
+DE: alt:"Badefass aus Thermoholz auf einer Terrasse am See"
+EN: alt:"Hot tub stainless steel chimney guard with flame pattern"
+DE: alt:"Schornsteinschutz aus Edelstahl mit Flammenmuster"
+EN: alt:"Wood-fired hot tub by the lake"
+DE: alt:"Holzbadefass mit Holzofen am See"
+EN: alt:"Wood-fired hot tub with dark cover on a wooden deck"
+DE: alt:"Badefass mit Holzofen und dunkler Abdeckung auf einer Holzterrasse"
+
+### header, language switch, footer (same on every sub-page)
+EN: <!-- German version (de/forest-king-tub-gallery.html) is built from this file: after editing texts here run tools/build-de.ps1 -->
+DE:
+EN: <html lang="en">
+DE: <html lang="de">
+EN: <link rel="canonical" href="https://forestkings.com/forest-king-tub-gallery.html">
+DE: <link rel="canonical" href="https://forestkings.com/de/forest-king-tub-gallery.html">
+EN: <meta property="og:url" content="https://forestkings.com/forest-king-tub-gallery.html">
+DE: <meta property="og:url" content="https://forestkings.com/de/forest-king-tub-gallery.html">
+EN: <meta property="og:type" content="website">
+DE: <meta property="og:type" content="website"><meta property="og:locale" content="de_DE">
+EN: <span>Customer reviews</span>
+DE: <span>Kundenbewertungen</span>
+EN: >Fast delivery</span>
+DE: >Schnelle Lieferung</span>
+EN: <span>24-month warranty</span><span>14-day right of withdrawal</span>
+DE: <span>24 Monate Garantie</span><span>14 Tage Widerrufsrecht</span>
+EN: Forest Kings – Hot Tubs Factory
+DE: Forest Kings – Badefass-Manufaktur
+EN: >About us</a>
+DE: >Über uns</a>
+EN: >Become an expert</a>
+DE: >Experte werden</a>
+EN: >Gallery</a>
+DE: >Galerie</a>
+EN: <a href="index.html#contact">Contact</a><a href="index.html#withdrawal">Withdraw from contract here</a>
+DE: <a href="index.html#contact">Kontakt</a><a href="index.html#withdrawal">Vertrag hier widerrufen</a>
+EN: <span class="lng" aria-label="Language"><a href="forest-king-tub-gallery.html" lang="en" hreflang="en" aria-current="page">EN</a><span aria-hidden="true">|</span><a href="de/forest-king-tub-gallery.html" lang="de" hreflang="de">DE</a></span>
+DE: <span class="lng" aria-label="Sprache"><a href="/forest-king-tub-gallery.html" lang="en" hreflang="en">EN</a><span aria-hidden="true">|</span><a href="/de/forest-king-tub-gallery.html" lang="de" hreflang="de" aria-current="page">DE</a></span>
+EN: aria-label="Social media"
+DE: aria-label="Soziale Medien"
+# footer: the links still point to the English PDFs until the German PDFs exist (stage 4)
+EN: >Legal notice</a>
+DE: >Impressum</a>
+EN: >Terms & conditions</a>
+DE: >AGB</a>
+EN: >Right of withdrawal</a>
+DE: >Widerrufsbelehrung</a>
+EN: download="Privacy_Policy_Forest_Kings_Tub.pdf">Privacy policy</a>
+DE: download="Privacy_Policy_Forest_Kings_Tub.pdf">Datenschutzerklärung</a>
+EN: download="Warranty_Forest_Kings_Tub.pdf">Warranty</a>
+DE: download="Warranty_Forest_Kings_Tub.pdf">Garantie</a>
+EN: >Shipping & payment</a>
+DE: >Versand & Zahlung</a>
+EN: >User manual</a>
+DE: >Bedienungsanleitung</a>
+EN: Marijampolė, Lithuania · Company code: 304924983 · VAT no.: LT100012395710<br>
+DE: Marijampolė, Litauen · Firmencode: 304924983 · USt-IdNr.: LT100012395710<br>
