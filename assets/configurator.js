@@ -1643,8 +1643,9 @@ document.getElementById('lux').onclick=()=>{
  /* with Filter connection the customer can also add a filter box (square / round) */
  const cbx=wrap.querySelector('.cbx');
  [['Connection',null],['Square box',0],['Round box',1]].forEach(([t,k])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t+' +'+(k==null?FO[2][1]:FBP[k])+'€'; b.dataset.k=k==null?'':k;
-  b.onclick=e=>{ e.stopPropagation(); st.cbox=k!=null; if(k!=null) st.fbox=k; name(); cbxUpd(); build(); readout(); if(rqs.open) showSum(); if(window.focusAngle) window.focusAngle((st.filtH%12)*Math.PI/6); }; cbx.appendChild(b); });
- function cbxUpd(){ cbx.hidden=st.filter!==2; [...cbx.children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===''?!st.cbox:(st.cbox&&+b.dataset.k===st.fbox)))); }
+  b.onclick=e=>{ e.stopPropagation(); if(k==null) return; if(st.cbox&&st.fbox===k) st.cbox=false; else { st.cbox=true; st.fbox=k; }   // Connection is always on; one box (square or round) can be added, click again to remove
+  name(); cbxUpd(); build(); readout(); if(rqs.open) showSum(); if(window.focusAngle) window.focusAngle((st.filtH%12)*Math.PI/6); }; cbx.appendChild(b); });
+ function cbxUpd(){ cbx.hidden=st.filter!==2; [...cbx.children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===''?true:(st.cbox&&+b.dataset.k===st.fbox)))); }
  const _fv=fvis; fvis=function(){ _fv.apply(this,arguments); vis(); };
  const _ss=syncUI; syncUI=function(){ const r=_ss.apply(this,arguments); if(!st.acc.filter||st.filter===1) picked=false; else if(!st.pend.filter&&FD.name!=='Filtration system') name(); vis(); return r; };
  { const _b=build; build=function(){   // if steps / shelf moved onto the filter, slide the filter to the nearest free hour
@@ -2047,7 +2048,7 @@ window.sandUnder=function(g,A){
    setTimeout(()=>{ try{ readout(); if(rqs.open) showSum(); }catch(e){} },0); }
   document.querySelectorAll('.cbx button[data-k="1"]').forEach(b=>{ b.style.display=sq?'none':''; });
   [...subB.children].forEach(b=>{ if(b.dataset.k==='1') b.style.display=sq?'none':''; });
-  document.querySelectorAll('.cbx button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===''?!st.cbox:(st.cbox&&+b.dataset.k===st.fbox)))); }
+  document.querySelectorAll('.cbx button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===''?true:(st.cbox&&+b.dataset.k===st.fbox)))); }
  const _b=build; build=function(){ fix(); return _b.apply(this,arguments); };
  window.fixFilterBox=fix; fix();
 })();
