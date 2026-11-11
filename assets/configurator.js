@@ -2391,3 +2391,7 @@ window.sandUnder=function(g,A){
   var set=function(){ if(i.naturalWidth&&!i.getAttribute("width")){ i.setAttribute("width",i.naturalWidth); i.setAttribute("height",i.naturalHeight); } };
   if(i.complete) set(); else i.addEventListener("load",set,{once:true}); }); })();
 
+
+/* Shape 3 and Shape 4 (square tub): King L is not offered; if it was chosen, King M is used */
+{ const _sf=window.syncForm; window.syncForm=function(){ const r=_sf.apply(this,arguments); const sq=S.shapes[st.s].id==='square', li=S.models.findIndex(m=>m.id==='L'), b=[...$('oModel').children].filter(x=>x.tagName==='BUTTON')[li];
+  if(b) b.style.display=sq?'none':''; if(sq&&st.m===li){ st.m=0; press($('oModel'),0); setTimeout(()=>{ build(); readout(); },0); } return r; }; window.syncForm(); }
