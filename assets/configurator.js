@@ -35,6 +35,7 @@ window.hourBlocked=function(who,h){
 /* Stove type options: [label, surcharge EUR]. Edit prices here. */
 const STV={ power:[['Stove 20 kW',0],['Stove 30 kW',150]], orient:[['Vertical',0]], glass:[['Without glass',0],['With glass',25]], metal:[['AISI 304',0],['AISI 316',150]], thick:[['1.5 mm',0],['2 mm',200]], elbow:[['Without elbow',0],['90\u00b0 elbow',60]] };
 Object.keys(STV).forEach(k=>STV[k].forEach((o,i)=>{const v=PRICE_OV['stv:'+k+':'+i]; if(v!=null)o[1]=v;}));   // price list overrides (admin)
+const INM=[['AISI 304',STV.metal[0][1]],['AISI 316',STV.metal[1][1]]]; INM.forEach((t,i)=>{const v=PRICE_OV['inm:'+i]; if(v!=null)t[1]=v;}); window.INM=INM;   // inside stove metal surcharge (admin Prices: inm:0 / inm:1)
 const GREYP=window.GREYP, GREYPT=window.GREYPT;   // shared: assets/fk-data.js
 const BLUEP=window.BLUEP, BLUEPT=window.BLUEPT;   // shared: assets/fk-data.js
 const OBSIDIAN=window.OBSIDIAN, OBST=window.OBST;   // shared: assets/fk-data.js
@@ -63,7 +64,7 @@ const SITE = {
   // stove types (Stove tab). extra = surcharge in EUR (set the real prices here). electric:true = no chimney / no fire
   stoveTypes: [ {id:'wood', free:true,
       get n(){ const v=st.sv; return STV.power[v.k||0][0]+' \u00b7 '+STV.glass[v.g][0].toLowerCase()+' \u00b7 '+STV.metal[v.m][0]+(v.e?' \u00b7 '+STV.elbow[v.e][0]:''); },
-      get extra(){ const v=st.sv; return STV.orient[v.o][1]+STV.glass[v.g][1]+STV.power[v.k||0][1]+STV.metal[v.m][1]+STV.elbow[v.e||0][1]; } },
+      get extra(){ const v=st.sv; return STV.orient[v.o][1]+STV.glass[v.g][1]+STV.power[v.k||0][1]+(S.stovePlaces[st.p]&&S.stovePlaces[st.p].id==='in'?INM:STV.metal)[v.m][1]+STV.elbow[v.e||0][1]; } },
     {id:'el9', n:'Electric 9 kW', extra:250, electric:true} ],
   woods:    [{n:'Spruce',c:'#c9a46c'},{n:'Thermowood',c:'#6d4b34'},{n:'Larch',c:'#b8733b'},{n:'Natural pine',c:'#dcbc8a'},{n:'Red cedar',c:'#a4512f'},{n:'Walnut',c:'#4f3526'},{n:'Grey wash',c:'#8d918e'},{n:'Black stain',c:'#2c2b29'}],
   acrylics: [{n:'Ice blue',c:'#bfe3ee'},{n:'Pearl white',c:'#f1f3f2'},{n:'Graphite',c:'#4b555a'},{n:'Mocha brown',c:'#9a7058'},{n:'Sky blue',c:'#7cc2e3'},{n:'Deep blue',c:'#2f6f9f'},{n:'Sand beige',c:'#d9c9a8'},{n:'Sage green',c:'#8fb09f'},
@@ -1314,6 +1315,9 @@ function avis(){subZ.hidden=!st.acc.air||!aOpen;chgZ.hidden=!st.acc.air||aOpen;c
 function setAir(i){st.air=i;AD.price=AO[i][1];AD.name='Air massage system \u00b7 '+AO[i][0];chipEls.air.querySelector('small').textContent=plus(AD.price);
  [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));aOpen=false;avis();readout();if(rqs.open)showSum();}
 const _sA=syncUI;syncUI=function(){if(!st.acc.air){aOpen=true;st.air=0;AD.name='Air massage system';AD.price=AO[0][1];[...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.air.querySelector('small').textContent=plus(AD.price);}_sA();avis();};
+{ const sub=document.createElement('div'); sub.className='sub'; INM.forEach(([n,p],i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=n+(p?' '+plus(p):''); b.onclick=e=>{ e.stopPropagation(); st.sv.m=i; setAcc('stove',true); }; sub.appendChild(b); }); $('oPos').after(sub);   // inside stove: AISI 304 / 316 (3D steel colour + own price)
+ const iv=()=>{ const ins=S.stovePlaces[st.p].id==='in'; sub.hidden=!ins; [...sub.children].forEach((b,i)=>b.setAttribute('aria-pressed',String(st.sv.m===i))); document.querySelectorAll('#oStove .rw').forEach(r=>{ if(r.title==='Metal') r.style.display=ins?'none':''; }); };
+ const _sI=syncUI; syncUI=function(){ const r=_sI.apply(this,arguments); iv(); return r; }; iv(); }
 [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));
 const FD=S.accessories.find(x=>x.id==='filter'),FO=[['Filter box',120],['Sand filter',250],['Filter connection',80]],FB=['Square box','Round box'],FBP=[120,120];FO.forEach((t,i)=>{const v=PRICE_OV['flt:'+i];if(v!=null)t[1]=v;});FBP.forEach((x,i)=>{const v=PRICE_OV['fbox:'+i];if(v!=null)FBP[i]=v;});window.FILO=FO;window.FBPO=FBP;   // FB: filter box shapes (prices: edit FO / FBP)
 let fOpen=true;st.filter=0;st.fbox=0;let fStep=0;   // fStep 1 = Filter box chosen, shape not chosen yet
@@ -2341,6 +2345,7 @@ window.sandUnder=function(g,A){
     out.push(sec('Stove type',S.stoveTypes.filter(t=>t.electric).map(t=>row(t.n,ex(t.extra),'st:'+t.id))));
     out.push(sec('Wood stove options',['power','metal','glass','elbow'].flatMap(k=>STV[k].map((o,i)=>row(({power:'Power',orient:'Orientation',glass:'Glass',metal:'Metal',thick:'Thickness',elbow:'Elbow'})[k]+': '+o[0],ex(o[1]),'stv:'+k+':'+i)))));
     out.push(sec('Stove position',S.stovePlaces.map(p=>row(p.n,ex(p.extra),'sp:'+p.id))));
+    out.push(sec('Inside stove metal',INM.map(([n,x],i)=>row(n,ex(x),'inm:'+i))));
     out.push(sec('Steps',[row('Closed',ex(LAD_CLOSED),'steps')]));
     out.push(sec('Air massage system',(window.AIRO||[]).map(([n,x],i)=>row(n,ex(x),'air:'+i))));
     out.push(sec('LED lighting',(window.LEDO||[]).map(([n,x],i)=>row(n,ex(x),'led:'+i))));
