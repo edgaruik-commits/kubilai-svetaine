@@ -1291,7 +1291,8 @@ function svis(){sw2.hidden=!st.acc.shelf||!shOpen;chg4.hidden=!st.acc.shelf||shO
 function setShelf(i){st.shelfC=i;SHA.name='Drink shelf \u00b7 '+SHC[i][0];SHA.price=SHC[i][2];chipEls.shelf.querySelector('small').textContent=plus(SHA.price);[...sw2.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));shOpen=false;svis();build();readout();if(rqs.open)showSum();}
 const _s4=syncUI;syncUI=function(){if(!st.acc.shelf){shOpen=true;st.shelfC=0;SHA.name='Drink shelf \u00b7 Wooden';SHA.price=SHC[0][2];chipEls.shelf.querySelector('small').textContent='';[...sw2.children].forEach(b=>b.setAttribute('aria-pressed',false));}_s4();svis();};
 [...sw2.children].forEach(b=>b.setAttribute('aria-pressed',false));
-const LD=S.accessories.find(x=>x.id==='led'),LO=[['LED RGB lighting, 2 pcs',0],['LED RGB lighting, 3 pcs',270],['LED RGB lighting, 5 pcs',540]];
+const LD=S.accessories.find(x=>x.id==='led'),LO=[['LED RGB lighting, 2 pcs',0],['LED RGB lighting, 3 pcs',270],['LED RGB lighting, 5 pcs',540]];LO.forEach((t,i)=>{const v=PRICE_OV['led:'+i];if(v!=null)t[1]=v;});window.LEDO=LO;   // price list overrides (admin)
+
 let lOpen=true;st.led=0;
 const sub3=document.createElement('div');sub3.className='sub';
 LO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p?' '+plus(p):'');b.dataset.i=i;b.onclick=()=>setLed(i);sub3.appendChild(b);});
@@ -2340,12 +2341,13 @@ window.sandUnder=function(g,A){
     out.push(sec('Stove position',S.stovePlaces.map(p=>row(p.n,ex(p.extra),'sp:'+p.id))));
     out.push(sec('Steps',[row('Closed',ex(LAD_CLOSED),'steps')]));
     out.push(sec('Air massage system',(window.AIRO||[]).map(([n,x],i)=>row(n,ex(x),'air:'+i))));
+    out.push(sec('LED lighting',(window.LEDO||[]).map(([n,x],i)=>row(n,ex(x),'led:'+i))));
     out.push(sec('Hydro massage',JT.map(([n,x])=>row(n+' jets',ex(x+HB),'jet:'+n))));
     out.push(sec('Thermometer',TO.map(([n,x],i)=>row(n,e(x),'th:'+i))));
     out.push(sec('Drink shelf',SHC.map(([n,c,x],i)=>row(n,e(x),'sh:'+i))));
     out.push(sec('LED Mini lighting',(window.LMO||[]).map(([n,x],i)=>row(n,ex(x),'lm:'+i))));
     out.push(sec('Chimney',(window.CHGO||[]).map(o=>row(o[1],ex(o[2]),'ch:'+o[0]))));
-    const skip=['stove','ladder','hydro','air','thermo','shelf','guard','ledmini'];
+    const skip=['stove','ladder','hydro','air','led','thermo','shelf','guard','ledmini'];
     out.push(sec('Accessories',S.accessories.filter(a=>!skip.includes(a.id)).map(a=>row(a.id==='headrest'?'Headrests (price per pc)':a.name,ex(a.id==='headrest'?a.unit:a.price),'a:'+a.id))));
     const d=dlg('Prices','<p class="note">Type a new price only where it changes and press <b>Save prices</b>. The same price list is used by the order database (Basic price). Prices in EUR.</p>'+out.join(''),
       '<button type="button" class="dan" id="fkPrR">Restore all original prices</button><button type="button" data-c>Cancel</button><button type="button" class="pri" id="fkPrS">Save prices</button>');
