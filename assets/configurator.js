@@ -63,8 +63,8 @@ const SITE = {
   stovePlaces: [ {id:'out', n:'Outside', extra:0}, {id:'in', n:'Inside', extra:200} ],
   // stove types (Stove tab). extra = surcharge in EUR (set the real prices here). electric:true = no chimney / no fire
   stoveTypes: [ {id:'wood', free:true,
-      get n(){ const v=st.sv; return STV.power[v.k||0][0]+' \u00b7 '+STV.glass[v.g][0].toLowerCase()+' \u00b7 '+STV.metal[v.m][0]+(v.e?' \u00b7 '+STV.elbow[v.e][0]:''); },
-      get extra(){ const v=st.sv; return STV.orient[v.o][1]+STV.glass[v.g][1]+STV.power[v.k||0][1]+(S.stovePlaces[st.p]&&S.stovePlaces[st.p].id==='in'?INM:STV.metal)[v.m][1]+STV.elbow[v.e||0][1]; } },
+      get n(){ const v=st.sv; return STV.power[v.k||0][0]+' \u00b7 '+STV.glass[v.g][0].toLowerCase()+' \u00b7 '+STV.metal[v.m][0]+(v.e&&S.stovePlaces[st.p].id!=='in'?' \u00b7 '+STV.elbow[v.e][0]:''); },
+      get extra(){ const v=st.sv; return STV.orient[v.o][1]+STV.glass[v.g][1]+STV.power[v.k||0][1]+(S.stovePlaces[st.p]&&S.stovePlaces[st.p].id==='in'?INM:STV.metal)[v.m][1]+(S.stovePlaces[st.p]&&S.stovePlaces[st.p].id==='in'?0:STV.elbow[v.e||0][1]); } },   // no 90° elbow with the inside stove
     {id:'el9', n:'Electric 9 kW', extra:250, electric:true} ],
   woods:    [{n:'Spruce',c:'#c9a46c'},{n:'Thermowood',c:'#6d4b34'},{n:'Larch',c:'#b8733b'},{n:'Natural pine',c:'#dcbc8a'},{n:'Red cedar',c:'#a4512f'},{n:'Walnut',c:'#4f3526'},{n:'Grey wash',c:'#8d918e'},{n:'Black stain',c:'#2c2b29'}],
   acrylics: [{n:'Ice blue',c:'#bfe3ee'},{n:'Pearl white',c:'#f1f3f2'},{n:'Graphite',c:'#4b555a'},{n:'Mocha brown',c:'#9a7058'},{n:'Sky blue',c:'#7cc2e3'},{n:'Deep blue',c:'#2f6f9f'},{n:'Sand beige',c:'#d9c9a8'},{n:'Sage green',c:'#8fb09f'},
@@ -1316,7 +1316,7 @@ function setAir(i){st.air=i;AD.price=AO[i][1];AD.name='Air massage system \u00b7
  [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));aOpen=false;avis();readout();if(rqs.open)showSum();}
 const _sA=syncUI;syncUI=function(){if(!st.acc.air){aOpen=true;st.air=0;AD.name='Air massage system';AD.price=AO[0][1];[...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.air.querySelector('small').textContent=plus(AD.price);}_sA();avis();};
 { const sub=document.createElement('div'); sub.className='sub'; INM.forEach(([n,p],i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=n+(p?' '+plus(p):''); b.onclick=e=>{ e.stopPropagation(); st.sv.m=i; setAcc('stove',true); }; sub.appendChild(b); }); $('oPos').after(sub);   // inside stove: AISI 304 / 316 (3D steel colour + own price)
- const iv=()=>{ const ins=S.stovePlaces[st.p].id==='in'; sub.hidden=!ins; [...sub.children].forEach((b,i)=>b.setAttribute('aria-pressed',String(st.sv.m===i))); document.querySelectorAll('#oStove .rw').forEach(r=>{ if(r.title==='Metal') r.style.display=ins?'none':''; }); };
+ const iv=()=>{ const ins=S.stovePlaces[st.p].id==='in'; sub.hidden=!ins; [...sub.children].forEach((b,i)=>b.setAttribute('aria-pressed',String(st.sv.m===i))); document.querySelectorAll('#oStove .rw').forEach(r=>{ if(r.title==='Metal'||r.title==='Elbow') r.style.display=ins?'none':''; }); };
  const _sI=syncUI; syncUI=function(){ const r=_sI.apply(this,arguments); iv(); return r; }; iv(); }
 [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));
 const FD=S.accessories.find(x=>x.id==='filter'),FO=[['Filter box',120],['Sand filter',250],['Filter connection',80]],FB=['Square box','Round box'],FBP=[120,120];FO.forEach((t,i)=>{const v=PRICE_OV['flt:'+i];if(v!=null)t[1]=v;});FBP.forEach((x,i)=>{const v=PRICE_OV['fbox:'+i];if(v!=null)FBP[i]=v;});window.FILO=FO;window.FBPO=FBP;   // FB: filter box shapes (prices: edit FO / FBP)
