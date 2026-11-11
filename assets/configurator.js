@@ -339,6 +339,7 @@ document.addEventListener('click',e=>{ if(st.fo&&!$('oForm').contains(e.target)&
 function pressWood(){ press($('oWood'),(st.wpc||st.plain)?-1:st.w); $('lWood').textContent='Tube cladding Thermowood'+(!st.wpc&&!st.plain&&CLAD_P()?' '+plus(CLAD_P()):''); press($('oWpc'),st.wpc?st.w:-1); $('lWpc').textContent='Tube cladding WPC'+(st.wpc&&CLAD_P()?' '+plus(CLAD_P()):''); }   // thermo wood, plain wood and WPC are alternatives, same colours
 S.woods.forEach((w,i)=>btn($('oWood'),w.n,()=>{st.w=i;st.wpc=0;st.plain=0;pressWood();build();},w.c));
 S.woods.forEach((w,i)=>btn($('oWpc'),w.n,()=>{ if(st.wpc&&st.w===i){ st.wpc=0; } else { st.w=i; st.wpc=1; st.plain=0; } pressWood();build(); },w.c));   // click the selected WPC colour again = remove WPC (and its price)
+window.WPC_OK=i=>/grey|black/i.test(S.woods[i].n); [...$('oWpc').children].filter(b=>b.tagName==='BUTTON').forEach((b,i)=>{ if(!WPC_OK(i)) b.style.display='none'; });   // WPC only in grey and black
 function pressMat(){ press($('oAcr'),st.fib?-1:st.a); press($('oFib'),st.fib?st.a:-1); $('lFib').textContent='Gelcoat inner'+(st.fib&&LINER_P()?' '+plus(LINER_P()):''); $('lAcr').textContent='Acrylic inner'+(!st.fib&&LINER_P()?' '+plus(LINER_P()):''); }
 S.acrylics.forEach((a,i)=>btn($('oAcr'),a.n,()=>{ if(!st.fib&&st.a===i){ st.fib=1; } else { st.a=i; st.fib=0; } pressMat();build(); },a.sw||a.c));   // click the selected acrylic colour again = remove acrylic (and its price)
 S.acrylics.forEach((a,i)=>btn($('oFib'),a.n,()=>{st.a=i;st.fib=1;pressMat();build();},a.sw||a.c));
@@ -2336,7 +2337,7 @@ window.sandUnder=function(g,A){
     out.push(sec('Gelcoat inner',S.acrylics.map((a,i)=>row(a.n,ex(FINP('fib',i)),'fin:fib:'+i))));
     out.push(sec('Acrylic inner',S.acrylics.map((a,i)=>a.r1?'':row(a.n,ex(FINP('acr',i)),'fin:acr:'+i))));
     out.push(sec('Tube cladding Thermowood',S.woods.map((w,i)=>row(w.n,ex(FINP('wood',i)),'fin:wood:'+i))));
-    out.push(sec('Tube cladding WPC',S.woods.map((w,i)=>row(w.n,ex(FINP('wpc',i)),'fin:wpc:'+i))));
+    out.push(sec('Tube cladding WPC',S.woods.map((w,i)=>!WPC_OK(i)?'':row(w.n,ex(FINP('wpc',i)),'fin:wpc:'+i))));
     out.push(sec('Stove type',S.stoveTypes.filter(t=>t.electric).map(t=>row(t.n,ex(t.extra),'st:'+t.id))));
     out.push(sec('Wood stove options',['power','metal','glass','elbow'].flatMap(k=>STV[k].map((o,i)=>row(({power:'Power',orient:'Orientation',glass:'Glass',metal:'Metal',thick:'Thickness',elbow:'Elbow'})[k]+': '+o[0],ex(o[1]),'stv:'+k+':'+i)))));
     out.push(sec('Stove position',S.stovePlaces.map(p=>row(p.n,ex(p.extra),'sp:'+p.id))));
