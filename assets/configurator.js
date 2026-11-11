@@ -1317,7 +1317,7 @@ const _sA=syncUI;syncUI=function(){if(!st.acc.air){aOpen=true;st.air=0;AD.name='
 const FD=S.accessories.find(x=>x.id==='filter'),FO=[['Filter box',120],['Sand filter',250],['Filter connection',80]],FB=['Square box','Round box'],FBP=[120,120];FO.forEach((t,i)=>{const v=PRICE_OV['flt:'+i];if(v!=null)t[1]=v;});FBP.forEach((x,i)=>{const v=PRICE_OV['fbox:'+i];if(v!=null)FBP[i]=v;});window.FILO=FO;window.FBPO=FBP;   // FB: filter box shapes (prices: edit FO / FBP)
 let fOpen=true;st.filter=0;st.fbox=0;let fStep=0;   // fStep 1 = Filter box chosen, shape not chosen yet
 const subF=document.createElement('div');subF.className='sub';
-FO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p&&i>0?' '+plus(p):'');b.dataset.i=i;b.onclick=e=>{ if(i===0){ e.stopPropagation(); fStep=1; fOpen=true; fvis(); } else { fStep=0; setFilter(i); } };subF.appendChild(b);});
+FO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p&&i===1?' '+plus(p):'');b.dataset.i=i;b.onclick=e=>{ if(i===0){ e.stopPropagation(); fStep=1; fOpen=true; fvis(); } else { fStep=0; setFilter(i); } };subF.appendChild(b);});
 const subB=document.createElement('div');subB.className='sub subfly';
 FB.forEach((n,k)=>{const b=document.createElement('button');b.type='button';b.textContent=n+' '+plus(FBP[k]);b.dataset.k=k;b.onclick=()=>{fStep=0;setFilter(0,k);};subB.appendChild(b);});
 const chgF=document.createElement('button');chgF.type='button';chgF.className='chg';chgF.onclick=()=>{fOpen=true;syncUI();};
@@ -1642,7 +1642,7 @@ document.getElementById('lux').onclick=()=>{
  cb.onclick=e=>{ e.stopPropagation(); fStep=0; st.cbox=false; setFilter(2); picked=true; name(); fOpen=true; fvis(); upd(); cbxUpd(); readout(); };
  /* with Filter connection the customer can also add a filter box (square / round) */
  const cbx=wrap.querySelector('.cbx');
- [['No box',null],['Square box',0],['Round box',1]].forEach(([t,k])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t+(k==null?'':' +'+FBP[k]+'€'); b.dataset.k=k==null?'':k;
+ [['Connection',null],['Square box',0],['Round box',1]].forEach(([t,k])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t+' +'+(k==null?FO[2][1]:FBP[k])+'€'; b.dataset.k=k==null?'':k;
   b.onclick=e=>{ e.stopPropagation(); st.cbox=k!=null; if(k!=null) st.fbox=k; name(); cbxUpd(); build(); readout(); if(rqs.open) showSum(); if(window.focusAngle) window.focusAngle((st.filtH%12)*Math.PI/6); }; cbx.appendChild(b); });
  function cbxUpd(){ cbx.hidden=st.filter!==2; [...cbx.children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===''?!st.cbox:(st.cbox&&+b.dataset.k===st.fbox)))); }
  const _fv=fvis; fvis=function(){ _fv.apply(this,arguments); vis(); };

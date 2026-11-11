@@ -69,7 +69,7 @@
   'Tube cover':'Abdeckung','Thermo cover':'Thermoabdeckung','Insulated lid that keeps the heat in':'Isolierter Deckel, der die Wärme im Wasser hält',
   'Black':'Schwarz','Brown':'Braun','Grey':'Grau',
   'Filtration system':'Filteranlage','Water filtration':'Wasserfilterung','Filter box':'Filterbox','Sand filter':'Sandfilter','Filter connection':'Filteranschluss',
-  'No box':'Ohne Box','Round box':'Runde Box','Square box':'Eckige Box','Filter connection position on the clock':'Position des Filteranschlusses (Uhrzeit)',
+  'No box':'Ohne Box','Connection':'Anschluss','Round box':'Runde Box','Square box':'Eckige Box','Filter connection position on the clock':'Position des Filteranschlusses (Uhrzeit)',
   'Hot tub control (Wi-Fi)':'Badefass-Steuerung (WLAN)','Control your hot tub via Wi-Fi':'Steuern Sie Ihr Badefass per WLAN',
   'Electric heating system 3 kW':'Elektroheizung 3 kW','3 kW electric heater that keeps the water warm':'3-kW-Elektroheizung, die das Wasser warm hält',
   'Headrests':'Kopfstützen','Headrest':'Kopfstütze','Headrests (price per pc)':'Kopfstützen (Preis pro Stück)',
