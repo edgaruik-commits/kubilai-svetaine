@@ -55,8 +55,8 @@ const SITE = {
         hint:'Drag to rotate', stovePos:'Stove position', steps:'Steps', guard:'Chimney guard', accessories:'Accessories', total:'Total', currency:'EUR' },
   // r = radius in 3D units (size in the configurator). Prices are placeholders (EUR).
   models: [
-    { id:'M', name:'King M', r:1.025, size:'Inner 185×85 cm · outer 205 cm', people:'5–6 people', liters:'approx. 1,100 l', heat:'approx. 2.5 h', price:6490, priceSquare:4500 },
-    { id:'L', name:'King L', r:1.125, size:'Inner 200×90 cm · outer 225 cm', people:'6–8 people', liters:'approx. 1,500 l', heat:'approx. 3 h',   price:8290, priceSquare:8690 }
+    { id:'M', name:'King M', r:1.025, size:'Outer 205 cm', people:'5–6 people', liters:'approx. 1,100 l', heat:'approx. 2.5 h', price:6490, priceSquare:4500 },
+    { id:'L', name:'King L', r:1.125, size:'Outer 225 cm', people:'6–8 people', liters:'approx. 1,500 l', heat:'approx. 3 h',   price:8290, priceSquare:8690 }
   ],
   shapes: [ {id:'round', n:'Shape 3', extra:0}, {id:'square', n:'Shape 4', extra:0} ],
   // stove position: inside the tub (integrated stove behind a wooden guard) or outside (free-standing)
