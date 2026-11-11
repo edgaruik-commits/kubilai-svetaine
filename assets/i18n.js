@@ -26,7 +26,7 @@
   'Inner shape 3: only with inside stove type.':'Innenform 3: nur mit Innenofen.',
   'Inner shape 4: only with outside stove type.':'Innenform 4: nur mit Außenofen.',
   'Round':'Rund','Square':'Eckig',
-  'Inner 185×85 cm':'innen 185×85 cm','outer 205×100 cm':'außen 205×100 cm',
+  'Inner 185×85 cm':'innen 185×85 cm','Outer 220×220 cm':'außen 220×220 cm','outer 205×100 cm':'außen 205×100 cm',
   'Inner 200×90 cm':'innen 200×90 cm','outer 225×105 cm':'außen 225×105 cm',
   '5–6 people':'5–6 Personen','6–8 people':'6–8 Personen',
   'approx. 1,100 l':'ca. 1.100 l','approx. 1,500 l':'ca. 1.500 l','approx. 2.5 h':'ca. 2,5 Std.','approx. 3 h':'ca. 3 Std.',
