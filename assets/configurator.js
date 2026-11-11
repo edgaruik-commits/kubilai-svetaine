@@ -1224,7 +1224,7 @@ document.getElementById('std').onclick=()=>{if(window.eqStd)window.eqStd();st.m=
 /* ---- part 05 ---- */
 
 readout=function(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n+' · '+(st.fib?'Gelcoat':'Acrylic');
- const L=[[m.name,m.size,1],['Size: '+m.people,''],['Shape: '+sh.n,sh.extra?'+'+fmt(sh.extra):'included'],[(st.wpc?'WPC: ':st.plain?'Wood: ':'Thermowood: ')+S.woods[st.w].n,CLAD_P()?fmt(CLAD_P()):'included'],[(st.fib?S.ui.fib:S.ui.acr)+': '+S.acrylics[st.a].n,LINER_P()?fmt(LINER_P()):'included'],
+ const L=[[m.name,m.size,1],['Size:',m.people,1],['Shape: '+sh.n,sh.extra?'+'+fmt(sh.extra):'included'],[(st.wpc?'WPC: ':st.plain?'Wood: ':'Thermowood: ')+S.woods[st.w].n,CLAD_P()?fmt(CLAD_P()):'included'],[(st.fib?S.ui.fib:S.ui.acr)+': '+S.acrylics[st.a].n,LINER_P()?fmt(LINER_P()):'included'],
   ];
  const ED=window.eqDone||[false,false,false];   // equipment rows appear only after the item was picked in the Equipment tab
  if(ED[0]&&st.acc.stove) L.push(['Stove: '+S.stoveTypes[st.t].n,(sv.price+S.stoveTypes[st.t].extra)?fmt(sv.price+S.stoveTypes[st.t].extra):'included']);
