@@ -132,7 +132,9 @@ S.stovePlaces.forEach(t=>{const v=PRICE_OV['sp:'+t.id]; if(v!=null) t.extra=v;})
 S.accessories.forEach(a=>{const v=PRICE_OV['a:'+a.id]; if(v!=null&&!['stove','ladder','hydro','thermo','shelf','ledmini'].includes(a.id)) a.price=v;});
 const ACR_PRICE = (PRICE_OV['fin:acr']!=null?PRICE_OV['fin:acr']:400);   // acrylic liner surcharge over fiberglass (EUR), any colour
 const WOOD_PRICE = 0;   // plain wood cladding surcharge (EUR), any colour - set the real price here
-const WPC_PRICE = (PRICE_OV['fin:wpc']!=null?PRICE_OV['fin:wpc']:200);   // WPC finish surcharge (EUR), any colour
+const WPC_PRICE = (PRICE_OV['fin:wpc']!=null?PRICE_OV['fin:wpc']:200);
+const FINP=(k,i)=>{ const v=PRICE_OV['fin:'+k+':'+i]; return v!=null?v:({fib:0,acr:ACR_PRICE,wood:0,wpc:WPC_PRICE})[k]; };   // finish surcharge per colour (admin Prices: fin:fib|acr|wood|wpc:<colour index>), else the one-for-all-colours price
+const LINER_P=()=>FINP(st.fib?'fib':'acr',st.a), CLAD_P=()=>st.wpc?FINP('wpc',st.w):st.plain?WOOD_PRICE:FINP('wood',st.w);   // WPC finish surcharge (EUR), any colour
 const st = { water:false, sf:0, sv:{o:0,g:1,m:0,h:0}, m:0, s:0, lf:1, w:5, wpc:0, plain:0, a:2, fib:1, coverC:0, stepOpen:0, stepInd:0, p:0, t:0, fire:true, acc:{ladder:true}, chim:{g:false,k:false}, pend:{hydro:false,thermo:true,shelf:true,led:true,air:true,filter:true,cover:true} };   // fire is always on
 S.defaultAccessories.forEach(i => st.acc[i] = true);
 const fmt = n => n===0?'':new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}).format(n)+'€';   // number first, then the euro sign: 25€
@@ -286,14 +288,14 @@ const visAcc = () => { const a=Object.assign({},st.acc); for(const k in st.pend)
 const mp = (m,si,form) => { const id=S.shapes[si].id;
   { const f=form!=null?form:(id==='round'?st.lf:id==='square'?st.sf:null), v=f!=null?PRICE_OV['m:'+m.id+':'+id+':'+f]:null; if(v!=null) return v; }   // price per size + exact shape (Shape 1-4), set in admin Prices
   return id==='rect' ? (m.priceRect!=null?m.priceRect:(m.priceSquare!=null?m.priceSquare:m.price)) : (id==='square' && m.priceSquare!=null) ? m.priceSquare : m.price; };   // base price depends on the shape
-const total = () => mp(S.models[st.m],st.s) + S.shapes[st.s].extra + (st.wpc?WPC_PRICE:0) + (st.plain?WOOD_PRICE:0) + (st.fib?0:ACR_PRICE) + (st.acc.stove?(S.stoveTypes[st.t].electric?0:S.stovePlaces[st.p].extra)+S.stoveTypes[st.t].extra:0) + S.accessories.reduce((t,a)=>t+(st.acc[a.id]&&!st.pend[a.id]?a.price:0),0);
+const total = () => mp(S.models[st.m],st.s) + S.shapes[st.s].extra + CLAD_P() + LINER_P() + (st.acc.stove?(S.stoveTypes[st.t].electric?0:S.stovePlaces[st.p].extra)+S.stoveTypes[st.t].extra:0) + S.accessories.reduce((t,a)=>t+(st.acc[a.id]&&!st.pend[a.id]?a.price:0),0);
 
 /* ---------- Text ---------- */
 (function(){
   const [b1,b2] = S.brand.split('|'); $('brand').innerHTML = b1 + '<span>' + b2 + '</span>';
   $('nav').innerHTML = S.nav.map(n => `<a href="${n[1]}">${n[0]}</a>`).join('');
   $('h1').textContent=S.hero.title; $('lead').textContent=S.hero.lead; $('cta').textContent=S.hero.cta;
-  $('lModel').textContent='Tube size'; $('lShape').textContent='Inner shape'; $('lWood').textContent='Tube cladding Thermowood'; $('lWpc').textContent='Tube cladding WPC'+(st.wpc?' '+plus(WPC_PRICE):''); $('lAcr').textContent='Acrylic inner'+(st.fib?'':' '+plus(ACR_PRICE)); $('lFib').textContent='Gelcoat inner'; const ap=id=>(S.accessories.find(a=>a.id===id)||{price:0}).price;
+  $('lModel').textContent='Tube size'; $('lShape').textContent='Inner shape'; $('lWood').textContent='Tube cladding Thermowood'+(!st.wpc&&!st.plain&&CLAD_P()?' '+plus(CLAD_P()):''); $('lWpc').textContent='Tube cladding WPC'+(st.wpc&&CLAD_P()?' '+plus(CLAD_P()):''); $('lAcr').textContent='Acrylic inner'+(!st.fib&&LINER_P()?' '+plus(LINER_P()):''); $('lFib').textContent='Gelcoat inner'+(st.fib&&LINER_P()?' '+plus(LINER_P()):''); const ap=id=>(S.accessories.find(a=>a.id===id)||{price:0}).price;
   $('lPos').textContent=S.ui.stovePos+(ap('stove')?' '+plus(ap('stove')):''); $('lSteps').textContent=S.ui.steps; $('lStove').textContent=S.ui.stoveType;
   $('hint').textContent=S.ui.hint;
   $('fTitle').textContent=S.features.title;
@@ -334,10 +336,10 @@ SQFORMS.forEach((f,i)=>{ const b=document.createElement('button'); b.type='butto
 /* press() styles every child, so skip the title: keep buttons only */
 addEventListener('resize',()=>posForm()); document.querySelector('.panel').addEventListener('scroll',()=>posForm());
 document.addEventListener('click',e=>{ if(st.fo&&!$('oForm').contains(e.target)&&!$('oShape').contains(e.target)){ st.fo=false; syncForm(); } });
-function pressWood(){ press($('oWood'),(st.wpc||st.plain)?-1:st.w); press($('oWpc'),st.wpc?st.w:-1); $('lWpc').textContent='Tube cladding WPC'+(st.wpc?' '+plus(WPC_PRICE):''); }   // thermo wood, plain wood and WPC are alternatives, same colours
+function pressWood(){ press($('oWood'),(st.wpc||st.plain)?-1:st.w); $('lWood').textContent='Tube cladding Thermowood'+(!st.wpc&&!st.plain&&CLAD_P()?' '+plus(CLAD_P()):''); press($('oWpc'),st.wpc?st.w:-1); $('lWpc').textContent='Tube cladding WPC'+(st.wpc&&CLAD_P()?' '+plus(CLAD_P()):''); }   // thermo wood, plain wood and WPC are alternatives, same colours
 S.woods.forEach((w,i)=>btn($('oWood'),w.n,()=>{st.w=i;st.wpc=0;st.plain=0;pressWood();build();},w.c));
 S.woods.forEach((w,i)=>btn($('oWpc'),w.n,()=>{ if(st.wpc&&st.w===i){ st.wpc=0; } else { st.w=i; st.wpc=1; st.plain=0; } pressWood();build(); },w.c));   // click the selected WPC colour again = remove WPC (and its price)
-function pressMat(){ press($('oAcr'),st.fib?-1:st.a); press($('oFib'),st.fib?st.a:-1); $('lAcr').textContent='Acrylic inner'+(st.fib?'':' '+plus(ACR_PRICE)); }
+function pressMat(){ press($('oAcr'),st.fib?-1:st.a); press($('oFib'),st.fib?st.a:-1); $('lFib').textContent='Gelcoat inner'+(st.fib&&LINER_P()?' '+plus(LINER_P()):''); $('lAcr').textContent='Acrylic inner'+(!st.fib&&LINER_P()?' '+plus(LINER_P()):''); }
 S.acrylics.forEach((a,i)=>btn($('oAcr'),a.n,()=>{ if(!st.fib&&st.a===i){ st.fib=1; } else { st.a=i; st.fib=0; } pressMat();build(); },a.sw||a.c));   // click the selected acrylic colour again = remove acrylic (and its price)
 S.acrylics.forEach((a,i)=>btn($('oFib'),a.n,()=>{st.a=i;st.fib=1;pressMat();build();},a.sw||a.c));
 window.FIB1=S.acrylics.map((a,i)=>a.only1?i:-1).filter(i=>i>=0);   // round Shape 1 basic colours: RAL 7015, RAL 5012, RAL 9001
@@ -1162,7 +1164,7 @@ window.__vis=true; try{ new IntersectionObserver(e=>{ window.__vis=e[0].isInters
 /* ---- part 03 ---- */
 
 S.email='info@forestkings.com';
-const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+')',fmt(mp(m,st.s))],['Size',m.people,''],['Shape',S.shapes[st.s].n,S.shapes[st.s].extra?'+'+fmt(S.shapes[st.s].extra):''],[st.wpc?'WPC finish':st.plain?'Wood cladding':'Thermowood',S.woods[st.w].n,st.wpc?fmt(WPC_PRICE):(st.plain&&WOOD_PRICE?fmt(WOOD_PRICE):'')],[st.fib?S.ui.fib:S.ui.acr,S.acrylics[st.a].n,st.fib?'':fmt(ACR_PRICE)]];
+const rows=()=>{const m=S.models[st.m],r=[['Model',m.name+' ('+m.size+')',fmt(mp(m,st.s))],['Size',m.people,''],['Shape',S.shapes[st.s].n,S.shapes[st.s].extra?'+'+fmt(S.shapes[st.s].extra):''],[st.wpc?'WPC finish':st.plain?'Wood cladding':'Thermowood',S.woods[st.w].n,CLAD_P()?fmt(CLAD_P()):''],[st.fib?S.ui.fib:S.ui.acr,S.acrylics[st.a].n,LINER_P()?fmt(LINER_P()):'']];
  r.push(['Stove',st.acc.stove?S.stoveTypes[st.t].n:'None',st.acc.stove?fmt(S.accessories.find(a=>a.id==='stove').price+S.stoveTypes[st.t].extra):'']);
  if(st.acc.stove&&!S.stoveTypes[st.t].electric) r.push(['Stove position',S.stovePlaces[st.p].n,S.stovePlaces[st.p].extra?fmt(S.stovePlaces[st.p].extra):'']);
  S.accessories.filter(a=>a.id!=='stove'&&st.acc[a.id]&&!st.pend[a.id]).forEach(a=>r.push([a.name,'',fmt(a.price)]));
@@ -1220,7 +1222,7 @@ document.getElementById('std').onclick=()=>{if(window.eqStd)window.eqStd();st.m=
 /* ---- part 05 ---- */
 
 readout=function(){const m=S.models[st.m],sh=S.shapes[st.s],sv=S.accessories.find(x=>x.id==='stove');$('rName').textContent=m.name+' · '+sh.n+' · '+(st.fib?'Gelcoat':'Acrylic');
- const L=[[m.name,m.size,1],['Size: '+m.people,''],['Shape: '+sh.n,sh.extra?'+'+fmt(sh.extra):'included'],[(st.wpc?'WPC: ':st.plain?'Wood: ':'Thermowood: ')+S.woods[st.w].n,st.wpc?fmt(WPC_PRICE):(st.plain&&WOOD_PRICE?fmt(WOOD_PRICE):'included')],[(st.fib?S.ui.fib:S.ui.acr)+': '+S.acrylics[st.a].n,st.fib?'included':fmt(ACR_PRICE)],
+ const L=[[m.name,m.size,1],['Size: '+m.people,''],['Shape: '+sh.n,sh.extra?'+'+fmt(sh.extra):'included'],[(st.wpc?'WPC: ':st.plain?'Wood: ':'Thermowood: ')+S.woods[st.w].n,CLAD_P()?fmt(CLAD_P()):'included'],[(st.fib?S.ui.fib:S.ui.acr)+': '+S.acrylics[st.a].n,LINER_P()?fmt(LINER_P()):'included'],
   ];
  const ED=window.eqDone||[false,false,false];   // equipment rows appear only after the item was picked in the Equipment tab
  if(ED[0]&&st.acc.stove) L.push(['Stove: '+S.stoveTypes[st.t].n,(sv.price+S.stoveTypes[st.t].extra)?fmt(sv.price+S.stoveTypes[st.t].extra):'included']);
@@ -1300,7 +1302,7 @@ function setLed(i){st.led=i;LD.price=LO[i][1];LD.name=LO[i][0];chipEls.led.query
  [...sub3.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));lOpen=false;lvis();readout();if(rqs.open)showSum();}
 const _sL=syncUI;syncUI=function(){if(!st.acc.led){lOpen=true;st.led=0;LD.name=LO[0][0];LD.price=LO[0][1];[...sub3.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.led.querySelector('small').textContent=plus(LD.price);}_sL();lvis();};
 LD.name=LO[0][0];LD.price=LO[0][1];[...sub3.children].forEach(b=>b.setAttribute('aria-pressed',false));
-const AD=S.accessories.find(x=>x.id==='air'),AO=[['12 jets \u00b7 750 W',0],['24 jets',300]];
+const AD=S.accessories.find(x=>x.id==='air'),AO=[['12 jets \u00b7 750 W',0],['24 jets',300]];AO.forEach((t,i)=>{const v=PRICE_OV['air:'+i];if(v!=null)t[1]=v;});window.AIRO=AO;AD.price=AO[0][1];   // price list overrides (admin)
 let aOpen=true;st.air=0;
 const subZ=document.createElement('div');subZ.className='sub';
 AO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p?' '+plus(p):'');b.dataset.i=i;b.onclick=()=>setAir(i);subZ.appendChild(b);});
@@ -2329,17 +2331,21 @@ window.sandUnder=function(g,A){
       '<div class="seg" id="fkSz">'+S.models.map((m,i)=>'<button type="button" data-m="'+i+'">'+m.name+'</button>').join('')+'</div>'+
       S.models.map((m,mi)=>combos.map((c,ci)=>{ const sh=S.shapes[c.si]; return '<div class="pr bp" data-m="'+mi+'" data-c="'+ci+'"><span><b style="text-align:left">'+m.name+' · '+c.n+'</b></span><b>'+e(mp(m,c.si,c.f)+sh.extra)+'</b><input type="number" min="0" step="1" placeholder="new" data-k="m:'+m.id+':'+c.id+':'+c.f+'" data-adj="'+(sh.extra||0)+'"></div>'; }).join('')).join('')+
       '</div><h4>Same for all sizes and shapes</h4>');
-    out.push(sec('Finish',[row('WPC cladding',e(WPC_PRICE),'fin:wpc'),row('Acrylic inner',e(ACR_PRICE),'fin:acr')]));
+    out.push(sec('Gelcoat inner',S.acrylics.map((a,i)=>row(a.n,ex(FINP('fib',i)),'fin:fib:'+i))));
+    out.push(sec('Acrylic inner',S.acrylics.map((a,i)=>a.r1?'':row(a.n,ex(FINP('acr',i)),'fin:acr:'+i))));
+    out.push(sec('Tube cladding Thermowood',S.woods.map((w,i)=>row(w.n,ex(FINP('wood',i)),'fin:wood:'+i))));
+    out.push(sec('Tube cladding WPC',S.woods.map((w,i)=>row(w.n,ex(FINP('wpc',i)),'fin:wpc:'+i))));
     out.push(sec('Stove type',S.stoveTypes.filter(t=>t.electric).map(t=>row(t.n,ex(t.extra),'st:'+t.id))));
     out.push(sec('Wood stove options',['power','metal','glass','elbow'].flatMap(k=>STV[k].map((o,i)=>row(({power:'Power',orient:'Orientation',glass:'Glass',metal:'Metal',thick:'Thickness',elbow:'Elbow'})[k]+': '+o[0],ex(o[1]),'stv:'+k+':'+i)))));
     out.push(sec('Stove position',S.stovePlaces.map(p=>row(p.n,ex(p.extra),'sp:'+p.id))));
     out.push(sec('Steps',[row('Closed',ex(LAD_CLOSED),'steps')]));
+    out.push(sec('Air massage system',(window.AIRO||[]).map(([n,x],i)=>row(n,ex(x),'air:'+i))));
     out.push(sec('Hydro massage',JT.map(([n,x])=>row(n+' jets',ex(x+HB),'jet:'+n))));
     out.push(sec('Thermometer',TO.map(([n,x],i)=>row(n,e(x),'th:'+i))));
     out.push(sec('Drink shelf',SHC.map(([n,c,x],i)=>row(n,e(x),'sh:'+i))));
     out.push(sec('LED Mini lighting',(window.LMO||[]).map(([n,x],i)=>row(n,ex(x),'lm:'+i))));
     out.push(sec('Chimney',(window.CHGO||[]).map(o=>row(o[1],ex(o[2]),'ch:'+o[0]))));
-    const skip=['stove','ladder','hydro','thermo','shelf','guard','ledmini'];
+    const skip=['stove','ladder','hydro','air','thermo','shelf','guard','ledmini'];
     out.push(sec('Accessories',S.accessories.filter(a=>!skip.includes(a.id)).map(a=>row(a.id==='headrest'?'Headrests (price per pc)':a.name,ex(a.id==='headrest'?a.unit:a.price),'a:'+a.id))));
     const d=dlg('Prices','<p class="note">Type a new price only where it changes and press <b>Save prices</b>. The same price list is used by the order database (Basic price). Prices in EUR.</p>'+out.join(''),
       '<button type="button" class="dan" id="fkPrR">Restore all original prices</button><button type="button" data-c>Cancel</button><button type="button" class="pri" id="fkPrS">Save prices</button>');
