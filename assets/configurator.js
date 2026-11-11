@@ -1314,7 +1314,7 @@ function setAir(i){st.air=i;AD.price=AO[i][1];AD.name='Air massage system \u00b7
  [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));aOpen=false;avis();readout();if(rqs.open)showSum();}
 const _sA=syncUI;syncUI=function(){if(!st.acc.air){aOpen=true;st.air=0;AD.name='Air massage system';AD.price=AO[0][1];[...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));chipEls.air.querySelector('small').textContent=plus(AD.price);}_sA();avis();};
 [...subZ.children].forEach(b=>b.setAttribute('aria-pressed',false));
-const FD=S.accessories.find(x=>x.id==='filter'),FO=[['Filter box',120],['Sand filter',250],['Filter connection',80]],FB=['Square box','Round box'],FBP=[120,120];   // FB: filter box shapes (prices: edit FO / FBP)
+const FD=S.accessories.find(x=>x.id==='filter'),FO=[['Filter box',120],['Sand filter',250],['Filter connection',80]],FB=['Square box','Round box'],FBP=[120,120];FO.forEach((t,i)=>{const v=PRICE_OV['flt:'+i];if(v!=null)t[1]=v;});FBP.forEach((x,i)=>{const v=PRICE_OV['fbox:'+i];if(v!=null)FBP[i]=v;});window.FILO=FO;window.FBPO=FBP;   // FB: filter box shapes (prices: edit FO / FBP)
 let fOpen=true;st.filter=0;st.fbox=0;let fStep=0;   // fStep 1 = Filter box chosen, shape not chosen yet
 const subF=document.createElement('div');subF.className='sub';
 FO.forEach(([n,p],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n+(p&&i>0?' '+plus(p):'');b.dataset.i=i;b.onclick=e=>{ if(i===0){ e.stopPropagation(); fStep=1; fOpen=true; fvis(); } else { fStep=0; setFilter(i); } };subF.appendChild(b);});
@@ -2342,12 +2342,13 @@ window.sandUnder=function(g,A){
     out.push(sec('Steps',[row('Closed',ex(LAD_CLOSED),'steps')]));
     out.push(sec('Air massage system',(window.AIRO||[]).map(([n,x],i)=>row(n,ex(x),'air:'+i))));
     out.push(sec('LED lighting',(window.LEDO||[]).map(([n,x],i)=>row(n,ex(x),'led:'+i))));
+    out.push(sec('Filtration',[row('Filter connection',ex(window.FILO[2][1]),'flt:2'),row('Square box',ex(window.FBPO[0]),'fbox:0'),row('Round box',ex(window.FBPO[1]),'fbox:1'),row('Sand filter',ex(window.FILO[1][1]),'flt:1')]));
     out.push(sec('Hydro massage',JT.map(([n,x])=>row(n+' jets',ex(x+HB),'jet:'+n))));
     out.push(sec('Thermometer',TO.map(([n,x],i)=>row(n,e(x),'th:'+i))));
     out.push(sec('Drink shelf',SHC.map(([n,c,x],i)=>row(n,e(x),'sh:'+i))));
     out.push(sec('LED Mini lighting',(window.LMO||[]).map(([n,x],i)=>row(n,ex(x),'lm:'+i))));
     out.push(sec('Chimney',(window.CHGO||[]).map(o=>row(o[1],ex(o[2]),'ch:'+o[0]))));
-    const skip=['stove','ladder','hydro','air','led','thermo','shelf','guard','ledmini'];
+    const skip=['stove','ladder','hydro','air','led','filter','thermo','shelf','guard','ledmini'];
     out.push(sec('Accessories',S.accessories.filter(a=>!skip.includes(a.id)).map(a=>row(a.id==='headrest'?'Headrests (price per pc)':a.name,ex(a.id==='headrest'?a.unit:a.price),'a:'+a.id))));
     const d=dlg('Prices','<p class="note">Type a new price only where it changes and press <b>Save prices</b>. The same price list is used by the order database (Basic price). Prices in EUR.</p>'+out.join(''),
       '<button type="button" class="dan" id="fkPrR">Restore all original prices</button><button type="button" data-c>Cancel</button><button type="button" class="pri" id="fkPrS">Save prices</button>');
